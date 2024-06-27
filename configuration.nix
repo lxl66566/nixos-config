@@ -22,6 +22,7 @@
     };
     systemd-boot.enable = false;
   };
+  boot.kernel.sysctl."kernel.sysrq" = 1;
 
   networking.hostName = "absx";
   networking.networkmanager.enable = true;
@@ -31,6 +32,14 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "zh_CN.UTF-8";
+  i18n.inputMethod = {
+    enabled = "fcitx5";
+    fcitx5.addons = with pkgs; [
+      fcitx5-mozc
+      fcitx5-gtk
+    ];
+  };
+
   time.hardwareClockInLocalTime = true;
   time.timeZone = "Asia/Shanghai";
   # console = {
@@ -40,20 +49,22 @@
   # };
 
   services.xserver.enable = true;
-  services.displayManager.sddm.enable = true;
-  services.displayManager.defaultSession = "plasmax11";
-  services.desktopManager.plasma6.enable = true;
+  services.displayManager = {
+    sddm.enable = true;
+    defaultSession = "plasmax11";
+  };
+  services.desktopManager = {
+    plasma6.enable = true;
+  };
   services.openssh.enable = true;
   services.libinput.enable = true;
   services.pipewire = {
     enable = true;
     pulse.enable = true;
   };
-  systemd.user.services.v2raya = {
+  systemd.services.v2raya = {
     description = "Run v2raya on startup";
-    script = ''
-      v2rayA
-    '';
+    script = "${pkgs.v2raya}/bin/v2rayA";
     wantedBy = [ "multi-user.target" ];
   };
 
@@ -107,7 +118,6 @@
       wget
       floorp
       vscode
-      v2raya
       telegram-desktop
       fastfetch
       flameshot
@@ -117,6 +127,7 @@
       kdePackages.yakuake
       rustup
       bottles
+      v2raya
     ];
     shell = pkgs.fish;
   };
