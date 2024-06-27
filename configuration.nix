@@ -10,10 +10,7 @@
 }:
 
 {
-  imports = [
-    # Include the results of the hardware scan.
-    ./hardware-configuration.nix
-  ];
+  imports = [ ./hardware-configuration.nix ];
 
   boot.loader = {
     efi.canTouchEfiVariables = true;
@@ -26,30 +23,45 @@
     systemd-boot.enable = false;
   };
 
-  networking.hostName = "absx"; # Define your hostname.
-  # Pick only one of the below networking options.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
-
-  # Set your time zone.
-  time.timeZone = "Asia/Shanghai";
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  networking.hostName = "absx";
+  networking.networkmanager.enable = true;
+  networking.firewall.enable = false;
+  networking.proxy.default = "http://127.0.0.1:20172/";
+  networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Select internationalisation properties.
+  i18n.defaultLocale = "zh_CN.UTF-8";
+  time.hardwareClockInLocalTime = true;
+  time.timeZone = "Asia/Shanghai";
   # console = {
   #   font = "Lat2-Terminus16";
   #   keyMap = "us";
   #   useXkbConfig = true; # use xkb.options in tty.
   # };
 
-  # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.displayManager.sddm.enable = true;
   services.displayManager.defaultSession = "plasmax11";
   services.desktopManager.plasma6.enable = true;
+  services.openssh.enable = true;
+  services.libinput.enable = true;
+  services.pipewire = {
+    enable = true;
+    pulse.enable = true;
+  };
+  systemd.user.services.v2raya = {
+    description = "Run v2raya on startup";
+    script = ''
+      v2rayA
+    '';
+    wantedBy = [ "multi-user.target" ];
+  };
+
+  environment.plasma6.excludePackages = with pkgs.kdePackages; [
+    plasma-browser-integration
+    oxygen
+    baloo
+  ];
 
   fonts.packages = with pkgs; [
     noto-fonts
@@ -62,9 +74,11 @@
     dina-font
     proggyfonts
   ];
-
-  i18n.defaultLocale = "zh_CN.UTF-8";
-  time.hardwareClockInLocalTime = true;
+  fonts.fontconfig = {
+    defaultFonts = {
+      serif = [ "Fira Code" ];
+    };
+  };
 
   # Configure keymap in X11
   # services.xserver.xkb.layout = "us";
@@ -73,18 +87,12 @@
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
-  # Enable sound.
-  # hardware.pulseaudio.enable = true;
-  # OR
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
-  };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.libinput.enable = true;
   nixpkgs.config.allowUnfree = true;
-  programs.fish.enable = true;
+  nix.settings.substituters = lib.mkBefore [
+    "https://mirror.sjtu.edu.cn/nix-channels/store"
+    "https://mirrors.ustc.edu.cn/nix-channels/store"
+    "https://mirrors.cernet.edu.cn/nix-channels/store"
+  ];
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.absx = {
@@ -92,7 +100,7 @@
     extraGroups = [
       "wheel"
       "networkmanager"
-    ]; # Enable ‘sudo’ for the user.
+    ];
     packages = with pkgs; [
       vim
       tree
@@ -106,15 +114,16 @@
       eza
       nodejs_22
       corepack_22
+      kdePackages.yakuake
+      rustup
+      bottles
     ];
     shell = pkgs.fish;
   };
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
   environment = {
     systemPackages = with pkgs; [
-      vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+      vim
       git
       wget
       curl
@@ -137,32 +146,24 @@
       atuin
       zellij
       nixfmt-rfc-style
+      python3
     ];
     sessionVariables = rec {
       EDITOR = "vim";
-      HTTPS_PROXY = "http://localhost:20172";
-      ALL_PROXY = "http://localhost:20172";
+      # HTTPS_PROXY = "http://localhost:20172";
+      # ALL_PROXY = "http://localhost:20172";
     };
   };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
 
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  programs.mtr.enable = true;
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
+  programs.fish.enable = true;
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
