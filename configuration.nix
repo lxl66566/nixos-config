@@ -32,6 +32,12 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "zh_CN.UTF-8";
+  i18n.supportedLocales = lib.mkBefore [
+    "C.UTF-8/UTF-8"
+    "en_US.UTF-8/UTF-8"
+    "ja_JP.UTF-8/UTF-8"
+    "zh_CN.UTF-8/UTF-8"
+  ];
   i18n.inputMethod = {
     enabled = "fcitx5";
     fcitx5.addons = with pkgs; [
@@ -104,6 +110,9 @@
     "https://mirrors.ustc.edu.cn/nix-channels/store"
     "https://mirrors.cernet.edu.cn/nix-channels/store"
   ];
+  nix.extraOptions = ''
+    experimental-features = nix-command
+  '';
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.absx = {
