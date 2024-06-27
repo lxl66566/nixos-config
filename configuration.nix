@@ -1,6 +1,5 @@
-# Edit this configuration file to define what should be installed on
-# your system. Help is available in the configuration.nix(5) man page, on
-# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
+# NixOS configuration for lxl66566. 
+# You can find the lastest version in https://github.com/lxl66566/nixos-config.
 
 {
   config,
@@ -12,6 +11,8 @@
 {
   imports = [ ./hardware-configuration.nix ];
 
+  # region boot and network
+
   boot.loader = {
     efi.canTouchEfiVariables = true;
     grub = {
@@ -19,10 +20,17 @@
       devices = [ "nodev" ];
       efiSupport = true;
       useOSProber = true;
+      default = "saved";
     };
+    timeout = 15;
     systemd-boot.enable = false;
   };
-  boot.kernel.sysctl."kernel.sysrq" = 1;
+  boot.kernel.sysctl = {
+    "kernel.sysrq" = 1;
+    "vm.swappiness" = 10;
+  };
+  boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.supportedFilesystems = [ "ntfs" ];
 
   networking.hostName = "absx";
   networking.networkmanager.enable = true;
@@ -30,55 +38,7 @@
   networking.proxy.default = "http://127.0.0.1:20172/";
   networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Select internationalisation properties.
-  i18n.defaultLocale = "zh_CN.UTF-8";
-  i18n.supportedLocales = lib.mkBefore [
-    "C.UTF-8/UTF-8"
-    "en_US.UTF-8/UTF-8"
-    "ja_JP.UTF-8/UTF-8"
-    "zh_CN.UTF-8/UTF-8"
-  ];
-  i18n.inputMethod = {
-    enabled = "fcitx5";
-    fcitx5.addons = with pkgs; [
-      fcitx5-mozc
-      fcitx5-gtk
-    ];
-  };
-
-  time.hardwareClockInLocalTime = true;
-  time.timeZone = "Asia/Shanghai";
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  #   useXkbConfig = true; # use xkb.options in tty.
-  # };
-
-  services.xserver.enable = true;
-  services.displayManager = {
-    sddm.enable = true;
-    defaultSession = "plasmax11";
-  };
-  services.desktopManager = {
-    plasma6.enable = true;
-  };
-  services.openssh.enable = true;
-  services.libinput.enable = true;
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
-  };
-  systemd.services.v2raya = {
-    description = "Run v2raya on startup";
-    script = "${pkgs.v2raya}/bin/v2rayA";
-    wantedBy = [ "multi-user.target" ];
-  };
-
-  environment.plasma6.excludePackages = with pkgs.kdePackages; [
-    plasma-browser-integration
-    oxygen
-    baloo
-  ];
+  # region fonts and ime
 
   fonts.packages = with pkgs; [
     noto-fonts
@@ -87,24 +47,75 @@
     liberation_ttf
     fira-code
     fira-code-symbols
-    mplus-outline-fonts.githubRelease
-    dina-font
-    proggyfonts
+    source-code-pro
+    source-han-sans
+    source-han-serif
+    sarasa-gothic
+
   ];
   fonts.fontconfig = {
     defaultFonts = {
-      serif = [ "Fira Code" ];
+      emoji = [ "Noto Color Emoji" ];
+      monospace = [
+        "Fira Code"
+        "Noto Sans Mono CJK SC"
+        "Sarasa Mono SC"
+        "DejaVu Sans Mono"
+      ];
+      sansSerif = [
+        "Fira Code Sans"
+        "Noto Sans CJK SC"
+        "Source Han Sans SC"
+        "DejaVu Sans"
+      ];
+      serif = [
+        "Fira Code Serif"
+        "Noto Serif CJK SC"
+        "Source Han Serif SC"
+        "DejaVu Serif"
+      ];
     };
   };
+  i18n.defaultLocale = "zh_CN.UTF-8";
+  i18n.supportedLocales = lib.mkBefore [
+    "C.UTF-8/UTF-8"
+    "en_US.UTF-8/UTF-8"
+    "ja_JP.UTF-8/UTF-8"
+    "zh_CN.UTF-8/UTF-8"
+  ];
+  i18n.inputMethod = {
+    # enabled = "fcitx5";
+    # fcitx5.addons = with pkgs; [
+    #   fcitx5-mozc
+    #   fcitx5-gtk
+    #   fcitx5-rime
+    #   fcitx5-chinese-addons
+    # ];
+    enabled = "ibus";
+    ibus.engines = with pkgs.ibus-engines; [
+      rime
+      libpinyin
+    ];
+  };
 
-  # Configure keymap in X11
-  # services.xserver.xkb.layout = "us";
-  # services.xserver.xkb.options = "eurosign:e,caps:escape";
+  # region system settings
 
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
-  nixpkgs.config.allowUnfree = true;
+  time.hardwareClockInLocalTime = true;
+  time.timeZone = "Asia/Shanghai";
+  console = {
+    earlySetup = true;
+    font = "${pkgs.terminus_font}/share/consolefonts/ter-132n.psf.gz";
+    packages = with pkgs; [ terminus_font ];
+    keyMap = "us";
+  };
+  nixpkgs.config = {
+    allowUnfree = true;
+    packageOverrides = pkgs: {
+      nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+        inherit pkgs;
+      };
+    };
+  };
   nix.settings.substituters = lib.mkBefore [
     "https://mirror.sjtu.edu.cn/nix-channels/store"
     "https://mirrors.ustc.edu.cn/nix-channels/store"
@@ -113,8 +124,43 @@
   nix.extraOptions = ''
     experimental-features = nix-command
   '';
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 15d";
+  };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # region services
+
+  services.xserver.enable = true;
+  services.xserver.videoDrivers = [ "nvidia" ];
+  services.displayManager = {
+    sddm.enable = true;
+    defaultSession = "plasmax11";
+  };
+  services.desktopManager = {
+    plasma6 = {
+      enable = true;
+    };
+  };
+  services.openssh = {
+    enable = false;
+    settings.PermitRootLogin = "no";
+  };
+  services.libinput.enable = true;
+  services.pipewire = {
+    enable = true;
+    pulse.enable = true;
+  };
+  services.v2raya.enable = true;
+  # systemd.services.v2raya = {
+  #   description = "Run v2raya on startup";
+  #   script = "${pkgs.v2raya}/bin/v2rayA";
+  #   wantedBy = [ "multi-user.target" ];
+  # };
+
+  # region Users and Root
+
   users.users.absx = {
     isNormalUser = true;
     extraGroups = [
@@ -137,10 +183,11 @@
       rustup
       bottles
       v2raya
+      anki
+      jellyfin-ffmpeg
     ];
     shell = pkgs.fish;
   };
-
   environment = {
     systemPackages = with pkgs; [
       vim
@@ -167,23 +214,43 @@
       zellij
       nixfmt-rfc-style
       python3
+      starship
     ];
     sessionVariables = rec {
       EDITOR = "vim";
-      # HTTPS_PROXY = "http://localhost:20172";
-      # ALL_PROXY = "http://localhost:20172";
     };
+    plasma6.excludePackages = with pkgs.kdePackages; [
+      plasma-browser-integration
+      oxygen
+      baloo
+    ];
+
   };
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
+  # region programs
 
   programs.mtr.enable = true;
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
   };
-  programs.fish.enable = true;
+  programs.fish = {
+    enable = true;
+    interactiveShellInit = ''
+      set fish_greeting # Disable greeting
+      bind \t forward-word
+      atuin init fish | source
+      zoxide init fish | source
+      starship init fish | source
+    '';
+    shellAliases = rec {
+      e = "${environment.sessionVariables.EDITOR}";
+      l = "eza --all --long --color-scale size --binary --header --time-style=long-iso";
+      gp = "git pull";
+      gc = "git clone --filter=tree:0";
+      py = "python";
+    };
+  };
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
