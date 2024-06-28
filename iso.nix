@@ -42,6 +42,7 @@
       unzip
       untar
       p7zip
+      fatresize
     ];
   };
   programs.fish = {

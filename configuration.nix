@@ -217,6 +217,9 @@
       anki
       jellyfin-ffmpeg
       pciutils
+      chromium
+      uv
+      bottles
     ];
     shell = pkgs.fish;
   };
@@ -248,6 +251,8 @@
       nixfmt-rfc-style
       python3
       starship
+      devenv
+      xclip
       (
         let
           base = pkgs.appimageTools.defaultFhsEnvArgs;
