@@ -11,26 +11,48 @@
 {
   imports = [ ./hardware-configuration.nix ];
 
-  # region boot and network
+  # region boot, hardware and network
 
-  boot.loader = {
-    efi.canTouchEfiVariables = true;
-    grub = {
-      enable = true;
-      devices = [ "nodev" ];
-      efiSupport = true;
-      useOSProber = true;
-      default = "saved";
+
+  # hardware.graphics = {
+  #   enable = true;
+  #   enable32Bit = true;
+  # };
+  boot = {
+    loader = {
+      efi.canTouchEfiVariables = true;
+      efi.efiSysMountPoint = "/boot";
+      grub = {
+        enable = true;
+        devices = [ "nodev" ];
+        efiSupport = true;
+        useOSProber = true;
+        default = "saved";
+        
+      };
+      timeout = 15;
+      systemd-boot.enable = false;
     };
-    timeout = 15;
-    systemd-boot.enable = false;
+    kernel.sysctl = {
+      "kernel.sysrq" = 1;
+      "vm.swappiness" = 10;
+    };
+    # kernelPackages = pkgs.linuxPackages_zen;
+  #   kernelModules = lib.mkAfter [ ];
+    supportedFilesystems = [ "ntfs" ];
   };
-  boot.kernel.sysctl = {
-    "kernel.sysrq" = 1;
-    "vm.swappiness" = 10;
-  };
-  boot.kernelPackages = pkgs.linuxPackages_zen;
-  boot.supportedFilesystems = [ "ntfs" ];
+
+  # specialisation = {
+  #   on-the-go.configuration = {
+  #     system.nixos.tags = [ "on-the-go" ];
+  #     hardware.nvidia = {
+  #       prime.offload.enable = lib.mkForce true;
+  #       prime.offload.enableOffloadCmd = lib.mkForce true;
+  #       prime.sync.enable = lib.mkForce false;
+  #       powerManagement.finegrained = lib.mkForce true;
+  #     };
+  #   };
+  # };
 
   networking.hostName = "absx";
   networking.networkmanager.enable = true;
@@ -51,7 +73,6 @@
     source-han-sans
     source-han-serif
     sarasa-gothic
-
   ];
   fonts.fontconfig = {
     defaultFonts = {
@@ -84,18 +105,18 @@
     "zh_CN.UTF-8/UTF-8"
   ];
   i18n.inputMethod = {
-    # enabled = "fcitx5";
-    # fcitx5.addons = with pkgs; [
-    #   fcitx5-mozc
-    #   fcitx5-gtk
-    #   fcitx5-rime
-    #   fcitx5-chinese-addons
-    # ];
-    enabled = "ibus";
-    ibus.engines = with pkgs.ibus-engines; [
-      rime
-      libpinyin
+    enabled = "fcitx5";
+    fcitx5.addons = with pkgs; [
+      fcitx5-chinese-addons
+      fcitx5-mozc
+      fcitx5-gtk
+      fcitx5-rime
     ];
+    # enabled = "ibus";
+    # ibus.engines = with pkgs.ibus-engines; [
+    #   rime
+    #   libpinyin
+    # ];
   };
 
   # region system settings
@@ -133,7 +154,7 @@
   # region services
 
   services.xserver.enable = true;
-  services.xserver.videoDrivers = [ "nvidia" ];
+  # services.xserver.videoDrivers = lib.mkAfter [ "nvidia" ];
   services.displayManager = {
     sddm.enable = true;
     defaultSession = "plasmax11";
@@ -147,11 +168,11 @@
     enable = false;
     settings.PermitRootLogin = "no";
   };
-  services.libinput.enable = true;
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
-  };
+  # services.libinput.enable = true;
+  # services.pipewire = {
+  #   enable = true;
+  #   pulse.enable = true;
+  # };
   services.v2raya.enable = true;
   # systemd.services.v2raya = {
   #   description = "Run v2raya on startup";
@@ -229,25 +250,48 @@
 
   # region programs
 
+  xdg.portal.enable = true;
+  # xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   programs.mtr.enable = true;
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
   };
+  # programs.steam = {
+  #   enable = true;
+  #   remotePlay.openFirewall = true;
+  #   dedicatedServer.openFirewall = true;
+  #   gamescopeSession.enable = true;
+  #   extraCompatPackages = [ pkgs.proton-ge-bin ];
+  # };
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
       set fish_greeting # Disable greeting
       bind \t forward-word
+
+      function make_new_subvolume -d 'make a btrfs subvol for existing folder'
+        set dir $argv
+        sudo mv $dir{,.bak}
+        sudo btrfs subvolume create $dir
+        sudo cp --archive --one-file-system --reflink=always $dir{.bak/*,}
+        sudo rm -r --one-file-system $dir'.bak'
+      end
+
+      function merge_video --description 'merge video and audio that downloaded by yt-dlp'
+        find . -name "*.mp4" -exec bash -c 'file="{}"; ffmpeg -i -nostats "$file" -i "$\{file%.mp4}.m4a" -c:v copy -c:a copy -strict experimental "/home/absolutex/Videos/$\{file}"' \;
+      end
+
       atuin init fish | source
       zoxide init fish | source
       starship init fish | source
     '';
     shellAliases = rec {
-      e = "${environment.sessionVariables.EDITOR}";
+      e = "vim";
       l = "eza --all --long --color-scale size --binary --header --time-style=long-iso";
       gp = "git pull";
       gc = "git clone --filter=tree:0";
+      gfixup = "git commit -a --fixup HEAD && GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash HEAD~2";
       py = "python";
     };
   };

@@ -34,6 +34,20 @@ in
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
+  # hardware.nvidia = {
+  #   modesetting.enable = true;
+  #   prime = {
+  #     intelBusId = "PCI:0:2:0";
+  #     nvidiaBusId = "PCI:1:0:0";
+  #     sync.enable = true;
+  #   };
+  #   powerManagement.enable = false;
+  #   powerManagement.finegrained = false;
+  #   open = false;
+  #   nvidiaSettings = true;
+  #   package = config.boot.kernelPackages.nvidiaPackages.stable;
+  # };
+
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/3f9c46c9-efa8-4f9e-9dcf-77226f28b75b";
     fsType = "btrfs";
@@ -53,7 +67,7 @@ in
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/04AD-805A";
+    device = "/dev/disk/by-uuid/209D-7E96";
     fsType = "vfat";
     options = [
       "fmask=0022"
