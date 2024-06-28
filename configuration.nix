@@ -13,11 +13,10 @@
 
   # region boot, hardware and network
 
-
-  # hardware.graphics = {
-  #   enable = true;
-  #   enable32Bit = true;
-  # };
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
   boot = {
     loader = {
       efi.canTouchEfiVariables = true;
@@ -28,7 +27,7 @@
         efiSupport = true;
         useOSProber = true;
         default = "saved";
-        
+
       };
       timeout = 15;
       systemd-boot.enable = false;
@@ -38,21 +37,21 @@
       "vm.swappiness" = 10;
     };
     # kernelPackages = pkgs.linuxPackages_zen;
-  #   kernelModules = lib.mkAfter [ ];
+    kernelModules = lib.mkAfter [ ];
     supportedFilesystems = [ "ntfs" ];
   };
 
-  # specialisation = {
-  #   on-the-go.configuration = {
-  #     system.nixos.tags = [ "on-the-go" ];
-  #     hardware.nvidia = {
-  #       prime.offload.enable = lib.mkForce true;
-  #       prime.offload.enableOffloadCmd = lib.mkForce true;
-  #       prime.sync.enable = lib.mkForce false;
-  #       powerManagement.finegrained = lib.mkForce true;
-  #     };
-  #   };
-  # };
+  specialisation = {
+    on-the-go.configuration = {
+      system.nixos.tags = [ "on-the-go" ];
+      hardware.nvidia = {
+        prime.offload.enable = lib.mkForce true;
+        prime.offload.enableOffloadCmd = lib.mkForce true;
+        prime.sync.enable = lib.mkForce false;
+        powerManagement.finegrained = lib.mkForce true;
+      };
+    };
+  };
 
   networking.hostName = "absx";
   networking.networkmanager.enable = true;
@@ -105,18 +104,18 @@
     "zh_CN.UTF-8/UTF-8"
   ];
   i18n.inputMethod = {
-    enabled = "fcitx5";
-    fcitx5.addons = with pkgs; [
-      fcitx5-chinese-addons
-      fcitx5-mozc
-      fcitx5-gtk
-      fcitx5-rime
-    ];
-    # enabled = "ibus";
-    # ibus.engines = with pkgs.ibus-engines; [
-    #   rime
-    #   libpinyin
+    # enabled = "fcitx5";
+    # fcitx5.addons = with pkgs; [
+    #   fcitx5-chinese-addons
+    #   fcitx5-mozc
+    #   fcitx5-gtk
+    #   fcitx5-rime
     # ];
+    enabled = "ibus";
+    ibus.engines = with pkgs.ibus-engines; [
+      rime
+      libpinyin
+    ];
   };
 
   # region system settings
@@ -125,7 +124,7 @@
   time.timeZone = "Asia/Shanghai";
   console = {
     earlySetup = true;
-    font = "${pkgs.terminus_font}/share/consolefonts/ter-132n.psf.gz";
+    font = "${pkgs.terminus_font}/share/consolefonts/ter-120n.psf.gz";
     packages = with pkgs; [ terminus_font ];
     keyMap = "us";
   };
@@ -168,11 +167,11 @@
     enable = false;
     settings.PermitRootLogin = "no";
   };
-  # services.libinput.enable = true;
-  # services.pipewire = {
-  #   enable = true;
-  #   pulse.enable = true;
-  # };
+  services.libinput.enable = true;
+  services.pipewire = {
+    enable = true;
+    pulse.enable = true;
+  };
   services.v2raya.enable = true;
   # systemd.services.v2raya = {
   #   description = "Run v2raya on startup";
