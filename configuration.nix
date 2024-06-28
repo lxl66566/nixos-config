@@ -27,7 +27,6 @@
         efiSupport = true;
         useOSProber = true;
         default = "saved";
-
       };
       timeout = 15;
       systemd-boot.enable = false;
@@ -36,6 +35,7 @@
       "kernel.sysrq" = 1;
       "vm.swappiness" = 10;
     };
+    # DO NOT CHANGE KERNEL! Otherwise your system may break due to NVIDIA driver.
     # kernelPackages = pkgs.linuxPackages_zen;
     kernelModules = lib.mkAfter [ ];
     supportedFilesystems = [ "ntfs" ];
@@ -104,18 +104,19 @@
     "zh_CN.UTF-8/UTF-8"
   ];
   i18n.inputMethod = {
-    # enabled = "fcitx5";
-    # fcitx5.addons = with pkgs; [
-    #   fcitx5-chinese-addons
-    #   fcitx5-mozc
-    #   fcitx5-gtk
-    #   fcitx5-rime
-    # ];
-    enabled = "ibus";
-    ibus.engines = with pkgs.ibus-engines; [
-      rime
-      libpinyin
+    enabled = "fcitx5";
+    fcitx5.addons = with pkgs; [
+      fcitx5-chinese-addons
+      fcitx5-mozc
+      fcitx5-gtk
+      fcitx5-rime
+      fcitx5-configtool
     ];
+    # enabled = "ibus";
+    # ibus.engines = with pkgs.ibus-engines; [
+    #   rime
+    #   libpinyin
+    # ];
   };
 
   # region system settings
@@ -136,14 +137,17 @@
       };
     };
   };
-  nix.settings.substituters = lib.mkBefore [
-    "https://mirror.sjtu.edu.cn/nix-channels/store"
-    "https://mirrors.ustc.edu.cn/nix-channels/store"
-    "https://mirrors.cernet.edu.cn/nix-channels/store"
-  ];
-  nix.extraOptions = ''
-    experimental-features = nix-command
-  '';
+  nix.settings = {
+    substituters = lib.mkBefore [
+      "https://mirror.sjtu.edu.cn/nix-channels/store"
+      "https://mirrors.ustc.edu.cn/nix-channels/store"
+      "https://mirrors.cernet.edu.cn/nix-channels/store"
+    ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+  };
   nix.gc = {
     automatic = true;
     dates = "weekly";
@@ -205,11 +209,13 @@
       v2raya
       anki
       jellyfin-ffmpeg
+      pciutils
     ];
     shell = pkgs.fish;
   };
   environment = {
     systemPackages = with pkgs; [
+      busybox
       vim
       git
       wget
@@ -235,6 +241,34 @@
       nixfmt-rfc-style
       python3
       starship
+      (
+        let
+          base = pkgs.appimageTools.defaultFhsEnvArgs;
+        in
+        pkgs.buildFHSUserEnv (
+          base
+          // {
+            name = "fhs";
+            targetPkgs =
+              pkgs:
+              (
+                # pkgs.buildFHSUserEnv 只提供一个最小的 FHS 环境，缺少很多常用软件所必须的基础包
+                # 所以直接使用它很可能会报错
+                #
+                # pkgs.appimageTools 提供了大多数程序常用的基础包，所以我们可以直接用它来补充
+                (base.targetPkgs pkgs)
+                ++ (with pkgs; [
+                  pkg-config
+                  ncurses
+                  # 如果你的 FHS 程序还有其他依赖，把它们添加在这里
+                ])
+              );
+            profile = "export FHS=1";
+            runScript = "bash";
+            extraOutputsToInstall = [ "dev" ];
+          }
+        )
+      )
     ];
     sessionVariables = rec {
       EDITOR = "vim";
