@@ -96,27 +96,34 @@
       ];
     };
   };
-  i18n.defaultLocale = "zh_CN.UTF-8";
-  i18n.supportedLocales = lib.mkBefore [
-    "C.UTF-8/UTF-8"
-    "en_US.UTF-8/UTF-8"
-    "ja_JP.UTF-8/UTF-8"
-    "zh_CN.UTF-8/UTF-8"
-  ];
-  i18n.inputMethod = {
-    enabled = "fcitx5";
-    fcitx5.addons = with pkgs; [
-      fcitx5-chinese-addons
-      fcitx5-mozc
-      fcitx5-gtk
-      fcitx5-rime
-      fcitx5-configtool
+  i18n = rec {
+    defaultLocale = "zh_CN.UTF-8";
+    supportedLocales = lib.mkBefore [
+      "C.UTF-8/UTF-8"
+      "en_US.UTF-8/UTF-8"
+      "en_SG.UTF-8/UTF-8"
+      "ja_JP.UTF-8/UTF-8"
+      "zh_CN.UTF-8/UTF-8"
     ];
-    # enabled = "ibus";
-    # ibus.engines = with pkgs.ibus-engines; [
-    #   rime
-    #   libpinyin
-    # ];
+    extraLocaleSettings = {
+      LANG = "en_SG.UTF-8";
+      LC_ALL = defaultLocale;
+    };
+    inputMethod = {
+      enabled = "fcitx5";
+      fcitx5.addons = with pkgs; [
+        fcitx5-chinese-addons
+        fcitx5-mozc
+        fcitx5-gtk
+        fcitx5-rime
+        fcitx5-configtool
+      ];
+      # enabled = "ibus";
+      # ibus.engines = with pkgs.ibus-engines; [
+      #   rime
+      #   libpinyin
+      # ];
+    };
   };
 
   # region system settings
@@ -290,13 +297,13 @@
     enable = true;
     enableSSHSupport = true;
   };
-  # programs.steam = {
-  #   enable = true;
-  #   remotePlay.openFirewall = true;
-  #   dedicatedServer.openFirewall = true;
-  #   gamescopeSession.enable = true;
-  #   extraCompatPackages = [ pkgs.proton-ge-bin ];
-  # };
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
+    dedicatedServer.openFirewall = true;
+    gamescopeSession.enable = true;
+    extraCompatPackages = [ pkgs.proton-ge-bin ];
+  };
   programs.fish = {
     enable = true;
     interactiveShellInit = ''

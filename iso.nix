@@ -12,6 +12,14 @@
     # nix-channel --add https://mirrors.ustc.edu.cn/nix-channels/nixpkgs-unstable nixpkg
     # nix-channel --add https://mirrors.ustc.edu.cn/nix-channels/nixos-24.05 nixos
   ];
+  nix.binaryCaches = [
+    "https://mirrors.ustc.edu.cn/nix-channels/store"
+    "https://cache.nixos.org/"
+  ];
+  fonts.fonts = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk
+  ];
   environment = {
     sessionVariables = rec {
       EDITOR = "vim";
@@ -30,6 +38,10 @@
       ripgrep
       eza
       zoxide
+      v2rayA
+      unzip
+      untar
+      p7zip
     ];
   };
   programs.fish = {
