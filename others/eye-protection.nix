@@ -12,9 +12,10 @@
     # add a gammastep icon in the system tray
     # has problem with wayland, so disable it
     tray = false;
+    # 越大蓝光越多
     temperature = {
-      day = 5700;
-      night = 4000;
+      day = 3500;
+      night = 2800;
     };
     # https://gitlab.com/chinstrap/gammastep/-/blob/master/gammastep.conf.sample?ref_type=heads
     settings = {
