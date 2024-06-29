@@ -1,8 +1,16 @@
 { config, pkgs, ... }:
 {
   imports = [ ./others/eye-protection.nix ];
+
   home.username = "absx";
   home.homeDirectory = "/home/absx";
+  home.enableNixpkgsReleaseCheck = false;
+  home.stateVersion = "24.05";
+  home.file = {
+    ".config/cargo/config.toml".source = ./config/cargo.toml;
+  };
+  home.sessionPath = [ "$HOME/.cargo/bin/" ];
+  xsession.numlock.enable = true;
 
   # 直接将当前文件夹的配置文件，链接到 Home 目录下的指定位置
   # home.file.".config/i3/wallpaper.jpg".source = ./wallpaper.jpg;
@@ -19,7 +27,6 @@
   #     xxx
   # '';
 
-  home.sessionPath = [ "$HOME/.cargo/bin/" ];
   home.packages = with pkgs; [
     vim
     tree
@@ -155,7 +162,6 @@
       nb = "sudo nixos-rebuild switch --show-trace"; # nixos (re)build
     };
   };
-
   programs.mpv = {
     enable = true;
     config = {
@@ -183,10 +189,14 @@
     # scripts = with pkgs.mpvScripts; [ autoload ];
   };
 
-  home.file = {
-    ".config/cargo/config.toml".source = ./config/cargo.toml;
-  };
+  # region wallpaper
+  #
+  # Run this command above:
+  # cd ~/Pictures && git clone git@github.com:lxl66566/wallpaper.git
 
-  home.enableNixpkgsReleaseCheck = false;
-  home.stateVersion = "24.05";
+  services.random-background = {
+    enable = true;
+    imageDirectory = "%h/Pictures/wallpaper";
+    interval = "6h";
+  };
 }

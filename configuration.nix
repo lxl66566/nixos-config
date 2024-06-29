@@ -202,6 +202,14 @@
   #   wantedBy = [ "multi-user.target" ];
   # };
 
+  systemd.sleep.extraConfig = ''
+    AllowSuspend=yes
+    AllowHibernation=yes
+    AllowHybridSleep=yes
+    AllowSuspendThenHibernate=no
+    HibernateDelaySec=1h
+  '';
+
   # region Users and Root
 
   users.users.absx = {
