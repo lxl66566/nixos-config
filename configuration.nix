@@ -11,12 +11,20 @@
 {
   imports = [ ./hardware-configuration.nix ];
 
-  # region boot, hardware and network
+  # region hardware
 
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
+  hardware = {
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+    };
+    bluetooth = {
+      enable = true; # enables support for Bluetooth
+      powerOnBoot = true; # powers up the default Bluetooth controller on boot
+    };
   };
+
+  # region boot&network
   boot = {
     loader = {
       efi.canTouchEfiVariables = true;
@@ -219,7 +227,11 @@
       pciutils
       chromium
       uv
-      bottles
+      bottles-unwrapped
+      qq
+      onlyoffice-bin_latest
+      mpv
+      activitywatch
     ];
     shell = pkgs.fish;
   };
@@ -249,10 +261,14 @@
       atuin
       zellij
       nixfmt-rfc-style
+      nil
       python3
       starship
       devenv
       xclip
+      poetry
+      cargo-binstall
+      unrar
       (
         let
           base = pkgs.appimageTools.defaultFhsEnvArgs;
@@ -338,6 +354,7 @@
       gc = "git clone --filter=tree:0";
       gfixup = "git commit -a --fixup HEAD && GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash HEAD~2";
       py = "python";
+      fd = "fd -H";
     };
   };
 
