@@ -206,33 +206,6 @@
       "wheel"
       "networkmanager"
     ];
-    packages = with pkgs; [
-      vim
-      tree
-      wget
-      floorp
-      vscode
-      telegram-desktop
-      fastfetch
-      flameshot
-      eza
-      nodejs_22
-      corepack_22
-      kdePackages.yakuake
-      rustup
-      bottles
-      v2raya
-      anki
-      jellyfin-ffmpeg
-      pciutils
-      chromium
-      uv
-      bottles-unwrapped
-      qq
-      onlyoffice-bin_latest
-      mpv
-      activitywatch
-    ];
     shell = pkgs.fish;
   };
   environment = {
@@ -242,7 +215,6 @@
       git
       wget
       curl
-      nix-search-cli
       yazi
       zoxide
       fzf
@@ -263,12 +235,7 @@
       nixfmt-rfc-style
       nil
       python3
-      starship
-      devenv
-      xclip
       poetry
-      cargo-binstall
-      unrar
       (
         let
           base = pkgs.appimageTools.defaultFhsEnvArgs;
@@ -306,7 +273,7 @@
       oxygen
       baloo
     ];
-
+    localBinInPath = true;
   };
 
   # region programs
@@ -325,38 +292,7 @@
     gamescopeSession.enable = true;
     extraCompatPackages = [ pkgs.proton-ge-bin ];
   };
-  programs.fish = {
-    enable = true;
-    interactiveShellInit = ''
-      set fish_greeting # Disable greeting
-      bind \t forward-word
-
-      function make_new_subvolume -d 'make a btrfs subvol for existing folder'
-        set dir $argv
-        sudo mv $dir{,.bak}
-        sudo btrfs subvolume create $dir
-        sudo cp --archive --one-file-system --reflink=always $dir{.bak/*,}
-        sudo rm -r --one-file-system $dir'.bak'
-      end
-
-      function merge_video --description 'merge video and audio that downloaded by yt-dlp'
-        find . -name "*.mp4" -exec bash -c 'file="{}"; ffmpeg -i -nostats "$file" -i "$\{file%.mp4}.m4a" -c:v copy -c:a copy -strict experimental "/home/absolutex/Videos/$\{file}"' \;
-      end
-
-      atuin init fish | source
-      zoxide init fish | source
-      starship init fish | source
-    '';
-    shellAliases = rec {
-      e = "vim";
-      l = "eza --all --long --color-scale size --binary --header --time-style=long-iso";
-      gp = "git pull";
-      gc = "git clone --filter=tree:0";
-      gfixup = "git commit -a --fixup HEAD && GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash HEAD~2";
-      py = "python";
-      fd = "fd -H";
-    };
-  };
+  programs.fish.enable = true;
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
