@@ -57,10 +57,6 @@
         prime.offload.enableOffloadCmd = lib.mkForce true;
         prime.sync.enable = lib.mkForce false;
         powerManagement.finegrained = lib.mkForce true;
-        services.xserver.videoDrivers = lib.mkDefault [
-          "modesetting"
-          "fbdev"
-        ];
       };
 
     };
@@ -228,15 +224,12 @@
       fzf
       fd
       ncdu
-      dust
       sd
       ripgrep
-      tldr
       btop
       htop
       xh
       bat
-      mtr
       lsof
       atuin
       zellij

@@ -1,5 +1,6 @@
 { config, pkgs, ... }:
 {
+  imports = [ ./others/eye-protection.nix ];
   home.username = "absx";
   home.homeDirectory = "/home/absx";
 
@@ -49,6 +50,9 @@
     xclip
     nix-search-cli
     unrar
+    mtr
+    dust
+    tldr
     cargo-binstall
     nil
     zip
@@ -58,6 +62,10 @@
     gnutar
     jq
     yq-go
+    nvtopPackages.nvidia
+    android-tools
+    sccache
+    difftastic
 
     # iperf3
     dnsutils # `dig` + `nslookup`
@@ -92,7 +100,6 @@
     usbutils # lsusb
   ];
 
-  # git 相关配置
   programs.git = {
     enable = true;
     userName = "lxl66566";
@@ -145,7 +152,39 @@
       gfixup = "git commit -a --fixup HEAD && GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash HEAD~2";
       py = "python";
       fd = "fd -H";
+      nb = "sudo nixos-rebuild switch --show-trace"; # nixos (re)build
     };
+  };
+
+  programs.mpv = {
+    enable = true;
+    config = {
+      profile = "fast";
+      hwdec = "auto-safe";
+      vo = "gpu-next";
+      sub-auto = "fuzzy";
+    };
+    defaultProfiles = [ "save-position-on-quit" ];
+    bindings = {
+      d = "add speed .1";
+      a = "add speed -.1";
+      s = "set speed 1.0";
+      WHEEL_UP = "seek -10";
+      WHEEL_DOWN = "seek 10";
+      UP = "add volume 2";
+      DOWN = "add volume -2";
+      z = "seek -7";
+      x = "seek 7";
+      Z = "seek -2";
+      X = "seek 2";
+      "Ctrl+w" = "quit";
+      "Alt+k" = ''playlist-shuffle ; show-text "$\{playlist}" 4000'';
+    };
+    # scripts = with pkgs.mpvScripts; [ autoload ];
+  };
+
+  home.file = {
+    ".config/cargo/config.toml".source = ./config/cargo.toml;
   };
 
   home.enableNixpkgsReleaseCheck = false;

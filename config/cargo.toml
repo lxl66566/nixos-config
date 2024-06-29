@@ -1,0 +1,10 @@
+[build]
+rustc-wrapper = "sccache"
+
+[alias]
+b = "build --release"
+c = "check"
+t = "test -- --nocapture"
+r = "run"
+u = "update"
+f = "fix --allow-dirty"
