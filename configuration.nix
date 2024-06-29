@@ -57,7 +57,12 @@
         prime.offload.enableOffloadCmd = lib.mkForce true;
         prime.sync.enable = lib.mkForce false;
         powerManagement.finegrained = lib.mkForce true;
+        services.xserver.videoDrivers = lib.mkDefault [
+          "modesetting"
+          "fbdev"
+        ];
       };
+
     };
   };
 
@@ -172,7 +177,7 @@
   # region services
 
   services.xserver.enable = true;
-  # services.xserver.videoDrivers = lib.mkAfter [ "nvidia" ];
+  services.xserver.videoDrivers = lib.mkBefore [ "nvidia" ];
   services.displayManager = {
     sddm.enable = true;
     defaultSession = "plasmax11";
@@ -190,6 +195,9 @@
   services.pipewire = {
     enable = true;
     pulse.enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    jack.enable = true;
   };
   services.v2raya.enable = true;
   # systemd.services.v2raya = {
@@ -233,9 +241,10 @@
       atuin
       zellij
       nixfmt-rfc-style
-      nil
       python3
       poetry
+      iotop
+      strace
       (
         let
           base = pkgs.appimageTools.defaultFhsEnvArgs;
@@ -279,7 +288,7 @@
   # region programs
 
   xdg.portal.enable = true;
-  # xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   programs.mtr.enable = true;
   programs.gnupg.agent = {
     enable = true;
