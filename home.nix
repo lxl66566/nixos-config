@@ -12,9 +12,6 @@
   home.sessionPath = [ "$HOME/.cargo/bin/" ];
   xsession.numlock.enable = true;
 
-  # 直接将当前文件夹的配置文件，链接到 Home 目录下的指定位置
-  # home.file.".config/i3/wallpaper.jpg".source = ./wallpaper.jpg;
-
   # 递归将某个文件夹中的文件，链接到 Home 目录下的指定位置
   # home.file.".config/i3/scripts" = {
   #   source = ./scripts;
@@ -47,7 +44,7 @@
     pciutils
     chromium
     uv
-    bottles-unwrapped
+    bottles
     qq
     onlyoffice-bin_latest
     mpv
@@ -73,6 +70,8 @@
     android-tools
     sccache
     difftastic
+    bitwarden-desktop
+    qpwgraph
 
     # iperf3
     dnsutils # `dig` + `nslookup`

@@ -80,19 +80,6 @@ in
     ];
   };
 
-  fileSystems."/tmp" = {
-    device = "none";
-    fsType = "tmpfs";
-    options = [
-      "rw"
-      "size=20G"
-      "mode=1777"
-      "noatime"
-      "nodev"
-      "nosuid"
-    ];
-  };
-
   swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking

@@ -20,7 +20,7 @@
     };
     bluetooth = {
       enable = true; # enables support for Bluetooth
-      powerOnBoot = true; # powers up the default Bluetooth controller on boot
+      powerOnBoot = false; # powers up the default Bluetooth controller on boot
     };
   };
 
@@ -43,10 +43,14 @@
       "kernel.sysrq" = 1;
       "vm.swappiness" = 10;
     };
-    # DO NOT CHANGE KERNEL! Otherwise your system may break due to NVIDIA driver.
     # kernelPackages = pkgs.linuxPackages_zen;
     kernelModules = lib.mkAfter [ ];
     supportedFilesystems = [ "ntfs" ];
+    tmp = {
+      # https://github.com/NixOS/nixpkgs/blob/nixos-24.05/nixos/modules/system/boot/tmp.nix
+      useTmpfs = true;
+      tmpfsSize = "80%";
+    };
   };
 
   specialisation = {
@@ -67,6 +71,10 @@
   networking.firewall.enable = false;
   networking.proxy.default = "http://127.0.0.1:20172/";
   networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+  zramSwap = {
+    enable = true;
+  };
 
   # region fonts and ime
 
@@ -115,7 +123,7 @@
       "zh_CN.UTF-8/UTF-8"
     ];
     extraLocaleSettings = {
-      LANG = "en_SG.UTF-8";
+      LANG = "zh_CN.UTF-8";
       LC_ALL = defaultLocale;
     };
     inputMethod = {
