@@ -2,7 +2,9 @@
 
 set -euxo pipefail
 
-cd /etc/nixos-backup
+git-se d
+cp ../nixos/config/absx.dae ./config/
+git-se e
 git add .
 git commit -m "update"
 git push

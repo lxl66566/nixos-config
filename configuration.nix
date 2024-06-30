@@ -45,6 +45,7 @@
     };
     # kernelPackages = pkgs.linuxPackages_zen;
     kernelModules = lib.mkAfter [ ];
+    kernelParams = [ "nvidia_drm.modeset=1" ];
     supportedFilesystems = [ "ntfs" ];
     tmp = {
       # https://github.com/NixOS/nixpkgs/blob/nixos-24.05/nixos/modules/system/boot/tmp.nix
@@ -69,8 +70,8 @@
   networking.hostName = "absx";
   networking.networkmanager.enable = true;
   networking.firewall.enable = false;
-  networking.proxy.default = "http://127.0.0.1:20172/";
-  networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  # networking.proxy.default = "http://127.0.0.1:20172/";
+  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   zramSwap = {
     enable = true;
@@ -203,12 +204,16 @@
     alsa.support32Bit = true;
     jack.enable = true;
   };
-  services.v2raya.enable = true;
+  services.v2raya.enable = false;
   # systemd.services.v2raya = {
   #   description = "Run v2raya on startup";
   #   script = "${pkgs.v2raya}/bin/v2rayA";
   #   wantedBy = [ "multi-user.target" ];
   # };
+  services.dae = {
+    enable = true;
+    configFile = ./config/absx.dae;
+  };
 
   systemd.sleep.extraConfig = ''
     AllowSuspend=yes

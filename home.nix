@@ -26,6 +26,7 @@
 
   home.packages = with pkgs; [
     vim
+    gcc
     tree
     wget
     floorp
@@ -146,6 +147,22 @@
         find . -name "*.mp4" -exec bash -c 'file="{}"; ffmpeg -i -nostats "$file" -i "$\{file%.mp4}.m4a" -c:v copy -c:a copy -strict experimental "/home/absolutex/Videos/$\{file}"' \;
       end
 
+      function revertversion
+        set cnt (count $argv)
+
+        if test $cnt -ne 1
+            echo "Usage: revertversion <version>"
+            return 1
+        end
+
+        set version $argv[1]
+        echo "Reverting version $version"
+        git push origin :refs/tags/$version
+        git tag -d $version
+        git tag $version
+        git push --tags
+      end
+
       atuin init fish | source
       zoxide init fish | source
       starship init fish | source
@@ -159,6 +176,7 @@
       py = "python";
       fd = "fd -H";
       nb = "sudo nixos-rebuild switch --show-trace"; # nixos (re)build
+      rv = "revertversion";
     };
   };
   programs.mpv = {
