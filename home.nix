@@ -33,7 +33,6 @@
     vscode
     telegram-desktop
     fastfetch
-    flameshot
     eza
     nodejs_22
     corepack_22
@@ -73,6 +72,7 @@
     difftastic
     bitwarden-desktop
     qpwgraph
+    feh
 
     # iperf3
     dnsutils # `dig` + `nslookup`
@@ -171,12 +171,14 @@
       e = "vim";
       l = "eza --all --long --color-scale size --binary --header --time-style=long-iso";
       gp = "git pull";
-      gc = "git clone --filter=tree:0";
+      # gc = "git clone --filter=tree:0";
       gfixup = "git commit -a --fixup HEAD && GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash HEAD~2";
       py = "python";
       fd = "fd -H";
       nb = "sudo nixos-rebuild switch --show-trace"; # nixos (re)build
       rv = "revertversion";
+      jc = "journalctl";
+      sc = "systemctl";
     };
   };
   programs.mpv = {
@@ -205,12 +207,18 @@
     };
     # scripts = with pkgs.mpvScripts; [ autoload ];
   };
+  programs.poetry = {
+    enable = true;
+    settings = {
+      virtualenvs.create = true;
+      virtualenvs.in-project = true;
+    };
+  };
 
   # region wallpaper
   #
   # Run this command above:
   # cd ~/Pictures && git clone git@github.com:lxl66566/wallpaper.git
-
   services.random-background = {
     enable = true;
     imageDirectory = "%h/Pictures/wallpaper";
