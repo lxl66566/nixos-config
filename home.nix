@@ -232,10 +232,10 @@
       settings = {
         auto_sync = true;
         dialect = "uk";
-        key_path = "./config/atuin.key";
+        key_path = "/etc/nixos/config/atuin.key";
         show_preview = true;
         style = "compact";
-        sync_frequency = "6h";
+        sync_frequency = "4h";
         sync_address = "https://api.atuin.sh";
         update_check = false;
       };
@@ -266,10 +266,9 @@
         "--long"
         "--binary"
         "--time-style=long-iso"
-        "--color-scale size"
       ];
       git = true;
-      icons = true;
+      # icons = true;
     };
     zoxide = {
       enable = true;
@@ -277,6 +276,9 @@
       enableFishIntegration = true;
       # Replace cd with z and add cdi to access zi
       options = [ "--cmd cd" ];
+    };
+    btop = {
+      enable = true;
     };
   };
 
