@@ -1,6 +1,14 @@
-{ config, pkgs, ... }:
 {
-  imports = [ ./others/eye-protection.nix ];
+  config,
+  pkgs,
+  catppuccin,
+  ...
+}:
+{
+  imports = [
+    ./others/eye-protection.nix
+    catppuccin.homeManagerModules.catppuccin
+  ];
 
   home.username = "absx";
   home.homeDirectory = "/home/absx";
@@ -33,7 +41,6 @@
     vscode
     telegram-desktop
     fastfetch
-    eza
     nodejs_22
     corepack_22
     kdePackages.yakuake
@@ -107,12 +114,6 @@
     usbutils # lsusb
   ];
 
-  programs.git = {
-    enable = true;
-    userName = "lxl66566";
-    userEmail = "lxl66566@gmail.com";
-  };
-
   # alacritty - 一个跨平台终端，带 GPU 加速功能
   # programs.alacritty = {
   #   enable = true;
@@ -128,90 +129,154 @@
   #   };
   # };
 
-  programs.home-manager.enable = true;
-  programs.fish = {
+  catppuccin = {
     enable = true;
-    interactiveShellInit = ''
-      set fish_greeting # Disable greeting
-      bind \t forward-word
+    flavor = "mocha";
+  };
+  programs = {
+    home-manager.enable = true;
+    git = {
+      enable = true;
+      userName = "lxl66566";
+      userEmail = "lxl66566@gmail.com";
+    };
+    fish = {
+      enable = true;
+      interactiveShellInit = ''
+        set fish_greeting # Disable greeting
+        bind \t forward-word
 
-      function make_new_subvolume -d 'make a btrfs subvol for existing folder'
-        set dir $argv
-        sudo mv $dir{,.bak}
-        sudo btrfs subvolume create $dir
-        sudo cp --archive --one-file-system --reflink=always $dir{.bak/*,}
-        sudo rm -r --one-file-system $dir'.bak'
-      end
-
-      function merge_video --description 'merge video and audio that downloaded by yt-dlp'
-        find . -name "*.mp4" -exec bash -c 'file="{}"; ffmpeg -i -nostats "$file" -i "$\{file%.mp4}.m4a" -c:v copy -c:a copy -strict experimental "/home/absolutex/Videos/$\{file}"' \;
-      end
-
-      function revertversion
-        set cnt (count $argv)
-
-        if test $cnt -ne 1
-            echo "Usage: revertversion <version>"
-            return 1
+        function make_new_subvolume -d 'make a btrfs subvol for existing folder'
+          set dir $argv
+          sudo mv $dir{,.bak}
+          sudo btrfs subvolume create $dir
+          sudo cp --archive --one-file-system --reflink=always $dir{.bak/*,}
+          sudo rm -r --one-file-system $dir'.bak'
         end
 
-        set version $argv[1]
-        echo "Reverting version $version"
-        git push origin :refs/tags/$version
-        git tag -d $version
-        git tag $version
-        git push --tags
-      end
+        function merge_video --description 'merge video and audio that downloaded by yt-dlp'
+          find . -name "*.mp4" -exec bash -c 'file="{}"; ffmpeg -i -nostats "$file" -i "$\{file%.mp4}.m4a" -c:v copy -c:a copy -strict experimental "/home/absolutex/Videos/$\{file}"' \;
+        end
 
-      atuin init fish | source
-      zoxide init fish | source
-      starship init fish | source
-    '';
-    shellAliases = rec {
-      e = "vim";
-      l = "eza --all --long --color-scale size --binary --header --time-style=long-iso";
-      gp = "git pull";
-      # gc = "git clone --filter=tree:0";
-      gfixup = "git commit -a --fixup HEAD && GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash HEAD~2";
-      py = "python";
-      fd = "fd -H";
-      nb = "sudo nixos-rebuild switch --show-trace"; # nixos (re)build
-      rv = "revertversion";
-      jc = "journalctl";
-      sc = "systemctl";
+        function revertversion
+          set cnt (count $argv)
+
+          if test $cnt -ne 1
+              echo "Usage: revertversion <version>"
+              return 1
+          end
+
+          set version $argv[1]
+          echo "Reverting version $version"
+          git push origin :refs/tags/$version
+          git tag -d $version
+          git tag $version
+          git push --tags
+        end
+
+        starship init fish | source
+      '';
+      shellAliases = rec {
+        e = "vim";
+        l = "eza";
+        gp = "git pull";
+        # gc = "git clone --filter=tree:0";
+        gfixup = "git commit -a --fixup HEAD && GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash HEAD~2";
+        py = "python";
+        fd = "fd -H";
+        nb = "sudo nixos-rebuild switch --show-trace"; # nixos (re)build
+        rv = "revertversion";
+        jc = "journalctl";
+        sc = "systemctl";
+      };
     };
-  };
-  programs.mpv = {
-    enable = true;
-    config = {
-      profile = "fast";
-      hwdec = "auto-safe";
-      vo = "gpu-next";
-      sub-auto = "fuzzy";
+    mpv = {
+      enable = true;
+      config = {
+        profile = "fast";
+        hwdec = "auto-safe";
+        vo = "gpu-next";
+        sub-auto = "fuzzy";
+      };
+      defaultProfiles = [ "save-position-on-quit" ];
+      bindings = {
+        d = "add speed .1";
+        a = "add speed -.1";
+        s = "set speed 1.0";
+        WHEEL_UP = "seek -10";
+        WHEEL_DOWN = "seek 10";
+        UP = "add volume 2";
+        DOWN = "add volume -2";
+        z = "seek -7";
+        x = "seek 7";
+        Z = "seek -2";
+        X = "seek 2";
+        "Ctrl+w" = "quit";
+        "Alt+k" = ''playlist-shuffle ; show-text "$\{playlist}" 4000'';
+      };
+      # scripts = with pkgs.mpvScripts; [ autoload ];
     };
-    defaultProfiles = [ "save-position-on-quit" ];
-    bindings = {
-      d = "add speed .1";
-      a = "add speed -.1";
-      s = "set speed 1.0";
-      WHEEL_UP = "seek -10";
-      WHEEL_DOWN = "seek 10";
-      UP = "add volume 2";
-      DOWN = "add volume -2";
-      z = "seek -7";
-      x = "seek 7";
-      Z = "seek -2";
-      X = "seek 2";
-      "Ctrl+w" = "quit";
-      "Alt+k" = ''playlist-shuffle ; show-text "$\{playlist}" 4000'';
+    poetry = {
+      enable = true;
+      settings = {
+        virtualenvs.create = true;
+        virtualenvs.in-project = true;
+      };
     };
-    # scripts = with pkgs.mpvScripts; [ autoload ];
-  };
-  programs.poetry = {
-    enable = true;
-    settings = {
-      virtualenvs.create = true;
-      virtualenvs.in-project = true;
+    atuin = {
+      enable = true;
+      enableBashIntegration = true;
+      enableFishIntegration = true;
+      enableZshIntegration = true;
+      flags = [ "--disable-ctrl-r" ];
+      settings = {
+        auto_sync = true;
+        dialect = "uk";
+        key_path = "./config/atuin.key";
+        show_preview = true;
+        style = "compact";
+        sync_frequency = "6h";
+        sync_address = "https://api.atuin.sh";
+        update_check = false;
+      };
+    };
+    bat = {
+      enable = true;
+      catppuccin.enable = true;
+      extraPackages = with pkgs.bat-extras; [
+        batgrep
+        batman
+        batdiff
+        batwatch
+        prettybat
+      ];
+      # config = {
+      #   style = "plain";
+      # };
+    };
+    eza = {
+      enable = true;
+      enableBashIntegration = true;
+      enableFishIntegration = true;
+      enableNushellIntegration = true;
+      extraOptions = [
+        "--group-directories-first"
+        "--header"
+        "--all"
+        "--long"
+        "--binary"
+        "--time-style=long-iso"
+        "--color-scale size"
+      ];
+      git = true;
+      icons = true;
+    };
+    zoxide = {
+      enable = true;
+      enableBashIntegration = true;
+      enableFishIntegration = true;
+      # Replace cd with z and add cdi to access zi
+      options = [ "--cmd cd" ];
     };
   };
 
@@ -219,9 +284,9 @@
   #
   # Run this command above:
   # cd ~/Pictures && git clone git@github.com:lxl66566/wallpaper.git
-  services.random-background = {
-    enable = true;
-    imageDirectory = "%h/Pictures/wallpaper";
-    interval = "6h";
-  };
+  # services.random-background = {
+  #   enable = true;
+  #   imageDirectory = "%h/Pictures/wallpaper";
+  #   interval = "6h";
+  # };
 }

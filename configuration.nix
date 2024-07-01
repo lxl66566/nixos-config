@@ -45,7 +45,10 @@
     };
     # kernelPackages = pkgs.linuxPackages_zen;
     kernelModules = lib.mkAfter [ ];
-    kernelParams = [ "nvidia_drm.modeset=1" ];
+    kernelParams = [
+      "nvidia_drm.modeset=1"
+      "nvidia_drm.fbdev=1"
+    ];
     supportedFilesystems = [ "ntfs" ];
     tmp = {
       # https://github.com/NixOS/nixpkgs/blob/nixos-24.05/nixos/modules/system/boot/tmp.nix
@@ -172,6 +175,7 @@
       "nix-command"
       "flakes"
     ];
+    warn-dirty = false;
   };
   nix.gc = {
     automatic = true;
@@ -204,7 +208,6 @@
     alsa.support32Bit = true;
     jack.enable = true;
   };
-  services.v2raya.enable = false;
   # systemd.services.v2raya = {
   #   description = "Run v2raya on startup";
   #   script = "${pkgs.v2raya}/bin/v2rayA";
@@ -259,6 +262,7 @@
       poetry
       iotop
       strace
+      delta
       (
         let
           base = pkgs.appimageTools.defaultFhsEnvArgs;
@@ -295,6 +299,13 @@
       plasma-browser-integration
       oxygen
       baloo
+      milou
+      plasma-workspace-wallpapers
+      ocean-sound-theme
+      phonon-vlc
+      kwallet
+      kwallet-pam
+      kwalletmanager
     ];
     localBinInPath = true;
   };
@@ -316,6 +327,31 @@
     extraCompatPackages = [ pkgs.proton-ge-bin ];
   };
   programs.fish.enable = true;
+  programs.git = {
+    enable = true;
+    config = {
+      safe.directory = "*";
+      core = {
+        quotepath = false;
+        pager = "delta";
+        # excludesfile = "~/.gitignore_g";
+      };
+      push = {
+        default = "current";
+        autoSetupRemote = true;
+        useForceIfIncludes = true;
+      };
+      diff = {
+        algorithm = "histogram";
+        colorMoved = "default";
+      };
+      init.defaultBranch = "main";
+      interactive.diffFilter = "delta --color-only";
+      delta.navigate = true;
+      merge.conflictstyle = "diff3";
+      rebase.autoSquash = true;
+    };
+  };
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
