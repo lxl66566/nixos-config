@@ -2,11 +2,14 @@
   config,
   pkgs,
   catppuccin,
+  plasma-manager,
   ...
 }:
 {
   imports = [
     ./others/eye-protection.nix
+    plasma-manager.homeManagerModules.plasma-manager
+    ./others/plasma.nix
     catppuccin.homeManagerModules.catppuccin
   ];
 
@@ -82,6 +85,7 @@
     losslesscut-bin
     zellij
     llvmPackages_18.clang-tools
+    qbittorrent
 
     # iperf3
     dnsutils # `dig` + `nslookup`
@@ -269,8 +273,6 @@
     };
   };
 
-  # region wallpaper
-  #
   # Run this command above:
   # cd ~/Pictures && git clone git@github.com:lxl66566/wallpaper.git
   # services.random-background = {

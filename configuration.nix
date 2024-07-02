@@ -187,8 +187,10 @@
 
   # region services
 
-  services.xserver.enable = true;
-  services.xserver.videoDrivers = lib.mkBefore [ "nvidia" ];
+  services.xserver = {
+    enable = true;
+    videoDrivers = lib.mkBefore [ "nvidia" ];
+  };
   services.displayManager = {
     sddm.enable = true;
     defaultSession = "plasmax11";

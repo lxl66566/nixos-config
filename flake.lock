@@ -350,6 +350,29 @@
         "type": "github"
       }
     },
+    "plasma-manager": {
+      "inputs": {
+        "home-manager": [
+          "home-manager"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1719875930,
+        "narHash": "sha256-jQmdWLxRP6BzOxRF8hQEhDD7UKw7UrnYbmaAPOSaXWY=",
+        "owner": "nix-community",
+        "repo": "plasma-manager",
+        "rev": "7e062fcd669e261fb06cf54fe0ef2e46c3db8e83",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "plasma-manager",
+        "type": "github"
+      }
+    },
     "pnpm2nix": {
       "inputs": {
         "flake-utils": "flake-utils_2",
@@ -402,7 +425,8 @@
         "catppuccin": "catppuccin",
         "daeuniverse": "daeuniverse",
         "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs_4"
+        "nixpkgs": "nixpkgs_4",
+        "plasma-manager": "plasma-manager"
       }
     },
     "systems": {

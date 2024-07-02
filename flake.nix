@@ -9,6 +9,11 @@
     };
     daeuniverse.url = "github:daeuniverse/flake.nix";
     catppuccin.url = "github:catppuccin/nix";
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
   };
   outputs =
     {
@@ -16,6 +21,7 @@
       nixpkgs,
       home-manager,
       catppuccin,
+      plasma-manager,
       ...
     }@inputs:
     {
@@ -27,7 +33,9 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.absx = import ./home.nix;
+            home-manager.users.absx = {
+              imports = [ ./home.nix ];
+            };
             home-manager.extraSpecialArgs = inputs;
             home-manager.backupFileExtension = "bakcup";
           }
