@@ -7,9 +7,11 @@
   pkgs,
   ...
 }:
-
 {
-  imports = [ ./hardware-configuration.nix ];
+  imports = [
+    ./hardware-configuration.nix
+    ./others/vm.nix
+  ];
 
   # region hardware
 
@@ -258,19 +260,15 @@
       wget
       curl
       yazi
-      zoxide
       fzf
       fd
       ncdu
       sd
       ripgrep
-      btop
       htop
       xh
       bat
       lsof
-      atuin
-      zellij
       nixfmt-rfc-style
       python3
       poetry
