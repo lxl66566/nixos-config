@@ -49,9 +49,15 @@ in
   };
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/3f9c46c9-efa8-4f9e-9dcf-77226f28b75b";
-    fsType = "btrfs";
-    options = defaultMountOption ++ [ "subvol=root" ];
+    # device = "/dev/disk/by-uuid/3f9c46c9-efa8-4f9e-9dcf-77226f28b75b";
+    # fsType = "btrfs";
+    # options = defaultMountOption ++ [ "subvol=root" ];
+    device = "tmpfs";
+    fsType = "tmpfs";
+    options = [
+      "relatime"
+      "mode=755"
+    ];
   };
 
   fileSystems."/home" = {
@@ -64,6 +70,12 @@ in
     device = "/dev/disk/by-uuid/3f9c46c9-efa8-4f9e-9dcf-77226f28b75b";
     fsType = "btrfs";
     options = defaultMountOption ++ [ "subvol=nix" ];
+  };
+
+  fileSystems."/var" = {
+    device = "/dev/disk/by-uuid/3f9c46c9-efa8-4f9e-9dcf-77226f28b75b";
+    fsType = "btrfs";
+    options = defaultMountOption ++ [ "subvol=var" ];
   };
 
   fileSystems."/boot" = {

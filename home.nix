@@ -86,6 +86,7 @@
     zellij
     llvmPackages_18.clang-tools
     qbittorrent
+    delta
 
     # iperf3
     dnsutils # `dig` + `nslookup`
@@ -176,6 +177,7 @@
         py = "python";
         fd = "fd -H";
         nb = "sudo nixos-rebuild switch --show-trace"; # nixos (re)build
+        nd = "nix develop -c $SHELL";
         rv = "revertversion";
         jc = "journalctl";
         sc = "systemctl";

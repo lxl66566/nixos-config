@@ -37,12 +37,12 @@
       htop
       ripgrep
       eza
-      zoxide
       v2rayA
       unzip
       untar
       p7zip
       fatresize
+      yazi
     ];
   };
   programs.fish = {
@@ -50,16 +50,6 @@
     interactiveShellInit = ''
       set fish_greeting # Disable greeting
       bind \t forward-word
-
-      function make_new_subvolume -d 'make a btrfs subvol for existing folder'
-        set dir $argv
-        sudo mv $dir{,.bak}
-        sudo btrfs subvolume create $dir
-        sudo cp --archive --one-file-system --reflink=always $dir{.bak/*,}
-        sudo rm -r --one-file-system $dir'.bak'
-      end
-
-      zoxide init fish | source
     '';
     shellAliases = rec {
       e = "vim";
