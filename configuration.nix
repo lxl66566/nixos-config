@@ -253,6 +253,7 @@
       "networkmanager"
     ];
     shell = pkgs.fish;
+    password = "1";
   };
   environment = {
     systemPackages = with pkgs; [
@@ -314,6 +315,7 @@
       directories = [
         "/etc/NetworkManager/system-connections"
         "/root"
+        "/etc/nixos"
       ];
       files = [
         "/etc/machine-id"
