@@ -87,6 +87,7 @@
     llvmPackages_18.clang-tools
     qbittorrent
     delta
+    xh
 
     # iperf3
     dnsutils # `dig` + `nslookup`
@@ -208,6 +209,28 @@
         "Alt+k" = ''playlist-shuffle ; show-text "$\{playlist}" 4000'';
       };
       # scripts = with pkgs.mpvScripts; [ autoload ];
+    };
+    ssh = {
+      enable = true;
+      matchBlocks = {
+        github = {
+          user = "git";
+          hostname = "ssh.github.com";
+          port = 443;
+        };
+        axw = {
+          user = "itdep";
+          hostname = "172.18.58.54";
+        };
+        jp = {
+          user = "root";
+          hostname = "38.47.53.113";
+        };
+        ali = {
+          user = "root";
+          hostname = "47.76.185.33";
+        };
+      };
     };
     poetry = {
       enable = true;

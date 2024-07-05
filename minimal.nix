@@ -1,4 +1,4 @@
-# NixOS configuration for lxl66566. 
+# NixOS configuration of lxl66566, the minimal version is to accelerate reinstallation on livecd. 
 # You can find the lastest version in https://github.com/lxl66566/nixos-config.
 
 {
@@ -8,10 +8,7 @@
   ...
 }:
 {
-  imports = [
-    ./hardware-configuration.nix
-    ./others/vm.nix
-  ];
+  imports = [ ./hardware-configuration.nix ];
 
   # region hardware
 
@@ -88,44 +85,12 @@
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
-    liberation_ttf
-    fira-code
-    fira-code-symbols
-    source-code-pro
-    source-han-sans
-    source-han-serif
-    sarasa-gothic
   ];
-  fonts.fontconfig = {
-    defaultFonts = {
-      emoji = [ "Noto Color Emoji" ];
-      monospace = [
-        "Fira Code"
-        "Noto Sans Mono CJK SC"
-        "Sarasa Mono SC"
-        "DejaVu Sans Mono"
-      ];
-      sansSerif = [
-        "Fira Code Sans"
-        "Noto Sans CJK SC"
-        "Source Han Sans SC"
-        "DejaVu Sans"
-      ];
-      serif = [
-        "Fira Code Serif"
-        "Noto Serif CJK SC"
-        "Source Han Serif SC"
-        "DejaVu Serif"
-      ];
-    };
-  };
   i18n = rec {
     defaultLocale = "zh_CN.UTF-8";
     supportedLocales = lib.mkBefore [
       "C.UTF-8/UTF-8"
       "en_US.UTF-8/UTF-8"
-      "en_SG.UTF-8/UTF-8"
-      "ja_JP.UTF-8/UTF-8"
       "zh_CN.UTF-8/UTF-8"
     ];
     extraLocaleSettings = {
@@ -136,16 +101,8 @@
       enabled = "fcitx5";
       fcitx5.addons = with pkgs; [
         fcitx5-chinese-addons
-        fcitx5-mozc
-        fcitx5-gtk
-        fcitx5-rime
         fcitx5-configtool
       ];
-      # enabled = "ibus";
-      # ibus.engines = with pkgs.ibus-engines; [
-      #   rime
-      #   libpinyin
-      # ];
     };
   };
 
@@ -200,48 +157,7 @@
       enable = true;
     };
   };
-  services.openssh = {
-    settings.PermitRootLogin = "no";
-  };
   services.libinput.enable = true;
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    jack.enable = true;
-  };
-  # systemd.services.v2raya = {
-  #   description = "Run v2raya on startup";
-  #   script = "${pkgs.v2raya}/bin/v2rayA";
-  #   wantedBy = [ "multi-user.target" ];
-  # };
-  services.dae = {
-    enable = true;
-    configFile = ./config/absx.dae;
-  };
-  services.tlp = {
-    enable = true;
-    settings = {
-      USB_AUTOSUSPEND = 0;
-      RUNTIME_PM_ON_AC = "auto";
-      CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
-      PLATFORM_PROFILE_ON_BAT = "low-power";
-      CPU_BOOST_ON_BAT = 0;
-      CPU_HWP_DYN_BOOST_ON_BAT = 0;
-      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
-      PLATFORM_PROFILE_ON_AC = "performance";
-    };
-  };
-  services.power-profiles-daemon.enable = false;
-
-  systemd.sleep.extraConfig = ''
-    AllowSuspend=yes
-    AllowHibernation=yes
-    AllowHybridSleep=yes
-    AllowSuspendThenHibernate=no
-    HibernateDelaySec=1h
-  '';
 
   # region Users and Root
 
@@ -265,62 +181,13 @@
       fzf
       fd
       ncdu
-      sd
       ripgrep
       htop
-      bat
       lsof
       nixfmt-rfc-style
-      python3
-      poetry
       iotop
       strace
-      trash-cli
-      (
-        let
-          base = pkgs.appimageTools.defaultFhsEnvArgs;
-        in
-        pkgs.buildFHSUserEnv (
-          base
-          // {
-            name = "fhs";
-            targetPkgs =
-              pkgs:
-              (
-                # pkgs.buildFHSUserEnv 只提供一个最小的 FHS 环境，缺少很多常用软件所必须的基础包
-                # 所以直接使用它很可能会报错
-                #
-                # pkgs.appimageTools 提供了大多数程序常用的基础包，所以我们可以直接用它来补充
-                (base.targetPkgs pkgs)
-                ++ (with pkgs; [
-                  pkg-config
-                  ncurses
-                  # 如果你的 FHS 程序还有其他依赖，把它们添加在这里
-                ])
-              );
-            profile = "export FHS=1";
-            runScript = "bash";
-            extraOutputsToInstall = [ "dev" ];
-          }
-        )
-      )
     ];
-    sessionVariables = rec { };
-    persistence."/nix/persistent" = {
-      hideMounts = true;
-      directories = [
-        "/etc/NetworkManager/system-connections"
-        "/root"
-        "/etc/nixos"
-      ];
-      files = [
-        "/etc/machine-id"
-        "/etc/ssh/ssh_host_ed25519_key.pub"
-        "/etc/ssh/ssh_host_ed25519_key"
-        "/etc/ssh/ssh_host_rsa_key.pub"
-        "/etc/ssh/ssh_host_rsa_key"
-      ];
-    };
     plasma6.excludePackages = with pkgs.kdePackages; [
       plasma-browser-integration
       oxygen
@@ -341,43 +208,9 @@
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   programs.vim.defaultEditor = true;
-  programs.mtr.enable = true;
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = true;
-    dedicatedServer.openFirewall = true;
-    gamescopeSession.enable = true;
-    extraCompatPackages = [ pkgs.proton-ge-bin ];
-  };
   programs.fish.enable = true;
   programs.git = {
     enable = true;
-    config = {
-      safe.directory = "*";
-      core = {
-        quotepath = false;
-        pager = "delta";
-        # excludesfile = "~/.gitignore_g";
-      };
-      push = {
-        default = "current";
-        autoSetupRemote = true;
-        useForceIfIncludes = true;
-      };
-      diff = {
-        algorithm = "histogram";
-        colorMoved = "default";
-      };
-      init.defaultBranch = "main";
-      interactive.diffFilter = "delta --color-only";
-      delta.navigate = true;
-      merge.conflictstyle = "diff3";
-      rebase.autoSquash = true;
-    };
   };
 
   # Copy the NixOS configuration file and link it from the resulting system

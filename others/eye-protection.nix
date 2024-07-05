@@ -15,7 +15,7 @@
     # 越大蓝光越多
     temperature = {
       day = 3200;
-      night = 2600;
+      night = 2700;
     };
     # https://gitlab.com/chinstrap/gammastep/-/blob/master/gammastep.conf.sample?ref_type=heads
     settings = {
