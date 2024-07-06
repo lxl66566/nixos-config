@@ -6,8 +6,9 @@
   lib,
   pkgs,
   ...
-}:
+}@args:
 {
+  nixpkgs.overlays = [ ] ++ (import ./overlays args);
   imports = [
     ./hardware-configuration.nix
     ./others/vm.nix
@@ -95,6 +96,7 @@
     source-han-sans
     source-han-serif
     sarasa-gothic
+    ipafont
   ];
   fonts.fontconfig = {
     defaultFonts = {

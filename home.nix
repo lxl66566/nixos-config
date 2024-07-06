@@ -192,7 +192,7 @@
         vo = "gpu-next";
         sub-auto = "fuzzy";
       };
-      defaultProfiles = [ "save-position-on-quit" ];
+      defaultProfiles = [ ];
       bindings = {
         d = "add speed .1";
         a = "add speed -.1";
