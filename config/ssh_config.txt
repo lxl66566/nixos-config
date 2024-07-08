@@ -1,0 +1,14 @@
+Host ali
+  User root
+  HostName 47.76.185.33
+Host axw
+  User itdep
+  HostName 172.18.58.54
+Host github
+  Port 443
+  User git
+  HostName ssh.github.com
+Host jp
+  User root
+  HostName 38.47.53.113
+  

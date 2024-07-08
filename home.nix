@@ -19,6 +19,7 @@
   home.stateVersion = "24.05";
   home.file = {
     ".config/cargo/config.toml".source = ./config/cargo.toml;
+    ".ssh/config".source = ./config/ssh_config.txt;
   };
   home.sessionPath = [ "$HOME/.cargo/bin/" ];
   xsession.numlock.enable = true;
@@ -37,10 +38,10 @@
 
   home.packages = with pkgs; [
     vim
+    gcc
     tree
     wget
     floorp
-    vscode
     telegram-desktop
     fastfetch
     nodejs_22
@@ -88,6 +89,9 @@
     qbittorrent
     delta
     xh
+    feishu
+    lunarvim
+    pre-commit
 
     # iperf3
     dnsutils # `dig` + `nslookup`
@@ -212,25 +216,6 @@
     };
     ssh = {
       enable = true;
-      matchBlocks = {
-        github = {
-          user = "git";
-          hostname = "ssh.github.com";
-          port = 443;
-        };
-        axw = {
-          user = "itdep";
-          hostname = "172.18.58.54";
-        };
-        jp = {
-          user = "root";
-          hostname = "38.47.53.113";
-        };
-        ali = {
-          user = "root";
-          hostname = "47.76.185.33";
-        };
-      };
     };
     poetry = {
       enable = true;
@@ -295,6 +280,28 @@
     };
     btop = {
       enable = true;
+    };
+    vscode = {
+      enable = true;
+      # package = pkgs.vscode.fhs;
+      extensions = with pkgs.vscode-extensions; [
+        formulahendry.auto-rename-tag
+        serayuzgur.crates
+        tamasfe.even-better-toml
+        jnoortheen.nix-ide
+        brettm12345.nixfmt-vscode
+        esbenp.prettier-vscode
+        ms-python.python
+        ms-python.vscode-pylance
+        charliermarsh.ruff
+        vscodevim.vim
+        vue.volar
+        llvm-vs-code-extensions.vscode-clangd
+        zxh404.vscode-proto3
+        rust-lang.rust-analyzer
+        myriad-dreamin.tinymist
+        shd101wyy.markdown-preview-enhanced
+      ];
     };
   };
 

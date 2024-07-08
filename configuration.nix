@@ -137,10 +137,10 @@
     inputMethod = {
       enabled = "fcitx5";
       fcitx5.addons = with pkgs; [
+        fcitx5-rime
         fcitx5-chinese-addons
         fcitx5-mozc
         fcitx5-gtk
-        fcitx5-rime
         fcitx5-configtool
       ];
       # enabled = "ibus";
@@ -380,6 +380,10 @@
       merge.conflictstyle = "diff3";
       rebase.autoSquash = true;
     };
+  };
+  programs.nix-ld = {
+    enable = true;
+    libraries = pkgs.steam-run.fhsenv.args.multiPkgs pkgs;
   };
 
   # Copy the NixOS configuration file and link it from the resulting system

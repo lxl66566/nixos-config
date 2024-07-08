@@ -6,7 +6,4 @@ _:
   # 下载链接：https://116-142-255-134.pd1.cjjd19.com:30443/download-cdn.cjjd19.com/123-630/d75b0863/1815256659-0/d75b0863395894c2f8bc5d1209b0a676/c-m39?v=5&t=1720352477&s=172035247718dad17dc0c1020f3aa105ebaefa3cfc&r=5GXOGN&bzc=2&bzs=313831353235363635393a32393834393939383a323032373933363a30&filename=%E5%B0%8F%E9%B9%A4%E9%9F%B3%E5%BD%A2%E2%80%9C%E9%BC%A0%E9%A1%BB%E7%AE%A1%E2%80%9Dfor+macOS.zip
   rime-data = ./rime-data-flypy;
   fcitx5-rime = super.fcitx5-rime.override { rimeDataPkgs = [ ./rime-data-flypy ]; };
-
-  # used by macOS Squirrel
-  flypy-squirrel = ./rime-data-flypy;
 })
