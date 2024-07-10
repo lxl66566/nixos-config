@@ -39,6 +39,7 @@
       ripgrep
       fatresize
       yazi
+      impala
     ];
   };
   programs.fish = {

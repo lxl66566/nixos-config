@@ -11,4 +11,7 @@ Host github
 Host jp
   User root
   HostName 38.47.53.113
-  
+Host xline
+  User xuanle
+  HostName frp.whyiscas.top
+  Port 7538

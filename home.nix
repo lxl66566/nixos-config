@@ -58,7 +58,6 @@
     qq
     onlyoffice-bin_latest
     mpv
-    activitywatch
     starship
     devenv
     xclip
@@ -92,6 +91,8 @@
     feishu
     lunarvim
     pre-commit
+    impala
+    nix-tree
 
     # iperf3
     dnsutils # `dig` + `nslookup`
@@ -183,6 +184,7 @@
         fd = "fd -H";
         nb = "sudo nixos-rebuild switch --show-trace"; # nixos (re)build
         nd = "nix develop -c $SHELL";
+        ndg = "git add --intent-to-add flake.lock flake.nix && git update-index --skip-worktree --assume-unchanged flake.lock flake.nix && nd";
         rv = "revertversion";
         jc = "journalctl";
         sc = "systemctl";
@@ -299,7 +301,7 @@
         llvm-vs-code-extensions.vscode-clangd
         zxh404.vscode-proto3
         rust-lang.rust-analyzer
-        myriad-dreamin.tinymist
+        # myriad-dreamin.tinymist
         shd101wyy.markdown-preview-enhanced
       ];
     };
@@ -312,4 +314,10 @@
   #   imageDirectory = "%h/Pictures/wallpaper";
   #   interval = "6h";
   # };
+  services.activitywatch = {
+    package = pkgs.aw-server-rust;
+    settings = {
+      timeout = 180;
+    };
+  };
 }

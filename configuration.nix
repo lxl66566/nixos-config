@@ -45,6 +45,9 @@
     kernel.sysctl = {
       "kernel.sysrq" = 1;
       "vm.swappiness" = 10;
+      "net.ipv6.conf.all.disable_ipv6" = 1;
+      "net.ipv6.conf.default.disable_ipv6" = 1;
+      "net.ipv6.conf.tun0.disable_ipv6" = 1;
     };
     # kernelPackages = pkgs.linuxPackages_zen;
     kernelModules = lib.mkAfter [ ];
@@ -370,6 +373,9 @@
         autoSetupRemote = true;
         useForceIfIncludes = true;
       };
+      pull = {
+        rebase = true;
+      };
       diff = {
         algorithm = "histogram";
         colorMoved = "default";
@@ -379,6 +385,9 @@
       delta.navigate = true;
       merge.conflictstyle = "diff3";
       rebase.autoSquash = true;
+      alias = {
+        commit = "commit --signoff";
+      };
     };
   };
   programs.nix-ld = {
