@@ -5,11 +5,9 @@
   config,
   lib,
   pkgs,
-  outputs,
   ...
 }@args:
 {
-  nixpkgs.overlays = [ ] ++ (import ./overlays args);
   imports = [
     ./hardware-configuration.nix
     ./others/vm.nix
@@ -87,6 +85,46 @@
     enable = true;
   };
 
+  # region system settings
+
+  time.hardwareClockInLocalTime = true;
+  time.timeZone = "Asia/Shanghai";
+  console = {
+    earlySetup = true;
+    font = "${pkgs.terminus_font}/share/consolefonts/ter-120n.psf.gz";
+    packages = with pkgs; [ terminus_font ];
+    keyMap = "us";
+  };
+  nixpkgs = {
+    overlays = [ ] ++ (import ./overlays args);
+    config = {
+      allowUnfree = true;
+      packageOverrides = pkgs: {
+        nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+          inherit pkgs;
+        };
+      };
+    };
+  };
+  nix.settings = {
+    substituters = lib.mkBefore [
+      "https://mirror.sjtu.edu.cn/nix-channels/store"
+      "https://mirrors.ustc.edu.cn/nix-channels/store"
+      "https://mirrors.cernet.edu.cn/nix-channels/store"
+    ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    warn-dirty = false;
+    trusted-users = [ "absx" ];
+  };
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 15d";
+  };
+
   # region fonts and ime
 
   fonts.packages = with pkgs; [
@@ -155,42 +193,6 @@
     };
   };
 
-  # region system settings
-
-  time.hardwareClockInLocalTime = true;
-  time.timeZone = "Asia/Shanghai";
-  console = {
-    earlySetup = true;
-    font = "${pkgs.terminus_font}/share/consolefonts/ter-120n.psf.gz";
-    packages = with pkgs; [ terminus_font ];
-    keyMap = "us";
-  };
-  nixpkgs.config = {
-    allowUnfree = true;
-    packageOverrides = pkgs: {
-      nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-        inherit pkgs;
-      };
-    };
-  };
-  nix.settings = {
-    substituters = lib.mkBefore [
-      "https://mirror.sjtu.edu.cn/nix-channels/store"
-      "https://mirrors.ustc.edu.cn/nix-channels/store"
-      "https://mirrors.cernet.edu.cn/nix-channels/store"
-    ];
-    experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
-    warn-dirty = false;
-  };
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 15d";
-  };
-
   # region services
 
   services.xserver = {
@@ -216,6 +218,11 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     jack.enable = true;
+    lowLatency = {
+      enable = true;
+      quantum = 64;
+      rate = 48000;
+    };
   };
   # systemd.services.v2raya = {
   #   description = "Run v2raya on startup";
@@ -248,6 +255,7 @@
     AllowSuspendThenHibernate=no
     HibernateDelaySec=1h
   '';
+  security.rtkit.enable = true;
 
   # region Users and Root
 
@@ -267,6 +275,11 @@
       git
       wget
       curl
+      file
+      which
+      tree
+      gnused
+      gawk
       yazi
       fzf
       fd
@@ -346,7 +359,10 @@
 
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-  programs.vim.defaultEditor = true;
+  programs.vim = {
+    enable = true;
+    defaultEditor = true;
+  };
   programs.mtr.enable = true;
   programs.gnupg.agent = {
     enable = true;
@@ -357,7 +373,8 @@
     remotePlay.openFirewall = true;
     dedicatedServer.openFirewall = true;
     gamescopeSession.enable = true;
-    extraCompatPackages = [ pkgs.proton-ge-bin ];
+    platformOptimizations.enable = true;
+    extraCompatPackages = with pkgs; [ proton-ge-bin ];
   };
   programs.fish.enable = true;
   programs.git = {

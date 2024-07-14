@@ -3,6 +3,7 @@
   pkgs,
   catppuccin,
   plasma-manager,
+  nix-gaming,
   ...
 }:
 {
@@ -103,17 +104,11 @@
     # nmap # A utility for network discovery and security auditing
     # ipcalc # it is a calculator for the IPv4/v6 addresses
 
-    # file
-    # which
-    # tree
-    # gnused
-    # gawk
-
     # # nix related
     # #
     # # it provides the command `nom` works just like `nix`
     # # with more details log output
-    # nix-output-monitor
+    nix-output-monitor
 
     # iftop # network monitoring
 
@@ -126,7 +121,10 @@
     ethtool
     pciutils # lspci
     usbutils # lsusb
+
+    osu-lazer-bin
   ];
+  # ++ (with nix-gaming.packages.${pkgs.system}; [ osu-stable ]);
 
   catppuccin = {
     enable = true;
@@ -186,7 +184,7 @@
         nb = "sudo nixos-rebuild switch --show-trace"; # nixos (re)build
         nd = "nix develop -c $SHELL";
         ndg = "git add --intent-to-add flake.lock flake.nix && git update-index --skip-worktree --assume-unchanged flake.lock flake.nix && nd";
-        ndc = "git add flake.lock flake.nix && nd && git rm --staged flake.lock flake.nix";
+        ndc = "git add flake.lock flake.nix && nd && git rm --cached flake.lock flake.nix && code .";
         rv = "revertversion";
         jc = "journalctl";
         sc = "systemctl";
