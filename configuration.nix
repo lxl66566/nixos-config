@@ -5,6 +5,7 @@
   config,
   lib,
   pkgs,
+  outputs,
   ...
 }@args:
 {
@@ -386,7 +387,7 @@
       merge.conflictstyle = "diff3";
       rebase.autoSquash = true;
       alias = {
-        commit = "commit --signoff";
+        cs = "commit --signoff";
       };
     };
   };

@@ -93,6 +93,7 @@
     pre-commit
     impala
     nix-tree
+    zed-editor
 
     # iperf3
     dnsutils # `dig` + `nslookup`
@@ -185,6 +186,7 @@
         nb = "sudo nixos-rebuild switch --show-trace"; # nixos (re)build
         nd = "nix develop -c $SHELL";
         ndg = "git add --intent-to-add flake.lock flake.nix && git update-index --skip-worktree --assume-unchanged flake.lock flake.nix && nd";
+        ndc = "git add flake.lock flake.nix && nd && git rm --staged flake.lock flake.nix";
         rv = "revertversion";
         jc = "journalctl";
         sc = "systemctl";
@@ -315,6 +317,7 @@
   #   interval = "6h";
   # };
   services.activitywatch = {
+    enable = true;
     package = pkgs.aw-server-rust;
     settings = {
       timeout = 180;
