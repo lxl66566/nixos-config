@@ -177,7 +177,8 @@
       LC_ALL = defaultLocale;
     };
     inputMethod = {
-      enabled = "fcitx5";
+      enable = true;
+      type = "fcitx5";
       fcitx5.addons = with pkgs; [
         fcitx5-rime
         fcitx5-chinese-addons
@@ -185,7 +186,7 @@
         fcitx5-gtk
         fcitx5-configtool
       ];
-      # enabled = "ibus";
+      # type = "ibus";
       # ibus.engines = with pkgs.ibus-engines; [
       #   rime
       #   libpinyin

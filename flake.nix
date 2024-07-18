@@ -40,6 +40,7 @@
       url = "github:fufexan/nix-gaming";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    amber.url = "github:Ph0enixKM/Amber";
   };
   outputs =
     {
@@ -50,6 +51,7 @@
       plasma-manager,
       impermanence,
       nix-gaming,
+      amber,
       ...
     }@inputs:
     {

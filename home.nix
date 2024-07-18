@@ -4,6 +4,7 @@
   catppuccin,
   plasma-manager,
   nix-gaming,
+  amber,
   ...
 }:
 {
@@ -123,8 +124,10 @@
     usbutils # lsusb
 
     osu-lazer-bin
-  ];
-  # ++ (with nix-gaming.packages.${pkgs.system}; [ osu-stable ]);
+  ]
+  # ++ (with nix-gaming.packages.${pkgs.system}; [ osu-stable ])
+  # ++ [ amber.packages.${pkgs.system}.default ]
+  ;
 
   catppuccin = {
     enable = true;
@@ -178,6 +181,7 @@
         l = "eza";
         gp = "git pull";
         # gc = "git clone --filter=tree:0";
+        gcm = "git commit --signoff -am";
         gfixup = "git commit -a --fixup HEAD && GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash HEAD~2";
         py = "python";
         fd = "fd -H";
