@@ -187,8 +187,7 @@
         fd = "fd -H";
         nb = "sudo nixos-rebuild switch --show-trace"; # nixos (re)build
         nd = "nix develop -c $SHELL";
-        ndg = "git add --intent-to-add flake.lock flake.nix && git update-index --skip-worktree --assume-unchanged flake.lock flake.nix && nd";
-        ndc = "git add flake.lock flake.nix && nd && git rm --cached flake.lock flake.nix && code .";
+        ndc = "nd && code .";
         rv = "revertversion";
         jc = "journalctl";
         sc = "systemctl";
@@ -321,6 +320,22 @@
   services.activitywatch = {
     enable = true;
     package = pkgs.aw-server-rust;
+    watchers = {
+      aw-watcher-afk = {
+        package = pkgs.activitywatch;
+        settings = {
+          timeout = 300;
+          poll_time = 2;
+        };
+      };
+      aw-watcher-windows = {
+        package = pkgs.activitywatch;
+        settings = {
+          poll_time = 1;
+          exclude_title = true;
+        };
+      };
+    };
     settings = {
       timeout = 180;
     };

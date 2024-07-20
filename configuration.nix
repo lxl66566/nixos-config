@@ -19,6 +19,25 @@
     graphics = {
       enable = true;
       enable32Bit = true;
+      extraPackages = with pkgs; [
+        intel-media-driver # LIBVA_DRIVER_NAME=iHD
+        intel-ocl
+        intel-vaapi-driver # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
+        intel-compute-runtime
+        vaapiVdpau
+        libvdpau-va-gl
+        mesa
+        nvidia-vaapi-driver
+        nv-codec-headers-12
+        vpl-gpu-rt
+      ];
+      extraPackages32 = with pkgs.pkgsi686Linux; [
+        intel-media-driver
+        intel-vaapi-driver
+        vaapiVdpau
+        mesa
+        libvdpau-va-gl
+      ];
     };
     bluetooth = {
       enable = true; # enables support for Bluetooth
@@ -376,6 +395,9 @@
     gamescopeSession.enable = true;
     platformOptimizations.enable = true;
     extraCompatPackages = with pkgs; [ proton-ge-bin ];
+    protontricks = {
+      enable = true;
+    };
   };
   programs.fish.enable = true;
   programs.git = {
