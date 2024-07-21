@@ -56,7 +56,6 @@
     pciutils
     chromium
     uv
-    bottles
     qq
     onlyoffice-bin_latest
     mpv
@@ -96,6 +95,8 @@
     impala
     nix-tree
     zed-editor
+    wine
+    winetricks
 
     # iperf3
     dnsutils # `dig` + `nslookup`
