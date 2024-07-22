@@ -97,6 +97,10 @@
     zed-editor
     wine
     winetricks
+    jdk
+    easyeffects
+    coppwr
+    obs-studio
 
     # iperf3
     dnsutils # `dig` + `nslookup`
