@@ -16,6 +16,8 @@
   # region hardware
 
   hardware = {
+    enableAllFirmware = true;
+    cpu.intel.updateMicrocode = true;
     graphics = {
       enable = true;
       enable32Bit = true;
@@ -68,7 +70,10 @@
       "net.ipv6.conf.tun0.disable_ipv6" = 1;
     };
     # kernelPackages = pkgs.linuxPackages_zen;
-    kernelModules = lib.mkAfter [ ];
+    kernelModules = lib.mkAfter [
+      "coretemp"
+      "kvm-intel"
+    ];
     kernelParams = [
       "nvidia_drm.modeset=1"
       "nvidia_drm.fbdev=1"
@@ -80,6 +85,7 @@
       tmpfsSize = "80%";
     };
   };
+  powerManagement.cpuFreqGovernor = "ondemand";
 
   specialisation = {
     on-the-go.configuration = {
@@ -90,7 +96,8 @@
         prime.sync.enable = lib.mkForce false;
         powerManagement.finegrained = lib.mkForce true;
       };
-
+      powerManagement.cpuFreqGovernor = lib.mkForce "powersave";
+      powerManagement.powertop.enable = lib.mkForce true;
     };
   };
 
@@ -310,6 +317,7 @@
     };
   };
   services.power-profiles-daemon.enable = false;
+  services.thermald.enable = true;
 
   systemd.sleep.extraConfig = ''
     AllowSuspend=yes
@@ -358,6 +366,8 @@
       iotop
       strace
       trash-cli
+      linuxKernel.packages.linux_6_6.cpupower
+      mbpfan
       (
         let
           base = pkgs.appimageTools.defaultFhsEnvArgs;
@@ -388,6 +398,9 @@
       )
     ];
     sessionVariables = rec { };
+    etc."sysconfig/lm_sensors".text = ''
+      HWMON_MODULES="coretemp"
+    '';
     persistence."/nix/persistent" = {
       hideMounts = true;
       directories = [

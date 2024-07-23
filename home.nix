@@ -101,6 +101,7 @@
     easyeffects
     coppwr
     obs-studio
+    lm_sensors
 
     # iperf3
     dnsutils # `dig` + `nslookup`
