@@ -64,19 +64,23 @@
     };
     kernel.sysctl = {
       "kernel.sysrq" = 1;
-      "vm.swappiness" = 10;
+      "vm.swappiness" = 30;
+      "net.ipv4.tcp_min_snd_mss" = 536;
+      "net.ipv4.tcp_congestion_control" = "bbr";
       "net.ipv6.conf.all.disable_ipv6" = 1;
       "net.ipv6.conf.default.disable_ipv6" = 1;
       "net.ipv6.conf.tun0.disable_ipv6" = 1;
     };
     # kernelPackages = pkgs.linuxPackages_zen;
     kernelModules = lib.mkAfter [
-      "coretemp"
       "kvm-intel"
+      "tcp_bbr"
+      "coretemp"
     ];
     kernelParams = [
       "nvidia_drm.modeset=1"
       "nvidia_drm.fbdev=1"
+      "acpi_enforce_resources=lax"
     ];
     supportedFilesystems = [ "ntfs" ];
     tmp = {
@@ -302,6 +306,10 @@
   services.dae = {
     enable = true;
     configFile = ./config/absx.dae;
+    assets = with pkgs; [
+      v2ray-geoip
+      v2ray-domain-list-community
+    ];
   };
   services.tlp = {
     enable = true;
@@ -367,7 +375,6 @@
       strace
       trash-cli
       linuxKernel.packages.linux_6_6.cpupower
-      mbpfan
       (
         let
           base = pkgs.appimageTools.defaultFhsEnvArgs;

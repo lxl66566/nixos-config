@@ -151,35 +151,6 @@
       interactiveShellInit = ''
         set fish_greeting # Disable greeting
         bind \t forward-word
-
-        function make_new_subvolume -d 'make a btrfs subvol for existing folder'
-          set dir $argv
-          sudo mv $dir{,.bak}
-          sudo btrfs subvolume create $dir
-          sudo cp --archive --one-file-system --reflink=always $dir{.bak/*,}
-          sudo rm -r --one-file-system $dir'.bak'
-        end
-
-        function merge_video --description 'merge video and audio that downloaded by yt-dlp'
-          find . -name "*.mp4" -exec bash -c 'file="{}"; ffmpeg -i -nostats "$file" -i "$\{file%.mp4}.m4a" -c:v copy -c:a copy -strict experimental "/home/absolutex/Videos/$\{file}"' \;
-        end
-
-        function revertversion
-          set cnt (count $argv)
-
-          if test $cnt -ne 1
-              echo "Usage: revertversion <version>"
-              return 1
-          end
-
-          set version $argv[1]
-          echo "Reverting version $version"
-          git push origin :refs/tags/$version
-          git tag -d $version
-          git tag $version
-          git push --tags
-        end
-
         starship init fish | source
       '';
       shellAliases = rec {
@@ -197,6 +168,34 @@
         rv = "revertversion";
         jc = "journalctl";
         sc = "systemctl";
+        remove_color = "sed -i -r 's/\x1b\[[0-9;]*m//g'";
+      };
+      functions = {
+        revertversion = ''
+          set cnt (count $argv)
+
+          if test $cnt -ne 1
+              echo "Usage: revertversion <version>"
+              return 1
+          end
+
+          set version $argv[1]
+          echo "Reverting version $version"
+          git push origin :refs/tags/$version
+          git tag -d $version
+          git tag $version
+          git push --tags
+        '';
+        merge_video = ''
+          find . -name "*.mp4" -exec bash -c 'file="{}"; ffmpeg -i -nostats "$file" -i "$\{file%.mp4}.m4a" -c:v copy -c:a copy -strict experimental "/home/absolutex/Videos/$\{file}"' \;
+        '';
+        make_new_subvolume = ''
+          set dir $argv
+          sudo mv $dir{,.bak}
+          sudo btrfs subvolume create $dir
+          sudo cp --archive --one-file-system --reflink=always $dir{.bak/*,}
+          sudo rm -r --one-file-system $dir'.bak'
+        '';
       };
     };
     mpv = {
