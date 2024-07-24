@@ -102,6 +102,7 @@
     coppwr
     obs-studio
     lm_sensors
+    ida-free
 
     # iperf3
     dnsutils # `dig` + `nslookup`
