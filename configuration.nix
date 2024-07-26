@@ -203,8 +203,8 @@
       "zh_CN.UTF-8/UTF-8"
     ];
     extraLocaleSettings = {
-      LANG = "zh_CN.UTF-8";
-      LC_ALL = defaultLocale;
+      # LANG = defaultLocale;
+      # LC_ALL = defaultLocale;
     };
     inputMethod = {
       enable = true;
@@ -404,7 +404,9 @@
         )
       )
     ];
-    sessionVariables = rec { };
+    sessionVariables = rec {
+      EDITOR = "nvim";
+    };
     etc."sysconfig/lm_sensors".text = ''
       HWMON_MODULES="coretemp"
     '';
@@ -442,10 +444,6 @@
 
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-  programs.vim = {
-    enable = true;
-    defaultEditor = true;
-  };
   programs.mtr.enable = true;
   programs.gnupg.agent = {
     enable = true;
@@ -461,6 +459,15 @@
     protontricks = {
       enable = true;
     };
+  };
+  programs.vim = {
+    enable = true;
+    defaultEditor = false;
+  };
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    vimAlias = true;
   };
   programs.fish.enable = true;
   programs.git = {

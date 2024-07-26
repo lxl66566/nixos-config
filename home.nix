@@ -101,8 +101,9 @@
     easyeffects
     coppwr
     obs-studio
-    lm_sensors
     ida-free
+    xonsh
+    go
 
     # iperf3
     dnsutils # `dig` + `nslookup`
@@ -112,10 +113,6 @@
     # nmap # A utility for network discovery and security auditing
     # ipcalc # it is a calculator for the IPv4/v6 addresses
 
-    # # nix related
-    # #
-    # # it provides the command `nom` works just like `nix`
-    # # with more details log output
     nix-output-monitor
 
     # iftop # network monitoring
@@ -125,7 +122,7 @@
 
     # # system tools
     sysstat
-    # lm_sensors # for `sensors` command
+    lm_sensors
     ethtool
     pciutils # lspci
     usbutils # lsusb
@@ -155,7 +152,7 @@
         starship init fish | source
       '';
       shellAliases = rec {
-        e = "vim";
+        e = "$EDITOR";
         l = "eza";
         gp = "git pull";
         # gc = "git clone --filter=tree:0";
@@ -164,6 +161,7 @@
         py = "python";
         fd = "fd -H";
         nb = "sudo nixos-rebuild switch --show-trace"; # nixos (re)build
+        nbf = "nb --fast";
         nd = "nix develop -c $SHELL";
         ndc = "nd && code .";
         rv = "revertversion";
