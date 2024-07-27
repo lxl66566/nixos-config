@@ -125,11 +125,16 @@
     packages = with pkgs; [ terminus_font ];
     keyMap = "us";
   };
+  system.activationScripts.binbash = {
+    deps = [ "binsh" ];
+    text = ''
+      ln -sfn /bin/sh /bin/bash
+    '';
+  };
 
   # region nix
 
   nixpkgs = {
-    overlays = [ ] ++ (import ./overlays args);
     config = {
       allowUnfree = true;
       packageOverrides = pkgs: {

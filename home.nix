@@ -23,6 +23,7 @@
   home.file = {
     ".config/cargo/config.toml".source = ./config/cargo.toml;
     ".ssh/config".source = ./config/ssh_config.txt;
+    ".local/share/fcitx5/pinyin/customphrase".source = ./config/fcitx5_pinyin_customphrase.txt;
   };
   home.sessionPath = [ "$HOME/.cargo/bin/" ];
   xsession.numlock.enable = true;
@@ -107,6 +108,10 @@
     go
     androidStudioPackages.dev
     nix-index
+    libtas
+    fcitx5-pinyin-zhwiki
+    fcitx5-pinyin-moegirl
+    fcitx5-pinyin-zhwiki
 
     # iperf3
     dnsutils # `dig` + `nslookup`
