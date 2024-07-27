@@ -5,8 +5,9 @@
   plasma-manager,
   nix-gaming,
   amber,
+  anyrun,
   ...
-}:
+}@inputs:
 {
   imports = [
     ./others/eye-protection.nix
@@ -104,6 +105,8 @@
     ida-free
     xonsh
     go
+    androidStudioPackages.dev
+    nix-index
 
     # iperf3
     dnsutils # `dig` + `nslookup`
@@ -130,7 +133,8 @@
     osu-lazer-bin
   ]
   # ++ (with nix-gaming.packages.${pkgs.system}; [ osu-stable ])
-  # ++ [ amber.packages.${pkgs.system}.default ]
+  # ++ [ inputs.amber.packages.${pkgs.system}.default ]
+  # ++ [ anyrun.packages.${system}.anyrun ]
   ;
 
   catppuccin = {
@@ -311,6 +315,28 @@
         # myriad-dreamin.tinymist
         shd101wyy.markdown-preview-enhanced
       ];
+    };
+    anyrun = {
+      enable = true;
+      config = {
+        plugins = [ ];
+        x = {
+          fraction = 0.5;
+        };
+        y = {
+          fraction = 0.3;
+        };
+        width = {
+          fraction = 0.3;
+        };
+        hideIcons = false;
+        ignoreExclusiveZones = false;
+        layer = "overlay";
+        hidePluginInfo = false;
+        closeOnClick = true;
+        showResultsImmediately = false;
+        maxEntries = null;
+      };
     };
   };
 

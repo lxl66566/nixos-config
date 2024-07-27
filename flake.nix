@@ -3,18 +3,20 @@
   nixConfig = {
     # substituers will be appended to the default substituters when fetching packages
     extra-substituters = [
-      # "https://anyrun.cachix.org"
       # "https://hyprland.cachix.org"
       # "https://nixpkgs-wayland.cachix.org"
       "https://nix-gaming.cachix.org"
       "https://daeuniverse.cachix.org"
+      "https://anyrun.cachix.org"
+      "https://nix-community.cachix.org"
     ];
     extra-trusted-public-keys = [
-      # "anyrun.cachix.org-1:pqBobmOjI7nKlsUMV25u9QHa9btJK65/C8vnO3p346s="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       # "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       # "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
       "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
       "daeuniverse.cachix.org-1:8hRIzkQmAKxeuYY3c/W1I7QbZimYphiPX/E7epYNTeM="
+      "anyrun.cachix.org-1:pqBobmOjI7nKlsUMV25u9QHa9btJK65/C8vnO3p346s="
     ];
   };
   inputs = {
@@ -40,6 +42,10 @@
       url = "github:fufexan/nix-gaming";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    anyrun = {
+      url = "github:anyrun-org/anyrun";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     amber.url = "github:Ph0enixKM/Amber";
   };
   outputs =
@@ -52,6 +58,7 @@
       impermanence,
       nix-gaming,
       amber,
+      anyrun,
       ...
     }@inputs:
     {
@@ -61,13 +68,17 @@
           [
             inputs.impermanence.nixosModules.impermanence
             # inputs.daeuniverse.nixosModules.dae
+            { nix.settings.trusted-users = [ "absx" ]; }
             ./configuration.nix
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.users.absx = {
-                imports = [ ./home.nix ];
+                imports = [
+                  ./home.nix
+                  anyrun.homeManagerModules.default
+                ];
               };
               home-manager.extraSpecialArgs = inputs;
               home-manager.backupFileExtension = "backup";

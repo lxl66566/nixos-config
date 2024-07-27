@@ -125,6 +125,9 @@
     packages = with pkgs; [ terminus_font ];
     keyMap = "us";
   };
+
+  # region nix
+
   nixpkgs = {
     overlays = [ ] ++ (import ./overlays args);
     config = {
@@ -137,17 +140,18 @@
     };
   };
   nix.settings = {
-    substituters = lib.mkBefore [
-      "https://mirror.sjtu.edu.cn/nix-channels/store"
-      "https://mirrors.ustc.edu.cn/nix-channels/store"
-      "https://mirrors.cernet.edu.cn/nix-channels/store"
-    ];
+    trusted-users = [ "absx" ];
     experimental-features = [
       "nix-command"
       "flakes"
     ];
     warn-dirty = false;
-    trusted-users = [ "absx" ];
+    builders-use-substitutes = true;
+    substituters = lib.mkBefore [
+      "https://mirror.sjtu.edu.cn/nix-channels/store"
+      "https://mirrors.ustc.edu.cn/nix-channels/store"
+      "https://mirrors.cernet.edu.cn/nix-channels/store"
+    ];
   };
   nix.gc = {
     automatic = true;
