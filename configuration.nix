@@ -90,6 +90,23 @@
     };
   };
   powerManagement.cpuFreqGovernor = "ondemand";
+  networking = {
+    hostName = "absx";
+    networkmanager.enable = true;
+    firewall.enable = false;
+    # enableIPv6 = false;
+    # proxy.default = "http://127.0.0.1:20172/";
+    # proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+    # use https://tool.chinaz.com/dns/ to info host.
+    extraHosts = ''
+      185.199.110.133 raw.githubusercontent.com
+      104.244.42.65 twitter.com
+    '';
+  };
+  zramSwap = {
+    enable = true;
+  };
 
   specialisation = {
     on-the-go.configuration = {
@@ -103,16 +120,6 @@
       powerManagement.cpuFreqGovernor = lib.mkForce "powersave";
       powerManagement.powertop.enable = lib.mkForce true;
     };
-  };
-
-  networking.hostName = "absx";
-  networking.networkmanager.enable = true;
-  networking.firewall.enable = false;
-  # networking.proxy.default = "http://127.0.0.1:20172/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  zramSwap = {
-    enable = true;
   };
 
   # region system settings
@@ -319,6 +326,7 @@
       v2ray-geoip
       v2ray-domain-list-community
     ];
+    # disableTxChecksumIpGeneric = true;
   };
   services.tlp = {
     enable = true;

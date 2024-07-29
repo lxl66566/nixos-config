@@ -43,6 +43,8 @@
   home.packages = with pkgs; [
     vim
     gcc
+    gnumake
+    cmake
     tree
     wget
     floorp
@@ -108,10 +110,15 @@
     go
     androidStudioPackages.dev
     nix-index
-    libtas
+    # libtas
+    (callPackage ./mynixpkgs/libtas.nix { })
     fcitx5-pinyin-zhwiki
     fcitx5-pinyin-moegirl
     fcitx5-pinyin-zhwiki
+    shfmt
+    tabiew
+    mise
+    gitui
 
     # iperf3
     dnsutils # `dig` + `nslookup`
