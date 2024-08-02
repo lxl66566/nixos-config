@@ -119,6 +119,8 @@
     tabiew
     mise
     gitui
+    onedrivegui
+    taplo
 
     # iperf3
     dnsutils # `dig` + `nslookup`
@@ -129,13 +131,8 @@
     # ipcalc # it is a calculator for the IPv4/v6 addresses
 
     nix-output-monitor
-
-    # iftop # network monitoring
-
-    # # system call monitoring
-    # ltrace # library call monitoring
-
-    # # system tools
+    iftop
+    ltrace
     sysstat
     lm_sensors
     ethtool
