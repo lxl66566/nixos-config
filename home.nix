@@ -121,6 +121,8 @@
     gitui
     onedrivegui
     taplo
+    yt-dlp
+    podman
 
     # iperf3
     dnsutils # `dig` + `nslookup`
@@ -187,15 +189,15 @@
           set cnt (count $argv)
 
           if test $cnt -ne 1
-              echo "Usage: revertversion <version>"
+              echo "Usage: revertversion <_version>"
               return 1
           end
 
-          set version $argv[1]
-          echo "Reverting version $version"
-          git push origin :refs/tags/$version
-          git tag -d $version
-          git tag $version
+          set _version $argv[1]
+          echo "Reverting version $_version"
+          git push origin :refs/tags/$_version
+          git tag -d $_version
+          git tag $_version
           git push --tags
         '';
         merge_video = ''
@@ -298,7 +300,7 @@
       enableBashIntegration = true;
       enableFishIntegration = true;
       # Replace cd with z and add cdi to access zi
-      options = [ "--cmd cd" ];
+      # options = [ "--cmd cd" ];
     };
     btop = {
       enable = true;

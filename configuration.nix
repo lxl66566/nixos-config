@@ -343,7 +343,8 @@
   };
   services.power-profiles-daemon.enable = false;
   services.thermald.enable = true;
-  services.onedrive.enable = true;
+  services.onedrive.enable = false;
+  services.vnstat.enable = true;
 
   systemd.sleep.extraConfig = ''
     AllowSuspend=yes
@@ -424,6 +425,7 @@
     ];
     sessionVariables = rec {
       EDITOR = "nvim";
+      SCCACHE_CACHE_SIZE = "50G";
     };
     etc."sysconfig/lm_sensors".text = ''
       HWMON_MODULES="coretemp"
@@ -502,9 +504,9 @@
         autoSetupRemote = true;
         useForceIfIncludes = true;
       };
-      pull = {
-        rebase = true;
-      };
+      # pull = {
+      #   rebase = true;
+      # };
       diff = {
         algorithm = "histogram";
         colorMoved = "default";
