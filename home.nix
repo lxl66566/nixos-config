@@ -123,6 +123,8 @@
     taplo
     yt-dlp
     podman
+    podman-tui
+    btdu
 
     # iperf3
     dnsutils # `dig` + `nslookup`

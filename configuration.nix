@@ -242,6 +242,10 @@
 
   # region services
 
+  services.btrfs.autoScrub = {
+    enable = true;
+    interval = "15 days";
+  };
   services.xserver = {
     enable = true;
     videoDrivers = lib.mkBefore [ "nvidia" ];
@@ -319,6 +323,11 @@
   #   script = "${pkgs.v2raya}/bin/v2rayA";
   #   wantedBy = [ "multi-user.target" ];
   # };
+  services.locate = {
+    package = pkgs.plocate;
+    enable = true;
+    localuser = null;
+  };
   services.dae = {
     enable = true;
     configFile = ./config/absx.dae;
