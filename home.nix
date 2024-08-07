@@ -6,6 +6,7 @@
   nix-gaming,
   amber,
   anyrun,
+  lib,
   ...
 }@inputs:
 {
@@ -125,16 +126,17 @@
     podman
     podman-tui
     btdu
+    fan2go
+    lm_sensors
 
     # iperf3
     dnsutils # `dig` + `nslookup`
     # ldns # replacement of `dig`, it provide the command `drill`
-    # aria2 # A lightweight multi-protocol & multi-source command-line download utility
+    aria2 # A lightweight multi-protocol & multi-source command-line download utility
     # socat # replacement of openbsd-netcat
     # nmap # A utility for network discovery and security auditing
     # ipcalc # it is a calculator for the IPv4/v6 addresses
 
-    nix-output-monitor
     iftop
     ltrace
     sysstat
@@ -351,6 +353,12 @@
         maxEntries = null;
       };
     };
+    neovim = {
+      enable = true;
+      vimAlias = true;
+      withNodeJs = true;
+      withPython3 = true;
+    };
   };
 
   # Run this command above:
@@ -381,6 +389,19 @@
     };
     settings = {
       timeout = 180;
+    };
+  };
+
+  xdg.configFile = {
+    "nvim" = {
+      source = pkgs.fetchFromGitHub {
+        owner = "AstroNvim";
+        repo = "template";
+        rev = "20450d8a65a74be39d2c92bc8689b1acccf2cffe";
+        sha256 = "sha256-P6AC1L5wWybju3+Pkuca3KB4YwKEdG7GVNvAR8w+X1I=";
+      };
+      executable = true;
+      recursive = true;
     };
   };
 }

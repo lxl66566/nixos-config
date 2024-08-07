@@ -22,6 +22,7 @@
       enable = true;
       enable32Bit = true;
       extraPackages = with pkgs; [
+        vpl-gpu-rt
         intel-media-driver # LIBVA_DRIVER_NAME=iHD
         intel-ocl
         intel-vaapi-driver # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
@@ -31,7 +32,6 @@
         mesa
         nvidia-vaapi-driver
         nv-codec-headers-12
-        vpl-gpu-rt
       ];
       extraPackages32 = with pkgs.pkgsi686Linux; [
         intel-media-driver
@@ -78,9 +78,11 @@
       "coretemp"
     ];
     kernelParams = [
+      "sysrq_always_enabled=1"
       "nvidia_drm.modeset=1"
       "nvidia_drm.fbdev=1"
       "acpi_enforce_resources=lax"
+      "i915.force_probe=46a6"
     ];
     supportedFilesystems = [ "ntfs" ];
     tmp = {
@@ -148,6 +150,7 @@
         nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
           inherit pkgs;
         };
+        intel-vaapi-driver = pkgs.intel-vaapi-driver.override { enableHybridCodec = true; };
       };
     };
   };
@@ -491,12 +494,11 @@
   };
   programs.vim = {
     enable = true;
-    defaultEditor = false;
+    defaultEditor = lib.mkForce false;
   };
   programs.neovim = {
     enable = true;
     defaultEditor = true;
-    vimAlias = true;
   };
   programs.fish.enable = true;
   programs.git = {
