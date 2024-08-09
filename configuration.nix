@@ -244,119 +244,115 @@
   };
 
   # region services
-
-  services.btrfs.autoScrub = {
-    enable = true;
-    interval = "15 days";
-  };
-  services.xserver = {
-    enable = true;
-    videoDrivers = lib.mkBefore [ "nvidia" ];
-  };
-  services.displayManager = {
-    sddm.enable = true;
-    defaultSession = "plasmax11";
-  };
-  services.desktopManager = {
-    plasma6 = {
+  services = {
+    btrfs.autoScrub = {
       enable = true;
+      interval = "15 days";
     };
-  };
-  services.openssh = {
-    settings.PermitRootLogin = "no";
-  };
-  services.libinput.enable = true;
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    jack.enable = true;
-    lowLatency = {
+    xserver = {
       enable = true;
-      quantum = 64;
-      rate = 48000;
+      videoDrivers = lib.mkBefore [ "nvidia" ];
     };
-    extraConfig = {
-      pipewire."92-low-latency" = {
-        context.properties = {
-          default.clock.rate = 48000;
-          default.clock.quantum = 32;
-          default.clock.min-quantum = 32;
-          default.clock.max-quantum = 32;
-        };
-      };
-      pipewire-pulse."92-low-latency" = {
-        context.modules = [
-          {
-            name = "libpipewire-module-protocol-pulse";
-            args = {
-              pulse.min.req = "32/48000";
-              pulse.default.req = "32/48000";
-              pulse.max.req = "32/48000";
-              pulse.min.quantum = "32/48000";
-              pulse.max.quantum = "32/48000";
-            };
-          }
-        ];
-        stream.properties = {
-          node.latency = "32/48000";
-          resample.quality = 1;
-        };
+    displayManager = {
+      sddm.enable = true;
+      defaultSession = "plasmax11";
+    };
+    desktopManager = {
+      plasma6 = {
+        enable = true;
       };
     };
-    wireplumber.configPackages = [
-      (pkgs.writeTextDir "share/wireplumber/main.lua.d/99-alsa-lowlatency.lua" ''
-        alsa_monitor.rules = {
-          {
-            matches = {{{ "node.name", "matches", "alsa_output.*" }}};
-            apply_properties = {
-              ["audio.format"] = "S32LE",
-              ["audio.rate"] = "96000", -- for USB soundcards it should be twice your desired rate
-              ["api.alsa.period-size"] = 2, -- defaults to 1024, tweak by trial-and-error
-              -- ["api.alsa.disable-batch"] = true, -- generally, USB soundcards use the batch mode
+    openssh = {
+      settings.PermitRootLogin = "no";
+    };
+    libinput.enable = true;
+    pipewire = {
+      enable = true;
+      pulse.enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      jack.enable = true;
+      lowLatency = {
+        enable = true;
+        quantum = 64;
+        rate = 48000;
+      };
+      extraConfig = {
+        pipewire."92-low-latency" = {
+          context.properties = {
+            default.clock.rate = 48000;
+            default.clock.quantum = 32;
+            default.clock.min-quantum = 32;
+            default.clock.max-quantum = 32;
+          };
+        };
+        pipewire-pulse."92-low-latency" = {
+          context.modules = [
+            {
+              name = "libpipewire-module-protocol-pulse";
+              args = {
+                pulse.min.req = "32/48000";
+                pulse.default.req = "32/48000";
+                pulse.max.req = "32/48000";
+                pulse.min.quantum = "32/48000";
+                pulse.max.quantum = "32/48000";
+              };
+            }
+          ];
+          stream.properties = {
+            node.latency = "32/48000";
+            resample.quality = 1;
+          };
+        };
+      };
+      wireplumber.configPackages = [
+        (pkgs.writeTextDir "share/wireplumber/main.lua.d/99-alsa-lowlatency.lua" ''
+          alsa_monitor.rules = {
+            {
+              matches = {{{ "node.name", "matches", "alsa_output.*" }}};
+              apply_properties = {
+                ["audio.format"] = "S32LE",
+                ["audio.rate"] = "96000", -- for USB soundcards it should be twice your desired rate
+                ["api.alsa.period-size"] = 2, -- defaults to 1024, tweak by trial-and-error
+                -- ["api.alsa.disable-batch"] = true, -- generally, USB soundcards use the batch mode
+              },
             },
-          },
-        }
-      '')
-    ];
-  };
-  # systemd.services.v2raya = {
-  #   description = "Run v2raya on startup";
-  #   script = "${pkgs.v2raya}/bin/v2rayA";
-  #   wantedBy = [ "multi-user.target" ];
-  # };
-  services.locate = {
-    package = pkgs.plocate;
-    enable = true;
-    localuser = null;
-  };
-  services.dae = {
-    enable = true;
-    configFile = ./config/absx.dae;
-    assets = with pkgs; [
-      v2ray-geoip
-      v2ray-domain-list-community
-    ];
-    # disableTxChecksumIpGeneric = true;
-  };
-  services.tlp = {
-    enable = true;
-    settings = {
-      USB_AUTOSUSPEND = 0;
-      RUNTIME_PM_ON_AC = "auto";
-      CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
-      PLATFORM_PROFILE_ON_BAT = "low-power";
-      CPU_BOOST_ON_BAT = 0;
-      CPU_HWP_DYN_BOOST_ON_BAT = 0;
-      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
-      PLATFORM_PROFILE_ON_AC = "performance";
+          }
+        '')
+      ];
     };
+    locate = {
+      package = pkgs.plocate;
+      enable = true;
+      localuser = null;
+    };
+    dae = {
+      enable = true;
+      configFile = ./config/absx.dae;
+      assets = with pkgs; [
+        v2ray-geoip
+        v2ray-domain-list-community
+      ];
+      # disableTxChecksumIpGeneric = true;
+    };
+    tlp = {
+      enable = true;
+      settings = {
+        USB_AUTOSUSPEND = 0;
+        RUNTIME_PM_ON_AC = "auto";
+        CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+        PLATFORM_PROFILE_ON_BAT = "low-power";
+        CPU_BOOST_ON_BAT = 0;
+        CPU_HWP_DYN_BOOST_ON_BAT = 0;
+        CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+        PLATFORM_PROFILE_ON_AC = "performance";
+      };
+    };
+    power-profiles-daemon.enable = false;
+    thermald.enable = true;
+    onedrive.enable = false;
+    vnstat.enable = true;
   };
-  services.power-profiles-daemon.enable = false;
-  services.thermald.enable = true;
-  services.onedrive.enable = false;
-  services.vnstat.enable = true;
 
   systemd.sleep.extraConfig = ''
     AllowSuspend=yes
@@ -365,6 +361,11 @@
     AllowSuspendThenHibernate=no
     HibernateDelaySec=1h
   '';
+  # systemd.v2raya = {
+  #   description = "Run v2raya on startup";
+  #   script = "${pkgs.v2raya}/bin/v2rayA";
+  #   wantedBy = [ "multi-user.target" ];
+  # };
   security.rtkit.enable = true;
 
   # region Users and Root
@@ -530,6 +531,8 @@
       alias = {
         cs = "commit --signoff";
       };
+      pack.threads = 8;
+      checkout.workers = 8;
     };
   };
   programs.nix-ld = {

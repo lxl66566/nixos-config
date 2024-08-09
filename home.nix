@@ -128,6 +128,9 @@
     btdu
     fan2go
     lm_sensors
+    gh
+    # arc-browser
+    brave
 
     # iperf3
     dnsutils # `dig` + `nslookup`
@@ -160,6 +163,7 @@
     home-manager.enable = true;
     git = {
       enable = true;
+      delta.enable = true;
       userName = "lxl66566";
       userEmail = "lxl66566@gmail.com";
     };
