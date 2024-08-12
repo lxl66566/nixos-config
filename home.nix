@@ -131,6 +131,8 @@
     gh
     # arc-browser
     brave
+    zig
+    leiningen
 
     # iperf3
     dnsutils # `dig` + `nslookup`
@@ -178,7 +180,7 @@
         e = "$EDITOR";
         l = "eza";
         gp = "git pull";
-        # gc = "git clone --filter=tree:0";
+        gc = "git clone --recursive --filter=tree:0";
         gcm = "git commit --signoff -am";
         gfixup = "git commit -a --fixup HEAD && GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash HEAD~2";
         py = "python";
@@ -191,6 +193,7 @@
         jc = "journalctl";
         sc = "systemctl";
         remove_color = "sed -i -r 's/\x1b\[[0-9;]*m//g'";
+        tp = "trash-put";
       };
       functions = {
         revertversion = ''

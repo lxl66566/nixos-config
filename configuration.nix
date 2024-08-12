@@ -462,6 +462,7 @@
       plasma-browser-integration
       oxygen
       baloo
+      baloo-widgets
       milou
       plasma-workspace-wallpapers
       ocean-sound-theme
@@ -469,6 +470,7 @@
       kwallet
       kwallet-pam
       kwalletmanager
+      elisa
     ];
     localBinInPath = true;
   };
