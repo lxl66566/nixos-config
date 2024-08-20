@@ -111,8 +111,7 @@
     go
     androidStudioPackages.dev
     nix-index
-    # libtas
-    (callPackage ./mynixpkgs/libtas.nix { })
+    (callPackage ./mynixpkgs/libtas.nix { }) # libtas
     fcitx5-pinyin-zhwiki
     fcitx5-pinyin-moegirl
     fcitx5-pinyin-zhwiki
@@ -126,13 +125,18 @@
     podman
     podman-tui
     btdu
-    fan2go
+    # fan2go
     lm_sensors
     gh
     # arc-browser
-    brave
+    brave # browser
     zig
-    leiningen
+    leiningen # clojure package manager
+    clojure # functional language
+    discord # chat platform
+    ouch # compress and decompress painlessly
+    jd-gui # java decompiler
+    efibootmgr
 
     # iperf3
     dnsutils # `dig` + `nslookup`
@@ -180,7 +184,7 @@
         e = "$EDITOR";
         l = "eza";
         gp = "git pull";
-        gc = "git clone --recursive --filter=tree:0";
+        gc = "git clone --recursive --depth 1";
         gcm = "git commit --signoff -am";
         gfixup = "git commit -a --fixup HEAD && GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash HEAD~2";
         py = "python";
@@ -188,7 +192,7 @@
         nb = "sudo nixos-rebuild switch --show-trace"; # nixos (re)build
         nbf = "nb --fast";
         nd = "nix develop -c $SHELL";
-        ndc = "nd && code .";
+        ndb = "git checkout nix -- flake.nix flake.lock && nd && rm flake.nix flake.lock";
         rv = "revertversion";
         jc = "journalctl";
         sc = "systemctl";

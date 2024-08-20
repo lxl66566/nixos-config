@@ -40,6 +40,7 @@
       fatresize
       yazi
       impala
+      efibootmgr
     ];
   };
   programs.fish = {

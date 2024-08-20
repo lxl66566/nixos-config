@@ -45,6 +45,10 @@
       enable = true; # enables support for Bluetooth
       powerOnBoot = false; # powers up the default Bluetooth controller on boot
     };
+    tuxedo-rs = {
+      enable = true;
+      tailor-gui.enable = true;
+    };
   };
 
   # region boot&network
@@ -128,6 +132,10 @@
 
   time.hardwareClockInLocalTime = true;
   time.timeZone = "Asia/Shanghai";
+  documentation.man = {
+    generateCaches = false;
+    man-db.enable = false;
+  };
   console = {
     earlySetup = true;
     font = "${pkgs.terminus_font}/share/consolefonts/ter-120n.psf.gz";
