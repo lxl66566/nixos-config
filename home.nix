@@ -189,7 +189,7 @@
         gfixup = "git commit -a --fixup HEAD && GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash HEAD~2";
         py = "python";
         fd = "fd -H";
-        nb = "sudo nixos-rebuild switch --show-trace"; # nixos (re)build
+        nb = "sudo nixos-rebuild switch"; # nixos (re)build
         nbf = "nb --fast";
         nd = "nix develop -c $SHELL";
         ndb = "git checkout nix -- flake.nix flake.lock && nd && rm flake.nix flake.lock";
@@ -286,7 +286,7 @@
       extraPackages = with pkgs.bat-extras; [
         batgrep
         batman
-        batdiff
+        # batdiff
         batwatch
         prettybat
       ];
