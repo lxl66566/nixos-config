@@ -97,7 +97,7 @@
     feishu
     lunarvim
     pre-commit
-    impala
+    impala # tui wireless manager
     nix-tree
     zed-editor
     wine
@@ -125,8 +125,8 @@
     podman
     podman-tui
     btdu
-    # fan2go
     lm_sensors
+    pkg-config
     gh
     # arc-browser
     brave # browser
@@ -137,6 +137,7 @@
     ouch # compress and decompress painlessly
     jd-gui # java decompiler
     efibootmgr
+    pipx
 
     # iperf3
     dnsutils # `dig` + `nslookup`
@@ -144,8 +145,8 @@
     aria2 # A lightweight multi-protocol & multi-source command-line download utility
     # socat # replacement of openbsd-netcat
     # nmap # A utility for network discovery and security auditing
-    # ipcalc # it is a calculator for the IPv4/v6 addresses
 
+    trippy
     iftop
     ltrace
     sysstat
@@ -381,7 +382,8 @@
   # };
   services.activitywatch = {
     enable = true;
-    package = pkgs.aw-server-rust;
+    # package = pkgs.aw-server-rust;
+    package = pkgs.activitywatch;
     watchers = {
       aw-watcher-afk = {
         package = pkgs.activitywatch;

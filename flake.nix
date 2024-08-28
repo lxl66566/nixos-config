@@ -6,7 +6,7 @@
       # "https://hyprland.cachix.org"
       # "https://nixpkgs-wayland.cachix.org"
       "https://nix-gaming.cachix.org"
-      "https://daeuniverse.cachix.org"
+      # "https://daeuniverse.cachix.org"
       "https://anyrun.cachix.org"
       "https://nix-community.cachix.org"
     ];
