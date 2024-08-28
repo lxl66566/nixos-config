@@ -25,6 +25,7 @@
     ".config/cargo/config.toml".source = ./config/cargo.toml;
     ".ssh/config".source = ./config/ssh_config.txt;
     ".local/share/fcitx5/pinyin/customphrase".source = ./config/fcitx5_pinyin_customphrase.txt;
+    ".config/mpv".source = ./config/mpv;
   };
   home.sessionPath = [ "$HOME/.cargo/bin/" ];
   xsession.numlock.enable = true;
@@ -227,32 +228,6 @@
           sudo rm -r --one-file-system $dir'.bak'
         '';
       };
-    };
-    mpv = {
-      enable = true;
-      config = {
-        profile = "fast";
-        hwdec = "auto-safe";
-        vo = "gpu-next";
-        sub-auto = "fuzzy";
-      };
-      defaultProfiles = [ ];
-      bindings = {
-        d = "add speed .1";
-        a = "add speed -.1";
-        s = "set speed 1.0";
-        WHEEL_UP = "seek -10";
-        WHEEL_DOWN = "seek 10";
-        UP = "add volume 2";
-        DOWN = "add volume -2";
-        z = "seek -7";
-        x = "seek 7";
-        Z = "seek -2";
-        X = "seek 2";
-        "Ctrl+w" = "quit";
-        "Alt+k" = ''playlist-shuffle ; show-text "$\{playlist}" 4000'';
-      };
-      # scripts = with pkgs.mpvScripts; [ autoload ];
     };
     ssh = {
       enable = true;
