@@ -159,6 +159,7 @@
           inherit pkgs;
         };
         intel-vaapi-driver = pkgs.intel-vaapi-driver.override { enableHybridCodec = true; };
+        yt-dlp = pkgs.yt-dlp.override { withAlias = true; };
       };
     };
   };
@@ -343,6 +344,7 @@
       ];
       # disableTxChecksumIpGeneric = true;
     };
+
     tlp = {
       enable = true;
       settings = {
@@ -369,11 +371,19 @@
     AllowSuspendThenHibernate=no
     HibernateDelaySec=1h
   '';
-  # systemd.v2raya = {
-  #   description = "Run v2raya on startup";
-  #   script = "${pkgs.v2raya}/bin/v2rayA";
-  #   wantedBy = [ "multi-user.target" ];
-  # };
+
+  systemd.user.services.apim = {
+    enable = true;
+    description = "Open online video in local mpv player";
+    script = "/home/absx/.local/bin/apim";
+    wantedBy = [ "default.target" ]; # [ "multi-user.target" ];
+    path = with pkgs; [
+      mpv
+      yt-dlp
+      kdePackages.kwallet
+      ffmpeg
+    ];
+  };
   security.rtkit.enable = true;
 
   # region Users and Root
@@ -526,9 +536,9 @@
         autoSetupRemote = true;
         useForceIfIncludes = true;
       };
-      # pull = {
-      #   rebase = true;
-      # };
+      pull = {
+        ff = "only";
+      };
       diff = {
         algorithm = "histogram";
         colorMoved = "default";

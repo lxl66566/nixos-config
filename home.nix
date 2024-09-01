@@ -64,7 +64,6 @@
     uv
     qq
     onlyoffice-bin_latest
-    mpv
     starship
     devenv
     xclip
@@ -122,6 +121,7 @@
     gitui
     onedrivegui
     taplo
+    mpv
     yt-dlp
     podman
     podman-tui
