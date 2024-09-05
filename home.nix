@@ -110,6 +110,7 @@
     xonsh
     go
     androidStudioPackages.dev
+    gradle
     nix-index
     (callPackage ./mynixpkgs/libtas.nix { }) # libtas
     fcitx5-pinyin-zhwiki
@@ -139,6 +140,7 @@
     jd-gui # java decompiler
     efibootmgr
     pipx
+    octave
 
     # iperf3
     dnsutils # `dig` + `nslookup`
