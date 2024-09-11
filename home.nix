@@ -141,6 +141,8 @@
     efibootmgr
     pipx
     octave
+    gimp
+    mtpaint
 
     # iperf3
     dnsutils # `dig` + `nslookup`
@@ -159,6 +161,10 @@
     usbutils # lsusb
 
     osu-lazer-bin
+
+    # testdev
+    jmeter
+    postman
   ]
   # ++ (with nix-gaming.packages.${pkgs.system}; [ osu-stable ])
   # ++ [ inputs.amber.packages.${pkgs.system}.default ]

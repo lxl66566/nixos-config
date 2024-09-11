@@ -21,3 +21,9 @@ Host sc
 Host lh
   User root
   HostName 167.253.153.49
+Host xrq
+  User root
+  HostName server.perrykum.top
+Host yxvm
+  User root
+  HostName 46.3.101.226
