@@ -117,7 +117,7 @@
     fcitx5-pinyin-moegirl
     fcitx5-pinyin-zhwiki
     shfmt
-    tabiew
+    tabiew # tw: Tabiew is a lightweight, terminal-based application to view and query delimiter separated value formatted documents, such as CSV and TSV files
     mise
     gitui
     onedrivegui
@@ -132,17 +132,18 @@
     gh
     # arc-browser
     brave # browser
-    zig
+    zig # programming language
     leiningen # clojure package manager
     clojure # functional language
     discord # chat platform
     ouch # compress and decompress painlessly
     jd-gui # java decompiler
-    efibootmgr
-    pipx
-    octave
-    gimp
-    mtpaint
+    efibootmgr # edit efi boot manager
+    pipx # python binary package manager
+    octave # scientific computing
+    gimp # image editor
+    mtpaint # a simple whiteboard
+    # vivaldi # track https://github.com/NixOS/nixpkgs/issues/309056
 
     # iperf3
     dnsutils # `dig` + `nslookup`
