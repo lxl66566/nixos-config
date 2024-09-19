@@ -26,6 +26,13 @@
     ".ssh/config".source = ./config/ssh_config.txt;
     ".local/share/fcitx5/pinyin/customphrase".source = ./config/fcitx5_pinyin_customphrase.txt;
     ".config/mpv".source = ./config/mpv;
+    ".config/nixpkgs/config.nix".text = ''
+      {
+        permittedInsecurePackages = [
+          "yandex-browser-beta"
+        ];
+      }
+    '';
   };
   home.sessionPath = [ "$HOME/.cargo/bin/" ];
   xsession.numlock.enable = true;
@@ -130,8 +137,8 @@
     lm_sensors
     pkg-config
     gh
-    # arc-browser
-    brave # browser
+    # arc-browser # not supported on x86_64 unknown linux
+    brave
     zig # programming language
     leiningen # clojure package manager
     clojure # functional language
@@ -144,6 +151,9 @@
     gimp # image editor
     mtpaint # a simple whiteboard
     # vivaldi # track https://github.com/NixOS/nixpkgs/issues/309056
+    fsearch
+    microsoft-edge
+    xorg.libxcb.dev
 
     # iperf3
     dnsutils # `dig` + `nslookup`
