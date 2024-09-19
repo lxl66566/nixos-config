@@ -6,7 +6,6 @@
       # "https://hyprland.cachix.org"
       # "https://nixpkgs-wayland.cachix.org"
       "https://nix-gaming.cachix.org"
-      # "https://daeuniverse.cachix.org"
       "https://anyrun.cachix.org"
       "https://nix-community.cachix.org"
     ];
@@ -15,7 +14,6 @@
       # "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       # "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
       "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
-      "daeuniverse.cachix.org-1:8hRIzkQmAKxeuYY3c/W1I7QbZimYphiPX/E7epYNTeM="
       "anyrun.cachix.org-1:pqBobmOjI7nKlsUMV25u9QHa9btJK65/C8vnO3p346s="
     ];
   };
@@ -28,7 +26,6 @@
     };
     daeuniverse = {
       url = "github:daeuniverse/flake.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
     catppuccin = {
       url = "github:catppuccin/nix";
@@ -67,7 +64,7 @@
         modules =
           [
             inputs.impermanence.nixosModules.impermanence
-            # inputs.daeuniverse.nixosModules.dae
+            inputs.daeuniverse.nixosModules.dae
             { nix.settings.trusted-users = [ "absx" ]; }
             ./configuration.nix
             home-manager.nixosModules.home-manager
