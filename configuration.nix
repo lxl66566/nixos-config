@@ -341,14 +341,16 @@
     };
     dae = {
       enable = true;
-      configFile = ./config/absx.dae;
+      configFile = "/etc/nixos/config/absx.dae";
+      # dae needs 0600 permission, but we cannot source file with permission.
+      # related issue: https://github.com/nix-community/home-manager/issues/3090
+      # configFile = "/home/absx/.config/absx_.dae";
       assets = with pkgs; [
         v2ray-geoip
         v2ray-domain-list-community
       ];
       # disableTxChecksumIpGeneric = true;
     };
-
     tlp = {
       enable = true;
       settings = {

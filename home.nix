@@ -119,7 +119,7 @@
     androidStudioPackages.dev
     gradle
     nix-index
-    (callPackage ./mynixpkgs/libtas.nix { }) # libtas
+    # (callPackage ./mynixpkgs/libtas.nix { }) # libtas
     fcitx5-pinyin-zhwiki
     fcitx5-pinyin-moegirl
     fcitx5-pinyin-zhwiki
@@ -176,6 +176,10 @@
     # testdev
     jmeter
     postman
+
+    # flatpak
+    flatpak
+    flatpak-builder
   ]
   # ++ (with nix-gaming.packages.${pkgs.system}; [ osu-stable ])
   # ++ [ inputs.amber.packages.${pkgs.system}.default ]
