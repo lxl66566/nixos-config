@@ -341,10 +341,10 @@
     };
     dae = {
       enable = true;
-      configFile = "/etc/nixos/config/absx.dae";
+      # configFile = "/etc/nixos/config/absx.dae";
       # dae needs 0600 permission, but we cannot source file with permission.
       # related issue: https://github.com/nix-community/home-manager/issues/3090
-      # configFile = "/home/absx/.config/absx_.dae";
+      configFile = "/home/absx/.config/absx_.dae";
       assets = with pkgs; [
         v2ray-geoip
         v2ray-domain-list-community
@@ -473,6 +473,9 @@
         "/etc/NetworkManager/system-connections"
         "/root"
         "/etc/nixos"
+        # add this two will break my system!
+        # "/etc/shadow"
+        # "/etc/passwd"
       ];
       files = [
         "/etc/machine-id"

@@ -33,6 +33,14 @@
         ];
       }
     '';
+    ".config/absx.dae" = {
+      source = ./config/absx.dae;
+      onChange = ''
+        rm -f ~/.config/absx_.dae
+        cp ~/.config/absx.dae ~/.config/absx_.dae
+        chmod 0640 ~/.config/absx_.dae
+      '';
+    };
   };
   home.sessionPath = [ "$HOME/.cargo/bin/" ];
   xsession.numlock.enable = true;
