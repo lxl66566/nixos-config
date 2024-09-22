@@ -162,6 +162,7 @@
     fsearch
     microsoft-edge
     xorg.libxcb.dev
+    bfg-repo-cleaner
 
     # iperf3
     dnsutils # `dig` + `nslookup`
