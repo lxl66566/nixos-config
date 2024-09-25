@@ -192,6 +192,8 @@
   fonts.packages = with pkgs; [
     noto-fonts
     noto-fonts-cjk
+    noto-fonts-cjk-serif
+    noto-fonts-cjk-sans
     noto-fonts-emoji
     liberation_ttf
     fira-code
@@ -201,6 +203,7 @@
     source-han-serif
     sarasa-gothic
     ipafont
+    vistafonts-chs
   ];
   fonts.fontconfig = {
     defaultFonts = {
@@ -431,6 +434,7 @@
       strace
       trash-cli
       linuxKernel.packages.linux_6_6.cpupower
+      libarchive
       (
         let
           base = pkgs.appimageTools.defaultFhsEnvArgs;

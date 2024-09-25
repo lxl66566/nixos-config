@@ -139,6 +139,7 @@
     taplo
     mpv
     yt-dlp
+    typst
     podman
     podman-tui
     btdu
@@ -163,6 +164,7 @@
     microsoft-edge
     xorg.libxcb.dev
     bfg-repo-cleaner
+    xcolor
 
     # iperf3
     dnsutils # `dig` + `nslookup`
