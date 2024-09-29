@@ -86,6 +86,7 @@
       "nvidia_drm.modeset=1"
       "nvidia_drm.fbdev=1"
       "acpi_enforce_resources=lax"
+      "i915.modeset=1"
       "i915.force_probe=46a6"
     ];
     supportedFilesystems = [ "ntfs" ];
@@ -227,6 +228,7 @@
         "DejaVu Serif"
       ];
     };
+    cache32Bit = true;
   };
   i18n = rec {
     defaultLocale = "zh_CN.UTF-8";
@@ -341,6 +343,16 @@
       package = pkgs.plocate;
       enable = true;
       localuser = null;
+      interval = "daily";
+      pruneNames = [
+        ".bzr"
+        ".cache"
+        ".git"
+        ".hg"
+        ".svn"
+        "node_modules"
+        "__pycache__"
+      ];
     };
     dae = {
       enable = true;
