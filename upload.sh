@@ -4,7 +4,7 @@ set -euxo pipefail
 
 git-se e
 git add -A
-git commit -a --allow-empty-message -m "$1"
+git commit -a --allow-empty-message -m "$*"
 if git log -1 --name-only | grep -q "atuin.key"; then
     echo "上一次提交包含隐私文件，脚本终止。"
     exit 1

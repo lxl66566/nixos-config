@@ -26,13 +26,7 @@
     ".ssh/config".source = ./config/ssh_config.txt;
     ".local/share/fcitx5/pinyin/customphrase".source = ./config/fcitx5_pinyin_customphrase.txt;
     ".config/mpv".source = ./config/mpv;
-    ".config/nixpkgs/config.nix".text = ''
-      {
-        permittedInsecurePackages = [
-          "yandex-browser-beta"
-        ];
-      }
-    '';
+    ".config/niri/config.kdl".source = ./config/niri.kdl;
     ".config/absx.dae" = {
       source = ./config/absx.dae;
       onChange = ''
@@ -165,6 +159,7 @@
     xorg.libxcb.dev
     bfg-repo-cleaner
     xcolor
+    cachix
 
     # iperf3
     dnsutils # `dig` + `nslookup`
@@ -380,6 +375,12 @@
       withNodeJs = true;
       withPython3 = true;
     };
+    alacritty = {
+      enable = true;
+    };
+    fuzzel = {
+      enable = true;
+    };
   };
 
   # Run this command above:
@@ -412,6 +413,9 @@
     settings = {
       timeout = 180;
     };
+  };
+  services.mako = {
+    enable = true;
   };
 
   xdg.configFile = {

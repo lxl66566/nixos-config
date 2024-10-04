@@ -43,7 +43,12 @@
       url = "github:anyrun-org/anyrun";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    niri = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     amber.url = "github:Ph0enixKM/Amber";
+    stylix.url = "github:danth/stylix";
   };
   outputs =
     {
@@ -56,6 +61,7 @@
       nix-gaming,
       amber,
       anyrun,
+      niri,
       ...
     }@inputs:
     {
@@ -65,6 +71,8 @@
           [
             inputs.impermanence.nixosModules.impermanence
             inputs.daeuniverse.nixosModules.dae
+            inputs.niri.nixosModules.niri
+            inputs.stylix.nixosModules.stylix
             { nix.settings.trusted-users = [ "absx" ]; }
             ./configuration.nix
             home-manager.nixosModules.home-manager
