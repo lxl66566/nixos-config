@@ -176,6 +176,7 @@
     ethtool
     pciutils # lspci
     usbutils # lsusb
+    cargo-msrv
 
     osu-lazer-bin
 
