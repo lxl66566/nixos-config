@@ -27,14 +27,6 @@
     ".local/share/fcitx5/pinyin/customphrase".source = ./config/fcitx5_pinyin_customphrase.txt;
     ".config/mpv".source = ./config/mpv;
     ".config/niri/config.kdl".source = ./config/niri.kdl;
-    ".config/absx.dae" = {
-      source = ./config/absx.dae;
-      onChange = ''
-        rm -f ~/.config/absx_.dae
-        cp ~/.config/absx.dae ~/.config/absx_.dae
-        chmod 0640 ~/.config/absx_.dae
-      '';
-    };
   };
   home.sessionPath = [ "$HOME/.cargo/bin/" ];
   xsession.numlock.enable = true;
