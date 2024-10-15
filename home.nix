@@ -342,28 +342,6 @@
         shd101wyy.markdown-preview-enhanced
       ];
     };
-    anyrun = {
-      enable = true;
-      config = {
-        plugins = [ ];
-        x = {
-          fraction = 0.5;
-        };
-        y = {
-          fraction = 0.3;
-        };
-        width = {
-          fraction = 0.3;
-        };
-        hideIcons = false;
-        ignoreExclusiveZones = false;
-        layer = "overlay";
-        hidePluginInfo = false;
-        closeOnClick = true;
-        showResultsImmediately = false;
-        maxEntries = null;
-      };
-    };
     neovim = {
       enable = true;
       vimAlias = true;

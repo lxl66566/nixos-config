@@ -383,6 +383,7 @@
     thermald.enable = true;
     onedrive.enable = false;
     vnstat.enable = true;
+    safeeyes.enable = true;
   };
 
   systemd.sleep.extraConfig = ''

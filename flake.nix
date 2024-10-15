@@ -6,7 +6,6 @@
       # "https://hyprland.cachix.org"
       # "https://nixpkgs-wayland.cachix.org"
       # "https://nix-gaming.cachix.org"
-      # "https://anyrun.cachix.org"
       "https://nix-community.cachix.org"
     ];
     extra-trusted-public-keys = [
@@ -14,7 +13,6 @@
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
       "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
-      "anyrun.cachix.org-1:pqBobmOjI7nKlsUMV25u9QHa9btJK65/C8vnO3p346s="
     ];
   };
   inputs = {
@@ -39,10 +37,6 @@
       url = "github:fufexan/nix-gaming";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    anyrun = {
-      url = "github:anyrun-org/anyrun";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     niri = {
       url = "github:sodiboo/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -60,7 +54,6 @@
       impermanence,
       nix-gaming,
       amber,
-      anyrun,
       niri,
       ...
     }@inputs:
@@ -82,7 +75,7 @@
               home-manager.users.absx = {
                 imports = [
                   ./home.nix
-                  anyrun.homeManagerModules.default
+                  # anyrun.homeManagerModules.default
                 ];
               };
               home-manager.extraSpecialArgs = inputs;
