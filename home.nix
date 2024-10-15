@@ -152,6 +152,8 @@
     bfg-repo-cleaner
     xcolor
     cachix
+    navi
+    cljfmt
 
     # iperf3
     dnsutils # `dig` + `nslookup`
