@@ -15,12 +15,9 @@ Host xline
   User xuanle
   HostName frp.whyiscas.top
   Port 7538
-Host sc
+Host azure
   User root
-  HostName 165.154.225.146
-Host lh
-  User root
-  HostName 167.253.153.49
+  HostName 20.78.33.166
 Host xrq
   User root
   HostName server.perrykum.top
