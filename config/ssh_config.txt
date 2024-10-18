@@ -24,3 +24,13 @@ Host xrq
 Host yxvm
   User root
   HostName 46.3.101.226
+
+# whc
+# greencloud
+Host gc
+  User root
+  HostName 91.199.209.151
+# bytevirt
+Host bv
+  User root
+  HostName 23.26.232.16
