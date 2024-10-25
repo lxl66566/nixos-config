@@ -27,6 +27,7 @@
     ".local/share/fcitx5/pinyin/customphrase".source = ./config/fcitx5_pinyin_customphrase.txt;
     ".config/mpv".source = ./config/mpv;
     ".config/niri/config.kdl".source = ./config/niri.kdl;
+    ".config/nixpkgs/config.nix".source = ./config/nix-config.nix;
   };
   home.sessionPath = [ "$HOME/.cargo/bin/" ];
   xsession.numlock.enable = true;
@@ -154,6 +155,7 @@
     cachix
     navi
     cljfmt
+    wechat-uos
 
     # iperf3
     dnsutils # `dig` + `nslookup`

@@ -483,6 +483,7 @@
     sessionVariables = rec {
       EDITOR = "nvim";
       SCCACHE_CACHE_SIZE = "50G";
+      NIXPKGS_ALLOW_UNFREE = 1;
     };
     etc."sysconfig/lm_sensors".text = ''
       HWMON_MODULES="coretemp"
