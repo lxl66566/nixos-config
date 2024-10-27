@@ -24,7 +24,10 @@
   home.file = {
     ".config/cargo/config.toml".source = ./config/cargo.toml;
     ".ssh/config".source = ./config/ssh_config.txt;
-    ".local/share/fcitx5/pinyin/customphrase".source = ./config/fcitx5_pinyin_customphrase.txt;
+    ".local/share/fcitx5/pinyin/customphrase".text =
+      builtins.readFile (./config/fcitx5_pinyin_secrets.txt)
+      + "\n"
+      + builtins.readFile (./config/fcitx5_pinyin_customphrase.txt);
     ".config/mpv".source = ./config/mpv;
     ".config/niri/config.kdl".source = ./config/niri.kdl;
     ".config/nixpkgs/config.nix".source = ./config/nix-config.nix;
@@ -156,6 +159,7 @@
     navi
     cljfmt
     wechat-uos
+    biome
 
     # iperf3
     dnsutils # `dig` + `nslookup`

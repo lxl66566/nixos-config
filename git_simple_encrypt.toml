@@ -4,5 +4,5 @@ zstd_level = 15
 crypt_list = [
   "config/absx.dae",
   "config/atuin.key",
-  "config/fcitx5_pinyin_customphrase.txt",
+  "config/fcitx5_pinyin_secrets.txt",
 ]
