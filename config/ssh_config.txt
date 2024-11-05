@@ -24,6 +24,9 @@ Host xrq
 Host yxvm
   User root
   HostName 46.3.101.226
+Host 91
+  User root
+  HostName 154.37.218.160
 
 # whc
 # greencloud

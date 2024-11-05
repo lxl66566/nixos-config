@@ -160,6 +160,7 @@
     cljfmt
     wechat-uos
     biome
+    deno
 
     # iperf3
     dnsutils # `dig` + `nslookup`
@@ -181,8 +182,8 @@
     osu-lazer-bin
 
     # testdev
-    jmeter
-    postman
+    # jmeter
+    # postman
 
     # flatpak
     flatpak
