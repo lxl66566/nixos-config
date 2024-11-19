@@ -188,14 +188,14 @@
   nix.gc = {
     automatic = true;
     dates = "weekly";
-    options = "--delete-older-than 15d";
+    options = "--delete-older-than 30d";
   };
 
   # region fonts and ime
 
   fonts.packages = with pkgs; [
     noto-fonts
-    noto-fonts-cjk
+    # 'noto-fonts-cjk' has been renamed to/replaced by 'noto-fonts-cjk-sans'
     noto-fonts-cjk-serif
     noto-fonts-cjk-sans
     noto-fonts-emoji
@@ -256,7 +256,7 @@
         fcitx5-gtk
         fcitx5-configtool
       ];
-      # type = "ibus";
+      # type = "ibus"; 
       # ibus.engines = with pkgs.ibus-engines; [
       #   rime
       #   libpinyin
@@ -423,6 +423,7 @@
     password = "1";
   };
   environment = {
+    # etc.machine-id.source = ./info/machine-id;
     systemPackages = with pkgs; [
       busybox
       vim
@@ -589,8 +590,9 @@
     enable = true;
     libraries =
       with pkgs;
-      (steam-run.fhsenv.args.multiPkgs pkgs)
-      ++ [
+      # (steam-run.fhsenv.args.multiPkgs pkgs)
+      # ++ 
+      [
         alsa-lib
         at-spi2-atk
         at-spi2-core

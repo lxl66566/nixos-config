@@ -24,10 +24,10 @@
   home.file = {
     ".config/cargo/config.toml".source = ./config/cargo.toml;
     ".ssh/config".source = ./config/ssh_config.txt;
-    ".local/share/fcitx5/pinyin/customphrase".text =
-      builtins.readFile (./config/fcitx5_pinyin_secrets.txt)
-      + "\n"
-      + builtins.readFile (./config/fcitx5_pinyin_customphrase.txt);
+    # ".local/share/fcitx5/pinyin/customphrase".text =
+    #   builtins.readFile (./config/fcitx5_pinyin_secrets.txt)
+    #   + "\n"
+    #   + builtins.readFile (./config/fcitx5_pinyin_customphrase.txt);
     ".config/mpv".source = ./config/mpv;
     ".config/niri/config.kdl".source = ./config/niri.kdl;
     ".config/nixpkgs/config.nix".source = ./config/nix-config.nix;
@@ -143,7 +143,8 @@
     clojure # functional language
     discord # chat platform
     ouch # compress and decompress painlessly
-    jd-gui # java decompiler
+    # jd-gui # java decompiler 
+    # jd-gui has been removed due to a dependency on the dead JCenter Bintray. Other Java decompilers in Nixpkgs include bytecode-viewer (GUI), cfr (CLI), and procyon (CLI).
     efibootmgr # edit efi boot manager
     pipx # python binary package manager
     octave # scientific computing
@@ -161,6 +162,7 @@
     wechat-uos
     biome
     deno
+    libreoffice-qt6-still
 
     # iperf3
     dnsutils # `dig` + `nslookup`
