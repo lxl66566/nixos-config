@@ -61,7 +61,7 @@
     corepack_22
     kdePackages.yakuake
     rustup
-    v2raya
+    # v2raya
     anki
     jellyfin-ffmpeg
     pciutils
@@ -90,7 +90,7 @@
     android-tools
     sccache
     difftastic
-    bitwarden-desktop
+    # bitwarden-desktop
     qpwgraph
     feh
     losslesscut-bin
@@ -111,7 +111,7 @@
     easyeffects
     coppwr
     obs-studio
-    ida-free
+    # ida-free
     xonsh
     go
     androidStudioPackages.dev
@@ -125,7 +125,7 @@
     tabiew # tw: Tabiew is a lightweight, terminal-based application to view and query delimiter separated value formatted documents, such as CSV and TSV files
     mise
     gitui
-    onedrivegui
+    # onedrivegui
     taplo
     mpv
     yt-dlp
@@ -137,11 +137,11 @@
     pkg-config
     gh
     # arc-browser # not supported on x86_64 unknown linux
-    brave
+    # brave
     zig # programming language
     leiningen # clojure package manager
     clojure # functional language
-    discord # chat platform
+    # discord # chat platform
     ouch # compress and decompress painlessly
     # jd-gui # java decompiler 
     # jd-gui has been removed due to a dependency on the dead JCenter Bintray. Other Java decompilers in Nixpkgs include bytecode-viewer (GUI), cfr (CLI), and procyon (CLI).
