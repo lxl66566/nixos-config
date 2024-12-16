@@ -31,6 +31,7 @@
     ".config/mpv".source = ./config/mpv;
     ".config/niri/config.kdl".source = ./config/niri.kdl;
     ".config/nixpkgs/config.nix".source = ./config/nix-config.nix;
+    "auto-cpufreq/auto-cpufreq.conf".source = ./config/auto-cpufreq.conf;
   };
   home.sessionPath = [ "$HOME/.cargo/bin/" ];
   xsession.numlock.enable = true;
@@ -160,9 +161,12 @@
     navi
     cljfmt
     wechat-uos
-    biome
-    deno
+    # biome
+    # deno
+    bun
     libreoffice-qt6-still
+    localsend
+    hyperfine # A command-line benchmarking tool
 
     # iperf3
     dnsutils # `dig` + `nslookup`
@@ -333,22 +337,11 @@
       enable = true;
       # package = pkgs.vscode.fhs;
       extensions = with pkgs.vscode-extensions; [
-        formulahendry.auto-rename-tag
-        serayuzgur.crates
-        tamasfe.even-better-toml
         jnoortheen.nix-ide
         brettm12345.nixfmt-vscode
-        esbenp.prettier-vscode
-        ms-python.python
-        ms-python.vscode-pylance
         charliermarsh.ruff
         vscodevim.vim
-        vue.volar
-        llvm-vs-code-extensions.vscode-clangd
-        zxh404.vscode-proto3
         rust-lang.rust-analyzer
-        # myriad-dreamin.tinymist
-        shd101wyy.markdown-preview-enhanced
       ];
     };
     neovim = {

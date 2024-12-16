@@ -370,7 +370,7 @@
       # disableTxChecksumIpGeneric = true;
     };
     tlp = {
-      enable = true;
+      enable = true; # auto-cpufreq
       settings = {
         USB_AUTOSUSPEND = 0;
         RUNTIME_PM_ON_AC = "auto";
@@ -381,6 +381,9 @@
         CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
         PLATFORM_PROFILE_ON_AC = "performance";
       };
+    };
+    auto-cpufreq = {
+      enable = false; # tlp
     };
     power-profiles-daemon.enable = false;
     thermald.enable = true;
@@ -452,6 +455,7 @@
       trash-cli
       linuxKernel.packages.linux_6_6.cpupower
       libarchive
+      # nix-fast-build # why disable this: not usable.
       (
         let
           base = pkgs.appimageTools.defaultFhsEnvArgs;

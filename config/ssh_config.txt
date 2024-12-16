@@ -27,6 +27,9 @@ Host yxvm
 Host 91
   User root
   HostName 154.37.218.160
+Host n1
+  User root
+  HostName 192.168.1.2
 
 # whc
 # greencloud
