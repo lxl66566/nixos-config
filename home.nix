@@ -23,15 +23,12 @@
   home.stateVersion = "24.05";
   home.file = {
     ".config/cargo/config.toml".source = ./config/cargo.toml;
-    ".ssh/config".source = ./config/ssh_config.txt;
-    # ".local/share/fcitx5/pinyin/customphrase".text =
-    #   builtins.readFile (./config/fcitx5_pinyin_secrets.txt)
-    #   + "\n"
-    #   + builtins.readFile (./config/fcitx5_pinyin_customphrase.txt);
+    ".ssh/config".source = ./config/ssh_config;
     ".config/mpv".source = ./config/mpv;
     ".config/niri/config.kdl".source = ./config/niri.kdl;
     ".config/nixpkgs/config.nix".source = ./config/nix-config.nix;
     "auto-cpufreq/auto-cpufreq.conf".source = ./config/auto-cpufreq.conf;
+    # ".config/starship.toml".source = ./config/starship.toml;
   };
   home.sessionPath = [ "$HOME/.cargo/bin/" ];
   xsession.numlock.enable = true;
@@ -62,7 +59,7 @@
     corepack_22
     kdePackages.yakuake
     rustup
-    # v2raya
+    v2raya
     anki
     jellyfin-ffmpeg
     pciutils

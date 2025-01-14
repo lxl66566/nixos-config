@@ -49,6 +49,7 @@
       enable = true;
       tailor-gui.enable = true;
     };
+    nvidia-container-toolkit.enable = false; # 用于 cuda 环境配置与 AI 训练
   };
 
   # region boot&network

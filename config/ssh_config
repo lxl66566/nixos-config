@@ -1,0 +1,39 @@
+Host ali
+  User root
+  HostName 47.76.185.33
+Host axw
+  User itdep
+  HostName 172.18.58.54
+Host github.com
+  User git
+  HostName ssh.github.com
+  Port 443
+Host xline
+  User xuanle
+  HostName frp.whyiscas.top
+  Port 7538
+Host azure
+  User root
+  HostName 20.78.33.166
+Host xrq
+  User root
+  HostName server.perrykum.top
+Host google
+  User root
+  HostName 35.228.162.86
+Host n1
+  User root
+  HostName 192.168.1.2
+Host claw
+  User root
+  HostName 47.79.33.39
+
+# whc
+# greencloud
+Host gc
+  User root
+  HostName 91.199.209.151
+# bytevirt
+Host bv
+  User root
+  HostName 23.26.232.16
