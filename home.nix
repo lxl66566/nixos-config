@@ -1,7 +1,7 @@
 {
   config,
   pkgs,
-  catppuccin,
+  # catppuccin,
   plasma-manager,
   nix-gaming,
   amber,
@@ -14,7 +14,7 @@
     ./others/eye-protection.nix
     plasma-manager.homeManagerModules.plasma-manager
     ./others/plasma.nix
-    catppuccin.homeManagerModules.catppuccin
+    # catppuccin.homeManagerModules.catppuccin
   ];
 
   home.username = "absx";
@@ -147,7 +147,7 @@
     pipx # python binary package manager
     octave # scientific computing
     gimp # image editor
-    mtpaint # a simple whiteboard
+    # mtpaint # a simple whiteboard # fail to build
     # vivaldi # track https://github.com/NixOS/nixpkgs/issues/309056
     fsearch
     microsoft-edge
@@ -197,10 +197,10 @@
   # ++ [ anyrun.packages.${system}.anyrun ]
   ;
 
-  catppuccin = {
-    enable = true;
-    flavor = "mocha";
-  };
+  # catppuccin = {
+  #   enable = true;
+  #   flavor = "mocha";
+  # };
   programs = {
     home-manager.enable = true;
     git = {
@@ -292,7 +292,7 @@
     };
     bat = {
       enable = true;
-      catppuccin.enable = true;
+      # catppuccin.enable = true;
       extraPackages = with pkgs.bat-extras; [
         batgrep
         batman
@@ -347,12 +347,10 @@
       withNodeJs = true;
       withPython3 = true;
     };
-    alacritty = {
-      enable = true;
-    };
     fuzzel = {
       enable = true;
     };
+    alacritty.enable = false;
   };
 
   # Run this command above:

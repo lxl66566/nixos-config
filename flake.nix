@@ -25,9 +25,10 @@
     daeuniverse = {
       url = "github:daeuniverse/flake.nix";
     };
-    catppuccin = {
-      url = "github:catppuccin/nix";
-    };
+    # catppuccin = {
+    #   url = "github:catppuccin/nix";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -42,14 +43,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     amber.url = "github:Ph0enixKM/Amber";
-    stylix.url = "github:danth/stylix";
   };
   outputs =
     {
       self,
       nixpkgs,
       home-manager,
-      catppuccin,
+      # catppuccin,
       plasma-manager,
       impermanence,
       nix-gaming,
@@ -65,7 +65,6 @@
             inputs.impermanence.nixosModules.impermanence
             inputs.daeuniverse.nixosModules.dae
             inputs.niri.nixosModules.niri
-            inputs.stylix.nixosModules.stylix
             { nix.settings.trusted-users = [ "absx" ]; }
             ./configuration.nix
             home-manager.nixosModules.home-manager
@@ -81,7 +80,7 @@
               home-manager.extraSpecialArgs = inputs;
               home-manager.backupFileExtension = "backup";
             }
-            catppuccin.nixosModules.catppuccin
+            # catppuccin.nixosModules.catppuccin
           ]
           ++ (with nix-gaming.nixosModules; [
             pipewireLowLatency
