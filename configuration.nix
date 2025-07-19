@@ -81,6 +81,7 @@
       "kvm-amd"
       "tcp_bbr"
       "coretemp"
+      # "ryzen_smu" # for ryzenadj
     ];
     kernelParams = [
       "sysrq_always_enabled=1"
@@ -447,6 +448,7 @@
       #linuxKernel.packages.linux_6_6.cpupower
       libarchive
       # nix-fast-build # why disable this: not usable.
+      # ryzenadj # AMD CPU Power limit, but "Only Ryzen Mobile Series are supported"
       (
         let
           base = pkgs.appimageTools.defaultFhsEnvArgs;

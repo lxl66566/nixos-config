@@ -1,6 +1,3 @@
-Host ali
-  User root
-  HostName 47.76.185.33
 Host axw
   User itdep
   HostName 172.18.58.54
@@ -15,18 +12,13 @@ Host xline
 Host azure
   User root
   HostName 20.78.33.166
-Host xrq
-  User root
-  HostName server.perrykum.top
-Host google
-  User root
-  HostName 35.228.162.86
 Host n1
   User root
-  HostName 192.168.1.2
+  HostName 192.168.10.152
 Host claw
   User root
   HostName 47.79.33.39
+
 
 # whc
 # greencloud

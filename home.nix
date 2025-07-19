@@ -57,6 +57,7 @@
     nodejs_22
     corepack_22
     kdePackages.yakuake
+    kdePackages.spectacle
     rustup
     v2raya
     anki
@@ -67,6 +68,7 @@
     qq
     wechat-uos
     onlyoffice-desktopeditors
+    flameshot
     #libreoffice-qt6-still
     starship
     devenv
@@ -113,6 +115,7 @@
     gradle
     nix-index
     # (callPackage ./mynixpkgs/libtas.nix { }) # libtas
+    (callPackage ./mynixpkgs/xmrig.nix { }) # xmrig
     # fcitx5-pinyin-zhwiki
     # fcitx5-pinyin-moegirl
     # fcitx5-pinyin-zhwiki
@@ -165,7 +168,7 @@
     # socat # replacement of openbsd-netcat
     # nmap # A utility for network discovery and security auditing
 
-    #trippy
+    # trippy # Network diagnostic TUI tool
     iftop
     ltrace
     sysstat
@@ -175,7 +178,7 @@
     usbutils # lsusb
     cargo-msrv
 
-    #osu-lazer-bin
+    # osu-lazer-bin
 
     # testdev
     # jmeter
