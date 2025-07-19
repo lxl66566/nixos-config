@@ -28,36 +28,36 @@ in
     "usbhid"
     "usb_storage"
     "sd_mod"
-    "sdhci_pci"
+    #"sdhci_pci"
   ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
+  boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
-  hardware.nvidia = {
-    modesetting.enable = true;
-    prime = {
-      intelBusId = "PCI:0:2:0";
-      nvidiaBusId = "PCI:1:0:0";
-      sync.enable = true;
-    };
-    powerManagement.enable = false;
-    powerManagement.finegrained = false;
-    open = true;
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-  };
+  #hardware.nvidia = {
+  #  modesetting.enable = true;
+  #  prime = {
+  #    intelBusId = "PCI:0:2:0";
+  #    nvidiaBusId = "PCI:1:0:0";
+  #    sync.enable = true;
+  #  };
+  #  powerManagement.enable = false;
+  #  powerManagement.finegrained = false;
+  #  open = true;
+  #  nvidiaSettings = true;
+  #  package = config.boot.kernelPackages.nvidiaPackages.stable;
+  #};
 
   fileSystems."/" = {
-    # device = "/dev/disk/by-uuid/3f9c46c9-efa8-4f9e-9dcf-77226f28b75b";
-    # fsType = "btrfs";
-    # options = defaultMountOption ++ [ "subvol=root" ];
-    device = "tmpfs";
-    fsType = "tmpfs";
-    options = [
-      "relatime"
-      "mode=755"
-    ];
+    device = "/dev/disk/by-uuid/3f9c46c9-efa8-4f9e-9dcf-77226f28b75b";
+    fsType = "btrfs";
+    options = defaultMountOption ++ [ "subvol=root" ];
+    #device = "tmpfs";
+    #fsType = "tmpfs";
+    #options = [
+    #  "relatime"
+    #  "mode=755"
+    #];
   };
 
   fileSystems."/home" = {

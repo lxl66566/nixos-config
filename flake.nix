@@ -19,7 +19,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     impermanence.url = "github:nix-community/impermanence";
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.05";
+      url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     daeuniverse = {
@@ -49,11 +49,11 @@
       self,
       nixpkgs,
       home-manager,
-      # catppuccin,
       plasma-manager,
-      impermanence,
+      # impermanence,
       nix-gaming,
       amber,
+      # catppuccin,
       niri,
       ...
     }@inputs:
@@ -62,11 +62,12 @@
         system = "x86_64-linux";
         modules =
           [
-            inputs.impermanence.nixosModules.impermanence
+            # inputs.impermanence.nixosModules.impermanence
             inputs.daeuniverse.nixosModules.dae
             inputs.niri.nixosModules.niri
             { nix.settings.trusted-users = [ "absx" ]; }
             ./configuration.nix
+            # catppuccin.nixosModules.catppuccin
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
@@ -75,12 +76,12 @@
                 imports = [
                   ./home.nix
                   # anyrun.homeManagerModules.default
+                  # catppuccin.homeModules.catppuccin
                 ];
               };
               home-manager.extraSpecialArgs = inputs;
               home-manager.backupFileExtension = "backup";
             }
-            # catppuccin.nixosModules.catppuccin
           ]
           ++ (with nix-gaming.nixosModules; [
             pipewireLowLatency

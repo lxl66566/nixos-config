@@ -1,4 +1,4 @@
-# NixOS configuration of lxl66566, the minimal version is to accelerate reinstallation on livecd. 
+# NixOS configuration of lxl66566, the minimal version is to accelerate reinstallation on livecd.
 # You can find the lastest version in https://github.com/lxl66566/nixos-config.
 
 {
@@ -13,9 +13,9 @@
   # region hardware
 
   hardware = {
-    bluetooth = {
-      enable = true; # enables support for Bluetooth
-      powerOnBoot = false; # powers up the default Bluetooth controller on boot
+    graphics = {
+      enable = true;
+      enable32Bit = true;
     };
   };
 
@@ -38,26 +38,12 @@
       "kernel.sysrq" = 1;
     };
     kernelParams = [
-      "nvidia_drm.modeset=1"
-      "nvidia_drm.fbdev=1"
     ];
     supportedFilesystems = [ "ntfs" ];
     tmp = {
       # https://github.com/NixOS/nixpkgs/blob/nixos-24.05/nixos/modules/system/boot/tmp.nix
       useTmpfs = true;
       tmpfsSize = "80%";
-    };
-  };
-
-  specialisation = {
-    on-the-go.configuration = {
-      system.nixos.tags = [ "on-the-go" ];
-      hardware.nvidia = {
-        prime.offload.enable = lib.mkForce true;
-        prime.offload.enableOffloadCmd = lib.mkForce true;
-        prime.sync.enable = lib.mkForce false;
-        powerManagement.finegrained = lib.mkForce true;
-      };
     };
   };
 
@@ -97,7 +83,12 @@
 
   services.xserver = {
     enable = true;
-    videoDrivers = lib.mkBefore [ "nvidia" ];
+    videoDrivers = lib.mkBefore [
+      "modesetting"
+      "fbdev"
+      # "amdgpu"
+      # "intel-gpu"
+    ];
   };
   services.displayManager = {
     sddm.enable = true;
@@ -139,6 +130,13 @@
       iotop
       impala
       strace
+      atuin
+      starship
+      v2raya
+      dae
+      vscode
+      zoxide
+      firefox
     ];
     plasma6.excludePackages = with pkgs.kdePackages; [
       plasma-browser-integration

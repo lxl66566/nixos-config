@@ -14,13 +14,12 @@
     ./others/eye-protection.nix
     plasma-manager.homeManagerModules.plasma-manager
     ./others/plasma.nix
-    # catppuccin.homeManagerModules.catppuccin
   ];
 
   home.username = "absx";
   home.homeDirectory = "/home/absx";
   home.enableNixpkgsReleaseCheck = false;
-  home.stateVersion = "24.05";
+  home.stateVersion = "25.05";
   home.file = {
     ".config/cargo/config.toml".source = ./config/cargo.toml;
     ".ssh/config".source = ./config/ssh_config;
@@ -28,7 +27,6 @@
     ".config/niri/config.kdl".source = ./config/niri.kdl;
     ".config/nixpkgs/config.nix".source = ./config/nix-config.nix;
     "auto-cpufreq/auto-cpufreq.conf".source = ./config/auto-cpufreq.conf;
-    # ".config/starship.toml".source = ./config/starship.toml;
   };
   home.sessionPath = [ "$HOME/.cargo/bin/" ];
   xsession.numlock.enable = true;
@@ -52,9 +50,10 @@
     cmake
     tree
     wget
-    floorp
-    telegram-desktop
+    #floorp
+    ayugram-desktop
     fastfetch
+    fnm
     nodejs_22
     corepack_22
     kdePackages.yakuake
@@ -66,7 +65,9 @@
     chromium
     uv
     qq
-    onlyoffice-bin_latest
+    wechat-uos
+    onlyoffice-desktopeditors
+    #libreoffice-qt6-still
     starship
     devenv
     xclip
@@ -84,25 +85,22 @@
     gnutar
     jq
     yq-go
-    nvtopPackages.nvidia
+    # nvtopPackages.nvidia
     android-tools
     sccache
     difftastic
-    # bitwarden-desktop
-    qpwgraph
+    # qpwgraph
     feh
     losslesscut-bin
     zellij
     llvmPackages_18.clang-tools
-    qbittorrent
+    # qbittorrent
     delta
     xh
-    feishu
     lunarvim
     pre-commit
     impala # tui wireless manager
     nix-tree
-    zed-editor
     wine
     winetricks
     jdk
@@ -111,14 +109,13 @@
     obs-studio
     # ida-free
     xonsh
-    go
     androidStudioPackages.dev
     gradle
     nix-index
     # (callPackage ./mynixpkgs/libtas.nix { }) # libtas
-    fcitx5-pinyin-zhwiki
-    fcitx5-pinyin-moegirl
-    fcitx5-pinyin-zhwiki
+    # fcitx5-pinyin-zhwiki
+    # fcitx5-pinyin-moegirl
+    # fcitx5-pinyin-zhwiki
     shfmt
     tabiew # tw: Tabiew is a lightweight, terminal-based application to view and query delimiter separated value formatted documents, such as CSV and TSV files
     mise
@@ -136,19 +133,21 @@
     gh
     # arc-browser # not supported on x86_64 unknown linux
     # brave
+    # vivaldi # track https://github.com/NixOS/nixpkgs/issues/309056
     zig # programming language
-    leiningen # clojure package manager
-    clojure # functional language
+    go
+    # leiningen # clojure package manager
+    # clojure # functional language
+    # cljfmt
     # discord # chat platform
     ouch # compress and decompress painlessly
-    # jd-gui # java decompiler 
+    # jd-gui # java decompiler
     # jd-gui has been removed due to a dependency on the dead JCenter Bintray. Other Java decompilers in Nixpkgs include bytecode-viewer (GUI), cfr (CLI), and procyon (CLI).
     efibootmgr # edit efi boot manager
-    pipx # python binary package manager
+    # pipx # python binary package manager
     octave # scientific computing
     gimp # image editor
     # mtpaint # a simple whiteboard # fail to build
-    # vivaldi # track https://github.com/NixOS/nixpkgs/issues/309056
     fsearch
     microsoft-edge
     xorg.libxcb.dev
@@ -156,15 +155,9 @@
     xcolor
     cachix
     navi
-    cljfmt
-    wechat-uos
-    # biome
-    # deno
     bun
-    libreoffice-qt6-still
     localsend
     hyperfine # A command-line benchmarking tool
-
     # iperf3
     dnsutils # `dig` + `nslookup`
     # ldns # replacement of `dig`, it provide the command `drill`
@@ -172,7 +165,7 @@
     # socat # replacement of openbsd-netcat
     # nmap # A utility for network discovery and security auditing
 
-    trippy
+    #trippy
     iftop
     ltrace
     sysstat
@@ -182,15 +175,15 @@
     usbutils # lsusb
     cargo-msrv
 
-    osu-lazer-bin
+    #osu-lazer-bin
 
     # testdev
     # jmeter
     # postman
 
     # flatpak
-    flatpak
-    flatpak-builder
+    # flatpak
+    # flatpak-builder
   ]
   # ++ (with nix-gaming.packages.${pkgs.system}; [ osu-stable ])
   # ++ [ inputs.amber.packages.${pkgs.system}.default ]
@@ -333,7 +326,7 @@
     vscode = {
       enable = true;
       # package = pkgs.vscode.fhs;
-      extensions = with pkgs.vscode-extensions; [
+      profiles.default.extensions = with pkgs.vscode-extensions; [
         jnoortheen.nix-ide
         brettm12345.nixfmt-vscode
         charliermarsh.ruff
@@ -355,38 +348,41 @@
 
   # Run this command above:
   # cd ~/Pictures && git clone git@github.com:lxl66566/wallpaper.git
-  # services.random-background = {
+  services.random-background = {
+    enable = true;
+    imageDirectory = "%h/Pictures/wallpaper";
+    interval = "6h";
+  };
+
+  # services.activitywatch = {
   #   enable = true;
-  #   imageDirectory = "%h/Pictures/wallpaper";
-  #   interval = "6h";
+  #   # package = pkgs.aw-server-rust;
+  #   package = pkgs.activitywatch;
+  #   watchers = {
+  #     aw-watcher-afk = {
+  #       package = pkgs.activitywatch;
+  #       settings = {
+  #         timeout = 300;
+  #         poll_time = 2;
+  #       };
+  #     };
+  #     aw-watcher-windows = {
+  #       package = pkgs.activitywatch;
+  #       settings = {
+  #         poll_time = 1;
+  #         exclude_title = true;
+  #       };
+  #     };
+  #   };
+  #   settings = {
+  #     timeout = 180;
+  #   };
   # };
-  services.activitywatch = {
-    enable = true;
-    # package = pkgs.aw-server-rust;
-    package = pkgs.activitywatch;
-    watchers = {
-      aw-watcher-afk = {
-        package = pkgs.activitywatch;
-        settings = {
-          timeout = 300;
-          poll_time = 2;
-        };
-      };
-      aw-watcher-windows = {
-        package = pkgs.activitywatch;
-        settings = {
-          poll_time = 1;
-          exclude_title = true;
-        };
-      };
-    };
-    settings = {
-      timeout = 180;
-    };
-  };
-  services.mako = {
-    enable = true;
-  };
+
+  # https://github.com/emersion/mako: A lightweight Wayland notification daemon
+  # services.mako = {
+  #   enable = true;
+  # };
 
   xdg.configFile = {
     "nvim" = {

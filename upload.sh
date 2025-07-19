@@ -3,6 +3,7 @@
 set -euxo pipefail
 
 dae validate -c config/absx.dae
+dae validate -c config/example.dae
 git-se e
 git add -A
 git commit -a --allow-empty-message -m "$*"

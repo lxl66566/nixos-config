@@ -1,4 +1,4 @@
-# NixOS configuration for lxl66566. 
+# NixOS configuration for lxl66566.
 # You can find the lastest version in https://github.com/lxl66566/nixos-config.
 
 {
@@ -22,24 +22,24 @@
       enable = true;
       enable32Bit = true;
       extraPackages = with pkgs; [
-        vpl-gpu-rt
-        intel-media-driver # LIBVA_DRIVER_NAME=iHD
-        intel-ocl
-        intel-vaapi-driver # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
-        intel-compute-runtime
-        vaapiVdpau
-        libvdpau-va-gl
-        mesa
-        nvidia-vaapi-driver
-        nv-codec-headers-12
+        # vpl-gpu-rt
+        # intel-media-driver # LIBVA_DRIVER_NAME=iHD
+        # intel-ocl
+        # intel-vaapi-driver # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
+        # intel-compute-runtime
+        # vaapiVdpau
+        # libvdpau-va-gl
+        # mesa
+        # nvidia-vaapi-driver
+        # nv-codec-headers-12
       ];
-      extraPackages32 = with pkgs.pkgsi686Linux; [
-        intel-media-driver
-        intel-vaapi-driver
-        vaapiVdpau
-        mesa
-        libvdpau-va-gl
-      ];
+      # extraPackages32 = with pkgs.pkgsi686Linux; [
+      #   intel-media-driver
+      #   intel-vaapi-driver
+      #   vaapiVdpau
+      #   mesa
+      #   libvdpau-va-gl
+      # ];
     };
     bluetooth = {
       enable = true; # enables support for Bluetooth
@@ -49,7 +49,7 @@
       enable = true;
       tailor-gui.enable = true;
     };
-    nvidia-container-toolkit.enable = false; # 用于 cuda 环境配置与 AI 训练
+    # nvidia-container-toolkit.enable = false; # 用于 cuda 环境配置与 AI 训练
   };
 
   # region boot&network
@@ -78,17 +78,17 @@
     };
     # kernelPackages = pkgs.linuxPackages_zen;
     kernelModules = lib.mkAfter [
-      "kvm-intel"
+      "kvm-amd"
       "tcp_bbr"
       "coretemp"
     ];
     kernelParams = [
       "sysrq_always_enabled=1"
-      "nvidia_drm.modeset=1"
-      "nvidia_drm.fbdev=1"
-      "acpi_enforce_resources=lax"
-      "i915.modeset=1"
-      "i915.force_probe=46a6"
+      # "nvidia_drm.modeset=1"
+      # "nvidia_drm.fbdev=1"
+      # "acpi_enforce_resources=lax"
+      # "i915.modeset=1"
+      # "i915.force_probe=46a6"
     ];
     supportedFilesystems = [ "ntfs" ];
     tmp = {
@@ -116,19 +116,19 @@
     enable = true;
   };
 
-  specialisation = {
-    on-the-go.configuration = {
-      system.nixos.tags = [ "on-the-go" ];
-      hardware.nvidia = {
-        prime.offload.enable = lib.mkForce true;
-        prime.offload.enableOffloadCmd = lib.mkForce true;
-        prime.sync.enable = lib.mkForce false;
-        powerManagement.finegrained = lib.mkForce true;
-      };
-      powerManagement.cpuFreqGovernor = lib.mkForce "powersave";
-      powerManagement.powertop.enable = lib.mkForce true;
-    };
-  };
+  # specialisation = {
+  #   on-the-go.configuration = {
+  #     system.nixos.tags = [ "on-the-go" ];
+  #     hardware.nvidia = {
+  #       prime.offload.enable = lib.mkForce true;
+  #       prime.offload.enableOffloadCmd = lib.mkForce true;
+  #       prime.sync.enable = lib.mkForce false;
+  #       powerManagement.finegrained = lib.mkForce true;
+  #     };
+  #     powerManagement.cpuFreqGovernor = lib.mkForce "powersave";
+  #     powerManagement.powertop.enable = lib.mkForce true;
+  #   };
+  # };
 
   # region system settings
 
@@ -160,13 +160,11 @@
         nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
           inherit pkgs;
         };
-        intel-vaapi-driver = pkgs.intel-vaapi-driver.override { enableHybridCodec = true; };
+        # intel-vaapi-driver = pkgs.intel-vaapi-driver.override { enableHybridCodec = true; };
         yt-dlp = pkgs.yt-dlp.override { withAlias = true; };
       };
     };
-    overlays =
-      [
-      ];
+    overlays = [ ];
   };
   nix.settings = {
     trusted-users = [ "absx" ];
@@ -175,16 +173,14 @@
       "flakes"
     ];
     warn-dirty = false;
-    builders-use-substitutes = true;
+    # builders-use-substitutes = true;
     substituters = lib.mkBefore [
       "https://mirror.sjtu.edu.cn/nix-channels/store"
       "https://mirrors.ustc.edu.cn/nix-channels/store"
       "https://cache.garnix.io"
       "https://mirrors.cernet.edu.cn/nix-channels/store"
     ];
-    trusted-public-keys = [
-      "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
-    ];
+    trusted-public-keys = [ "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g=" ];
   };
   nix.gc = {
     automatic = true;
@@ -253,11 +249,11 @@
       fcitx5.addons = with pkgs; [
         fcitx5-rime
         fcitx5-chinese-addons
-        fcitx5-mozc
-        fcitx5-gtk
-        fcitx5-configtool
+        # fcitx5-mozc
+        # fcitx5-gtk
+        # fcitx5-configtool
       ];
-      # type = "ibus"; 
+      # type = "ibus";
       # ibus.engines = with pkgs.ibus-engines; [
       #   rime
       #   libpinyin
@@ -273,7 +269,12 @@
     };
     xserver = {
       enable = true;
-      videoDrivers = lib.mkBefore [ "nvidia" ];
+      videoDrivers = lib.mkBefore [
+        "modesetting"
+        "fbdev"
+        "amdgpu"
+        # "nvidia"
+      ];
     };
     displayManager = {
       sddm.enable = true;
@@ -346,7 +347,6 @@
     locate = {
       package = pkgs.plocate;
       enable = true;
-      localuser = null;
       interval = "daily";
       pruneNames = [
         ".bzr"
@@ -371,7 +371,7 @@
       # disableTxChecksumIpGeneric = true;
     };
     tlp = {
-      enable = true; # auto-cpufreq
+      enable = false; # auto-cpufreq
       settings = {
         USB_AUTOSUSPEND = 0;
         RUNTIME_PM_ON_AC = "auto";
@@ -390,7 +390,8 @@
     thermald.enable = true;
     onedrive.enable = false;
     vnstat.enable = true;
-    safeeyes.enable = true;
+    safeeyes.enable = false;
+    logrotate.checkConfig = false;
   };
 
   systemd.sleep.extraConfig = ''
@@ -401,18 +402,7 @@
     HibernateDelaySec=1h
   '';
 
-  systemd.user.services.apim = {
-    enable = true;
-    description = "Open online video in local mpv player";
-    script = "/home/absx/.local/bin/apim";
-    wantedBy = [ "default.target" ]; # [ "multi-user.target" ];
-    path = with pkgs; [
-      mpv
-      yt-dlp
-      kdePackages.kwallet
-      ffmpeg
-    ];
-  };
+  security.pam.services.sudo.rootOK = true;
   security.rtkit.enable = true;
 
   # region Users and Root
@@ -454,7 +444,7 @@
       iotop
       strace
       trash-cli
-      linuxKernel.packages.linux_6_6.cpupower
+      #linuxKernel.packages.linux_6_6.cpupower
       libarchive
       # nix-fast-build # why disable this: not usable.
       (
@@ -491,27 +481,28 @@
       SCCACHE_CACHE_SIZE = "50G";
       NIXPKGS_ALLOW_UNFREE = 1;
     };
-    etc."sysconfig/lm_sensors".text = ''
-      HWMON_MODULES="coretemp"
-    '';
-    persistence."/nix/persistent" = {
-      hideMounts = true;
-      directories = [
-        "/etc/NetworkManager/system-connections"
-        "/root"
-        "/etc/nixos"
-        # add this two will break my system!
-        # "/etc/shadow"
-        # "/etc/passwd"
-      ];
-      files = [
-        "/etc/machine-id"
-        "/etc/ssh/ssh_host_ed25519_key.pub"
-        "/etc/ssh/ssh_host_ed25519_key"
-        "/etc/ssh/ssh_host_rsa_key.pub"
-        "/etc/ssh/ssh_host_rsa_key"
-      ];
-    };
+    # etc."sysconfig/lm_sensors".text = ''
+    #   HWMON_MODULES="coretemp"
+    # '';
+
+    # persistence."/nix/persistent" = {
+    #   hideMounts = true;
+    #   directories = [
+    #     "/etc/NetworkManager/system-connections"
+    #     "/root"
+    #     "/etc/nixos"
+    #     # add this two will break my system!
+    #     # "/etc/shadow"
+    #     # "/etc/passwd"
+    #   ];
+    #   files = [
+    #     "/etc/machine-id"
+    #     "/etc/ssh/ssh_host_ed25519_key.pub"
+    #     "/etc/ssh/ssh_host_ed25519_key"
+    #     "/etc/ssh/ssh_host_rsa_key.pub"
+    #     "/etc/ssh/ssh_host_rsa_key"
+    #   ];
+    # };
     plasma6.excludePackages = with pkgs.kdePackages; [
       plasma-browser-integration
       oxygen
@@ -596,7 +587,7 @@
     libraries =
       with pkgs;
       # (steam-run.fhsenv.args.multiPkgs pkgs)
-      # ++ 
+      # ++
       [
         alsa-lib
         at-spi2-atk
@@ -652,7 +643,7 @@
       ];
   };
   programs.niri = {
-    enable = true;
+    enable = false;
   };
 
   # Copy the NixOS configuration file and link it from the resulting system
