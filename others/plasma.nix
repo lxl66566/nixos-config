@@ -36,7 +36,7 @@
       "kwinrc"."Desktops"."Rows" = 1;
       "kwinrc"."NightColor"."Active" = true;
       "kwinrc"."NightColor"."Mode" = "Constant";
-      "kwinrc"."NightColor"."NightTemperature" = 2800;
+      "kwinrc"."NightColor"."NightTemperature" = 3800;
       "plasma-localerc"."Formats"."LANG" = "zh_CN.UTF-8";
       "plasma-localerc"."Translations"."LANGUAGE" = "zh_CN";
     };

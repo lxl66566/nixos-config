@@ -61,8 +61,18 @@
         enable = true;
         devices = [ "nodev" ];
         efiSupport = true;
-        useOSProber = true;
         default = "saved";
+        useOSProber = false;
+        extraEntries = ''
+          menuentry "Windows 11 (zh)" {
+            search --fs-uuid D247-DFCF --set=root
+            chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+          }
+          menuentry "Windows 10 LTSC (jp)" {
+            search --fs-uuid 209D-7E96 --set=root
+            chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+          }
+        '';
       };
       timeout = 15;
       systemd-boot.enable = false;
@@ -76,7 +86,7 @@
       "net.ipv6.conf.default.disable_ipv6" = 1;
       "net.ipv6.conf.tun0.disable_ipv6" = 1;
     };
-    # kernelPackages = pkgs.linuxPackages_zen;
+    kernelPackages = pkgs.linuxPackages_zen;
     kernelModules = lib.mkAfter [
       "kvm-amd"
       "tcp_bbr"
@@ -85,6 +95,7 @@
     ];
     kernelParams = [
       "sysrq_always_enabled=1"
+      "amdgpu.sg_display=0"
       # "nvidia_drm.modeset=1"
       # "nvidia_drm.fbdev=1"
       # "acpi_enforce_resources=lax"
@@ -395,13 +406,13 @@
     logrotate.checkConfig = false;
   };
 
-  systemd.sleep.extraConfig = ''
-    AllowSuspend=yes
-    AllowHibernation=yes
-    AllowHybridSleep=yes
-    AllowSuspendThenHibernate=no
-    HibernateDelaySec=1h
-  '';
+  # systemd.sleep.extraConfig = ''
+  #   AllowSuspend=yes
+  #   AllowHibernation=yes
+  #   AllowHybridSleep=yes
+  #   AllowSuspendThenHibernate=no
+  #   HibernateDelaySec=1h
+  # '';
 
   security.pam.services.sudo.rootOK = true;
   security.rtkit.enable = true;
