@@ -79,12 +79,15 @@
     };
     kernel.sysctl = {
       "kernel.sysrq" = 1;
+      #"kernel.nmi_watchdog" = 0;
+      #"kernel.sched_rt_period_us" = 1000000;
+      #"kernel.sched_rt_runtime_us" = 1000000;
       "vm.swappiness" = 30;
       "net.ipv4.tcp_min_snd_mss" = 536;
       "net.ipv4.tcp_congestion_control" = "bbr";
       "net.ipv6.conf.all.disable_ipv6" = 1;
       "net.ipv6.conf.default.disable_ipv6" = 1;
-      "net.ipv6.conf.tun0.disable_ipv6" = 1;
+      "net.ipv6.conf.lo.disable_ipv6" = 1;
     };
     kernelPackages = pkgs.linuxPackages_zen;
     kernelModules = lib.mkAfter [
@@ -96,6 +99,9 @@
     kernelParams = [
       "sysrq_always_enabled=1"
       "amdgpu.sg_display=0"
+      #"default_hugepagesz=1G"
+      #"hugepagesz=1G"
+      #"hugepages=16" # 分配16个1GB的大页，总计16GB
       # "nvidia_drm.modeset=1"
       # "nvidia_drm.fbdev=1"
       # "acpi_enforce_resources=lax"
