@@ -1,4 +1,7 @@
 # build command:
+# BOTH
+# nix-shell -p nixos-generators --run "nixos-generate --format iso --configuration ./iso.nix -o result"
+# OR
 # nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix --extra-experimental-features flakes
 
 {
@@ -169,10 +172,10 @@
       gfixup = "git commit -a --fixup HEAD && GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash HEAD~2";
     };
   };
-  # isoImage.contents = [
-  #   {
-  #     source = "/etc/nixos/config/absx.dae";
-  #     target = "etc/dae/config.dae";
-  #   }
-  # ];
+  isoImage.contents = [
+    {
+      source = ./config/absx.dae;
+      target = "/etc/dae/config.dae";
+    }
+  ];
 }
