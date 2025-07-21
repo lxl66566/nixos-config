@@ -8,7 +8,7 @@
   ...
 }:
 {
-  imports = [ ./hardware-configuration.nix ];
+  imports = [ ./hardware/main.nix ];
 
   # region hardware
 
