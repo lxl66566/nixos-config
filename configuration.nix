@@ -99,9 +99,12 @@
     kernelParams = [
       "sysrq_always_enabled=1"
       "amdgpu.sg_display=0"
-      #"default_hugepagesz=1G"
-      #"hugepagesz=1G"
-      #"hugepages=16" # 分配16个1GB的大页，总计16GB
+
+      # 不能开这两行，亲测开了进不去图形界面！
+      # xmrig 会自行分配 huge pages，无需手动分配。
+      # "hugepagesz=1G"
+      # "hugepages=16" # 分配16个1GB的大页，总计16GB
+
       # "nvidia_drm.modeset=1"
       # "nvidia_drm.fbdev=1"
       # "acpi_enforce_resources=lax"
