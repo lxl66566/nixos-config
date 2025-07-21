@@ -5,7 +5,7 @@
     extra-substituters = [
       # "https://hyprland.cachix.org"
       # "https://nixpkgs-wayland.cachix.org"
-      # "https://nix-gaming.cachix.org"
+      "https://nix-gaming.cachix.org"
       "https://nix-community.cachix.org"
     ];
     extra-trusted-public-keys = [
@@ -25,10 +25,6 @@
     daeuniverse = {
       url = "github:daeuniverse/flake.nix";
     };
-    # catppuccin = {
-    #   url = "github:catppuccin/nix";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -42,7 +38,7 @@
       url = "github:sodiboo/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    amber.url = "github:Ph0enixKM/Amber";
+    # amber.url = "github:Ph0enixKM/Amber";
   };
   outputs =
     {
@@ -52,41 +48,71 @@
       plasma-manager,
       # impermanence,
       nix-gaming,
-      amber,
-      # catppuccin,
+      # amber,
       niri,
       ...
     }@inputs:
+    let
+      # 函数，用于生成一个带特定 features 的系统
+      lib = nixpkgs.lib;
+      mkSystem =
+        {
+          system ? "x86_64-linux",
+          features ? { },
+          devicename ? "main",
+        }:
+        lib.nixosSystem {
+          inherit system;
+          # specialArgs 会被传递给所有模块
+          specialArgs = { inherit inputs features devicename; };
+          modules =
+            [
+              # inputs.impermanence.nixosModules.impermanence
+              inputs.daeuniverse.nixosModules.dae
+              # inputs.niri.nixosModules.niri
+              { nix.settings.trusted-users = [ "absx" ]; }
+
+              # 基础配置和所有 feature 模块的定义
+              ./configuration.nix
+            ]
+            ++ (lib.optional features.gaming ./features/configuration/gaming.nix)
+            ++ (lib.optional features.desktop ./features/configuration/desktop.nix)
+            ++ (lib.optional features.laptop ./features/configuration/laptop.nix)
+            ++ [
+              # 导入 home-manager 模块
+              home-manager.nixosModules.home-manager
+              {
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
+                home-manager.extraSpecialArgs = { inherit inputs features; };
+                home-manager.backupFileExtension = "backup";
+                home-manager.users.absx = {
+                  imports =
+                    [
+                      ./home.nix # 基础 home 配置
+                    ]
+                    ++ (lib.optional features.gaming ./features/home-manager/gaming.nix)
+                    ++ (lib.optional features.desktop ./features/home-manager/desktop.nix)
+                    ++ (lib.optional features.laptop ./features/home-manager/laptop.nix)
+                    ++ (lib.optional features.programming ./features/home-manager/programming.nix)
+                    ++ (lib.optional features.mining ./features/home-manager/mining.nix);
+                };
+              }
+            ];
+        };
+    in
     {
-      nixosConfigurations.absx = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules =
-          [
-            # inputs.impermanence.nixosModules.impermanence
-            inputs.daeuniverse.nixosModules.dae
-            inputs.niri.nixosModules.niri
-            { nix.settings.trusted-users = [ "absx" ]; }
-            ./configuration.nix
-            # catppuccin.nixosModules.catppuccin
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.absx = {
-                imports = [
-                  ./home.nix
-                  # anyrun.homeManagerModules.default
-                  # catppuccin.homeModules.catppuccin
-                ];
-              };
-              home-manager.extraSpecialArgs = inputs;
-              home-manager.backupFileExtension = "backup";
-            }
-          ]
-          ++ (with nix-gaming.nixosModules; [
-            pipewireLowLatency
-            platformOptimizations
-          ]);
+      nixosConfigurations = {
+        "main" = mkSystem {
+          devicename = "main";
+          features = {
+            gaming = true;
+            desktop = true;
+            laptop = false;
+            programming = true;
+            mining = true;
+          };
+        };
       };
     };
 }

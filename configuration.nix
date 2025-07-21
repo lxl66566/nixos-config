@@ -5,50 +5,18 @@
   config,
   lib,
   pkgs,
+  devicename,
   ...
 }@args:
 {
-  imports = [
-    ./hardware-configuration.nix
-    ./others/vm.nix
-  ];
+  imports = (lib.optional (devicename == "main") ./hardware/main.nix);
 
   # region hardware
 
   hardware = {
     enableAllFirmware = true;
-    cpu.intel.updateMicrocode = true;
-    graphics = {
-      enable = true;
-      enable32Bit = true;
-      extraPackages = with pkgs; [
-        # vpl-gpu-rt
-        # intel-media-driver # LIBVA_DRIVER_NAME=iHD
-        # intel-ocl
-        # intel-vaapi-driver # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
-        # intel-compute-runtime
-        # vaapiVdpau
-        # libvdpau-va-gl
-        # mesa
-        # nvidia-vaapi-driver
-        # nv-codec-headers-12
-      ];
-      # extraPackages32 = with pkgs.pkgsi686Linux; [
-      #   intel-media-driver
-      #   intel-vaapi-driver
-      #   vaapiVdpau
-      #   mesa
-      #   libvdpau-va-gl
-      # ];
-    };
-    bluetooth = {
-      enable = true; # enables support for Bluetooth
-      powerOnBoot = false; # powers up the default Bluetooth controller on boot
-    };
-    tuxedo-rs = {
-      enable = true;
-      tailor-gui.enable = true;
-    };
+    # cpu.intel.updateMicrocode = true;
+    cpu.amd.updateMicrocode = true;
     # nvidia-container-toolkit.enable = false; # 用于 cuda 环境配置与 AI 训练
   };
 
@@ -62,7 +30,7 @@
         devices = [ "nodev" ];
         efiSupport = true;
         default = "saved";
-        useOSProber = false;
+        useOSProber = lib.mkDefault false;
         extraEntries = ''
           menuentry "Windows 11 (zh)" {
             search --fs-uuid D247-DFCF --set=root
@@ -79,9 +47,7 @@
     };
     kernel.sysctl = {
       "kernel.sysrq" = 1;
-      #"kernel.nmi_watchdog" = 0;
-      #"kernel.sched_rt_period_us" = 1000000;
-      #"kernel.sched_rt_runtime_us" = 1000000;
+      # "kernel.nmi_watchdog" = 0;
       "vm.swappiness" = 30;
       "net.ipv4.tcp_min_snd_mss" = 536;
       "net.ipv4.tcp_congestion_control" = "bbr";
@@ -118,7 +84,6 @@
       tmpfsSize = "80%";
     };
   };
-  powerManagement.cpuFreqGovernor = "ondemand";
   networking = {
     hostName = "absx";
     networkmanager.enable = true;
@@ -154,7 +119,7 @@
   # region system settings
 
   time.hardwareClockInLocalTime = true;
-  time.timeZone = "Asia/Shanghai";
+  time.timeZone = lib.mkDefault "Asia/Shanghai";
   documentation.man = {
     generateCaches = false;
     man-db.enable = false;
@@ -209,161 +174,14 @@
     options = "--delete-older-than 30d";
   };
 
-  # region fonts and ime
-
-  fonts.packages = with pkgs; [
-    noto-fonts
-    # 'noto-fonts-cjk' has been renamed to/replaced by 'noto-fonts-cjk-sans'
-    noto-fonts-cjk-serif
-    noto-fonts-cjk-sans
-    noto-fonts-emoji
-    liberation_ttf
-    fira-code
-    fira-code-symbols
-    source-code-pro
-    source-han-sans
-    source-han-serif
-    sarasa-gothic
-    ipafont
-    vistafonts-chs
-  ];
-  fonts.fontconfig = {
-    defaultFonts = {
-      emoji = [ "Noto Color Emoji" ];
-      monospace = [
-        "Fira Code"
-        "Noto Sans Mono CJK SC"
-        "Sarasa Mono SC"
-        "DejaVu Sans Mono"
-      ];
-      sansSerif = [
-        "Fira Code Sans"
-        "Noto Sans CJK SC"
-        "Source Han Sans SC"
-        "DejaVu Sans"
-      ];
-      serif = [
-        "Fira Code Serif"
-        "Noto Serif CJK SC"
-        "Source Han Serif SC"
-        "DejaVu Serif"
-      ];
-    };
-    cache32Bit = true;
-  };
-  i18n = rec {
-    defaultLocale = "zh_CN.UTF-8";
-    supportedLocales = lib.mkBefore [
-      "C.UTF-8/UTF-8"
-      "en_US.UTF-8/UTF-8"
-      "en_SG.UTF-8/UTF-8"
-      "ja_JP.UTF-8/UTF-8"
-      "zh_CN.UTF-8/UTF-8"
-    ];
-    extraLocaleSettings = {
-      # LANG = defaultLocale;
-      # LC_ALL = defaultLocale;
-    };
-    inputMethod = {
-      enable = true;
-      type = "fcitx5";
-      fcitx5.addons = with pkgs; [
-        fcitx5-rime
-        fcitx5-chinese-addons
-        # fcitx5-mozc
-        # fcitx5-gtk
-        # fcitx5-configtool
-      ];
-      # type = "ibus";
-      # ibus.engines = with pkgs.ibus-engines; [
-      #   rime
-      #   libpinyin
-      # ];
-    };
-  };
-
   # region services
   services = {
     btrfs.autoScrub = {
       enable = true;
       interval = "15 days";
     };
-    xserver = {
-      enable = true;
-      videoDrivers = lib.mkBefore [
-        "modesetting"
-        "fbdev"
-        "amdgpu"
-        # "nvidia"
-      ];
-    };
-    displayManager = {
-      sddm.enable = true;
-      defaultSession = "plasmax11";
-    };
-    desktopManager = {
-      plasma6 = {
-        enable = true;
-      };
-    };
     openssh = {
-      settings.PermitRootLogin = "no";
-    };
-    libinput.enable = true;
-    pipewire = {
-      enable = true;
-      pulse.enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      jack.enable = true;
-      lowLatency = {
-        enable = true;
-        quantum = 64;
-        rate = 48000;
-      };
-      extraConfig = {
-        pipewire."92-low-latency" = {
-          context.properties = {
-            default.clock.rate = 48000;
-            default.clock.quantum = 32;
-            default.clock.min-quantum = 32;
-            default.clock.max-quantum = 32;
-          };
-        };
-        pipewire-pulse."92-low-latency" = {
-          context.modules = [
-            {
-              name = "libpipewire-module-protocol-pulse";
-              args = {
-                pulse.min.req = "32/48000";
-                pulse.default.req = "32/48000";
-                pulse.max.req = "32/48000";
-                pulse.min.quantum = "32/48000";
-                pulse.max.quantum = "32/48000";
-              };
-            }
-          ];
-          stream.properties = {
-            node.latency = "32/48000";
-            resample.quality = 1;
-          };
-        };
-      };
-      wireplumber.configPackages = [
-        (pkgs.writeTextDir "share/wireplumber/main.lua.d/99-alsa-lowlatency.lua" ''
-          alsa_monitor.rules = {
-            {
-              matches = {{{ "node.name", "matches", "alsa_output.*" }}};
-              apply_properties = {
-                ["audio.format"] = "S32LE",
-                ["audio.rate"] = "96000", -- for USB soundcards it should be twice your desired rate
-                ["api.alsa.period-size"] = 2, -- defaults to 1024, tweak by trial-and-error
-                -- ["api.alsa.disable-batch"] = true, -- generally, USB soundcards use the batch mode
-              },
-            },
-          }
-        '')
-      ];
+      settings.PermitRootLogin = lib.mkDefault "no";
     };
     locate = {
       package = pkgs.plocate;
@@ -391,37 +209,11 @@
       ];
       # disableTxChecksumIpGeneric = true;
     };
-    tlp = {
-      enable = false; # auto-cpufreq
-      settings = {
-        USB_AUTOSUSPEND = 0;
-        RUNTIME_PM_ON_AC = "auto";
-        CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
-        PLATFORM_PROFILE_ON_BAT = "low-power";
-        CPU_BOOST_ON_BAT = 0;
-        CPU_HWP_DYN_BOOST_ON_BAT = 0;
-        CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
-        PLATFORM_PROFILE_ON_AC = "performance";
-      };
-    };
-    auto-cpufreq = {
-      enable = false; # tlp
-    };
-    power-profiles-daemon.enable = false;
+    # 防止过热的守护进程
     thermald.enable = true;
-    onedrive.enable = false;
     vnstat.enable = true;
-    safeeyes.enable = false;
     logrotate.checkConfig = false;
   };
-
-  # systemd.sleep.extraConfig = ''
-  #   AllowSuspend=yes
-  #   AllowHibernation=yes
-  #   AllowHybridSleep=yes
-  #   AllowSuspendThenHibernate=no
-  #   HibernateDelaySec=1h
-  # '';
 
   security.pam.services.sudo.rootOK = true;
   security.rtkit.enable = true;
@@ -435,13 +227,12 @@
       "networkmanager"
     ];
     shell = pkgs.fish;
-    password = "1";
+    password = "1"; # must be set if you use impermanence
   };
   environment = {
     # etc.machine-id.source = ./info/machine-id;
     systemPackages = with pkgs; [
       busybox
-      vim
       git
       wget
       curl
@@ -449,8 +240,9 @@
       which
       tree
       gnused
-      gawk
-      yazi
+      gawk # GNU awk
+      gnutar
+      yazi # TUI file browser
       fzf
       fd
       ncdu
@@ -461,12 +253,15 @@
       lsof
       nixfmt-rfc-style
       python3
-      poetry
       iotop
       strace
-      trash-cli
-      #linuxKernel.packages.linux_6_6.cpupower
-      libarchive
+      gcc
+      gnumake
+      cmake
+      tree
+      fastfetch
+      dnsutils # `dig` + `nslookup`
+      # linuxKernel.packages.linux_6_6.cpupower
       # nix-fast-build # why disable this: not usable.
       # ryzenadj # AMD CPU Power limit, but "Only Ryzen Mobile Series are supported"
       (
@@ -503,9 +298,6 @@
       SCCACHE_CACHE_SIZE = "50G";
       NIXPKGS_ALLOW_UNFREE = 1;
     };
-    # etc."sysconfig/lm_sensors".text = ''
-    #   HWMON_MODULES="coretemp"
-    # '';
 
     # persistence."/nix/persistent" = {
     #   hideMounts = true;
@@ -525,42 +317,15 @@
     #     "/etc/ssh/ssh_host_rsa_key"
     #   ];
     # };
-    plasma6.excludePackages = with pkgs.kdePackages; [
-      plasma-browser-integration
-      oxygen
-      baloo
-      baloo-widgets
-      milou
-      plasma-workspace-wallpapers
-      ocean-sound-theme
-      phonon-vlc
-      kwallet
-      kwallet-pam
-      kwalletmanager
-      elisa
-    ];
     localBinInPath = true;
   };
 
   # region programs
 
-  xdg.portal.enable = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   programs.mtr.enable = true;
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
-  };
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = true;
-    dedicatedServer.openFirewall = true;
-    gamescopeSession.enable = true;
-    platformOptimizations.enable = true;
-    extraCompatPackages = with pkgs; [ proton-ge-bin ];
-    protontricks = {
-      enable = true;
-    };
   };
   programs.vim = {
     enable = true;
@@ -603,69 +368,6 @@
       pack.threads = 8;
       checkout.workers = 8;
     };
-  };
-  programs.nix-ld = {
-    enable = true;
-    libraries =
-      with pkgs;
-      # (steam-run.fhsenv.args.multiPkgs pkgs)
-      # ++
-      [
-        alsa-lib
-        at-spi2-atk
-        at-spi2-core
-        atk
-        cairo
-        cups
-        curl
-        dbus
-        expat
-        fontconfig
-        freetype
-        fuse3
-        gdk-pixbuf
-        glib
-        gtk3
-        icu
-        libGL
-        libappindicator-gtk3
-        libdrm
-        libglvnd
-        libnotify
-        libpulseaudio
-        libunwind
-        libusb1
-        libuuid
-        libxkbcommon
-        libxml2
-        mesa
-        nspr
-        nss
-        openssl
-        pango
-        pipewire
-        stdenv.cc.cc
-        systemd
-        vulkan-loader
-        xorg.libX11
-        xorg.libXScrnSaver
-        xorg.libXcomposite
-        xorg.libXcursor
-        xorg.libXdamage
-        xorg.libXext
-        xorg.libXfixes
-        xorg.libXi
-        xorg.libXrandr
-        xorg.libXrender
-        xorg.libXtst
-        xorg.libxcb
-        xorg.libxkbfile
-        xorg.libxshmfence
-        zlib
-      ];
-  };
-  programs.niri = {
-    enable = false;
   };
 
   # Copy the NixOS configuration file and link it from the resulting system

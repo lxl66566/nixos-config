@@ -105,8 +105,8 @@ node {
     # Add your node links here.
     # Support socks5, http, https, ss, ssr, vmess, vless, trojan, tuic, juicity, etc.
     # Full support list: https://github.com/daeuniverse/dae/blob/main/docs/en/proxy-protocols.md
-    jp-claw-hy: 'hy2://yourpassword@claw.absx.us.kg:30000/?sni=claw.absx.us.kg&obfs=salamander&obfs-password=your-obfs-password#claw%20hy'
-    jp-claw-trojan: 'trojan://yourpassword@claw.absx.us.kg:40000/?type=tcp&security=tls&sni=claw.absx.us.kg#claw%20trojan'
+    jp-claw-hy: 'hy2://yourpassword@claw.852456.xyz:30000/?sni=claw.852456.xyz&obfs=salamander&obfs-password=your-obfs-password#claw%20hy'
+    jp-claw-trojan: 'trojan://yourpassword@claw.852456.xyz:40000/?type=tcp&security=tls&sni=claw.852456.xyz#claw%20trojan'
 }
 
 # See https://github.com/daeuniverse/dae/blob/main/docs/en/configuration/dns.md for full examples.
