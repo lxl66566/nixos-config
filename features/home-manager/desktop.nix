@@ -34,8 +34,6 @@
     # nvtopPackages.nvidia
     # qpwgraph
     # qbittorrent
-    wine
-    winetricks
     easyeffects
     # coppwr  # Low level control GUI for the PipeWire multimedia server
     obs-studio

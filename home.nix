@@ -101,7 +101,7 @@
         gcm = "git commit --signoff -am";
         py = "python";
         fd = "fd -H";
-        nb = "sudo nixos-rebuild switch --flake .#${devicename}"; # nixos (re)build
+        nb = "sudo nixos-rebuild switch --show-trace --flake .#${devicename}"; # nixos (re)build
         nbf = "nb --fast";
         nd = "nix develop -c $SHELL";
         rv = "revertversion";
