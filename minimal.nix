@@ -108,6 +108,7 @@
     extraGroups = [
       "wheel"
       "networkmanager"
+      "docker"
     ];
     shell = pkgs.fish;
     password = "1";
@@ -130,12 +131,9 @@
       iotop
       impala
       strace
-      atuin
-      starship
       v2raya
       dae
       vscode
-      zoxide
       firefox
     ];
     plasma6.excludePackages = with pkgs.kdePackages; [

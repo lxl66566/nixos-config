@@ -34,10 +34,6 @@
     "https://mirrors.ustc.edu.cn/nix-channels/store"
     "https://cache.nixos.org/"
   ];
-  fonts.packages = with pkgs; [
-    noto-fonts
-    noto-fonts-cjk
-  ];
   environment = {
     sessionVariables = rec {
       EDITOR = "vim";
@@ -47,13 +43,12 @@
     systemPackages = with pkgs; [
       vim
       ncdu
-      dust
       lsof
       git
       wget
       curl
+      gnutar
       htop
-      dae
       ripgrep
       fatresize
       yazi
@@ -61,6 +56,7 @@
       efibootmgr
       rsync
       fd
+      eza
     ];
   };
   programs.fish = {
@@ -172,10 +168,21 @@
       gfixup = "git commit -a --fixup HEAD && GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash HEAD~2";
     };
   };
+  services = {
+    dae = {
+      enable = true;
+      configFile = "/etc/dae/config.dae";
+      assets = with pkgs; [
+        v2ray-geoip
+        v2ray-domain-list-community
+      ];
+    };
+  };
   isoImage.contents = [
     {
       source = ./config/absx.dae;
       target = "/etc/dae/config.dae";
     }
   ];
+  isoImage.squashfsCompression = "zstd";
 }

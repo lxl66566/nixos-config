@@ -33,6 +33,18 @@ in
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
+  boot.loader.grub = {
+    extraEntries = ''
+      menuentry "Windows 11 (zh)" {
+        search --fs-uuid D247-DFCF --set=root
+        chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+      }
+      menuentry "Windows 10 LTSC (jp)" {
+        search --fs-uuid 209D-7E96 --set=root
+        chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+      }
+    '';
+  };
 
   #hardware.nvidia = {
   #  modesetting.enable = true;
@@ -93,15 +105,5 @@ in
   };
 
   swapDevices = [ ];
-
-  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
-  # (the default) this is the recommended approach. When using systemd-networkd it's
-  # still possible to use this option, but it's recommended to use it in conjunction
-  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
-  networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp4s0.useDHCP = lib.mkDefault true;
-  # networking.interfaces.wlp0s20f3.useDHCP = lib.mkDefault true;
-
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

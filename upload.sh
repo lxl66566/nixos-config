@@ -2,8 +2,13 @@
 
 set -euxo pipefail
 
-dae validate -c config/absx.dae
-dae validate -c config/example.dae
+os_kernel=$(uname -s | tr '[:upper:]' '[:lower:]')
+
+if [[ "$os_kernel" == "linux" ]]; then
+    dae validate -c config/absx.dae
+    dae validate -c config/example.dae
+fi
+
 git-se e
 git add -A
 git commit -a --allow-empty-message -m "$*"

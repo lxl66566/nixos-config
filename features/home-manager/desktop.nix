@@ -65,14 +65,6 @@
   ];
 
   programs = {
-    poetry = {
-      enable = false;
-      settings = {
-        virtualenvs.create = true;
-        virtualenvs.in-project = true;
-      };
-    };
-
     vscode = {
       enable = true;
       # package = pkgs.vscode.fhs;
@@ -91,38 +83,41 @@
     alacritty.enable = false;
   };
 
-  # Run this command above:
-  # cd ~/Pictures && git clone git@github.com:lxl66566/wallpaper.git
-  services.random-background = {
-    enable = true;
-    imageDirectory = "%h/Pictures/wallpaper";
-    interval = "6h";
+  services = {
+    # Run this command above:
+    # cd ~/Pictures && git clone git@github.com:lxl66566/wallpaper.git
+    random-background = {
+      enable = true;
+      imageDirectory = "%h/Pictures/wallpaper";
+      interval = "6h";
+    };
+    # https://nix-community.github.io/home-manager/options.xhtml#opt-services.activitywatch.watchers
+    # https://docs.activitywatch.net/en/latest/configuration.html
+    activitywatch = {
+      enable = true;
+      # package = pkgs.aw-server-rust;
+      package = pkgs.activitywatch;
+      watchers = {
+        aw-watcher-afk = {
+          package = pkgs.activitywatch;
+          settings = {
+            timeout = 180;
+            poll_time = 2;
+          };
+        };
+        aw-watcher-window = {
+          package = pkgs.activitywatch;
+          settings = {
+            exclude_title = false;
+            poll_time = 1;
+          };
+        };
+      };
+      settings = {
+        timeout = 180;
+      };
+    };
   };
-
-  # services.activitywatch = {
-  #   enable = true;
-  #   # package = pkgs.aw-server-rust;
-  #   package = pkgs.activitywatch;
-  #   watchers = {
-  #     aw-watcher-afk = {
-  #       package = pkgs.activitywatch;
-  #       settings = {
-  #         timeout = 300;
-  #         poll_time = 2;
-  #       };
-  #     };
-  #     aw-watcher-windows = {
-  #       package = pkgs.activitywatch;
-  #       settings = {
-  #         poll_time = 1;
-  #         exclude_title = true;
-  #       };
-  #     };
-  #   };
-  #   settings = {
-  #     timeout = 180;
-  #   };
-  # };
 
   # https://github.com/emersion/mako: A lightweight Wayland notification daemon
   # services.mako = {

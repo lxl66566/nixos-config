@@ -17,6 +17,7 @@ pkgs.stdenv.mkDerivation rec {
   postPatch = ''
     sed -i 's/kDefaultDonateLevel = 1;/kDefaultDonateLevel = 0;/' src/donate.h
     sed -i 's/kMinimumDonateLevel = 1;/kMinimumDonateLevel = 0;/' src/donate.h
+    sed -i 's/\/sbin\/modprobe/modprobe/' src/hw/msr/Msr_linux.cpp
   '';
 
   # 编译 XMRig 所需的依赖

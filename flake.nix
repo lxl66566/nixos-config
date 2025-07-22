@@ -24,6 +24,7 @@
     };
     daeuniverse = {
       url = "github:daeuniverse/flake.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
@@ -38,7 +39,6 @@
       url = "github:sodiboo/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # amber.url = "github:Ph0enixKM/Amber";
   };
   outputs =
     {
@@ -48,7 +48,6 @@
       plasma-manager,
       # impermanence,
       nix-gaming,
-      # amber,
       niri,
       ...
     }@inputs:
@@ -77,14 +76,16 @@
             ]
             ++ (lib.optional features.gaming ./features/configuration/gaming.nix)
             ++ (lib.optional features.desktop ./features/configuration/desktop.nix)
+            ++ (lib.optional features.server ./features/configuration/server.nix)
             ++ (lib.optional features.laptop ./features/configuration/laptop.nix)
+            ++ (lib.optional features.mining ./features/configuration/mining.nix)
             ++ [
               # 导入 home-manager 模块
               home-manager.nixosModules.home-manager
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.extraSpecialArgs = { inherit inputs features; };
+                home-manager.extraSpecialArgs = { inherit inputs features devicename; };
                 home-manager.backupFileExtension = "backup";
                 home-manager.users.absx = {
                   imports =
@@ -94,8 +95,7 @@
                     ++ (lib.optional features.gaming ./features/home-manager/gaming.nix)
                     ++ (lib.optional features.desktop ./features/home-manager/desktop.nix)
                     ++ (lib.optional features.laptop ./features/home-manager/laptop.nix)
-                    ++ (lib.optional features.programming ./features/home-manager/programming.nix)
-                    ++ (lib.optional features.mining ./features/home-manager/mining.nix);
+                    ++ (lib.optional features.programming ./features/home-manager/programming.nix);
                 };
               }
             ];
@@ -105,12 +105,19 @@
       nixosConfigurations = {
         "main" = mkSystem {
           devicename = "main";
+
+          # desktop: for graphics displaying system
+          # laptop: for laptop, which needs performance control and power management
+          # server: for remote connection
+          # mini: for device that has very little resources. cannot be used with `desktop`.
           features = {
             gaming = true;
             desktop = true;
             laptop = false;
             programming = true;
             mining = true;
+            server = false;
+            mini = false;
           };
         };
       };

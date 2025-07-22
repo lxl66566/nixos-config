@@ -3,9 +3,10 @@
   pkgs,
   plasma-manager,
   nix-gaming,
-  # amber,
   anyrun,
   lib,
+  devicename,
+  features,
   ...
 }@inputs:
 {
@@ -15,6 +16,7 @@
   home.stateVersion = "25.05";
   home.file = {
     ".config/cargo/config.toml".source = ./config/cargo.toml;
+    ".gitignore_g".source = ./config/.gitignore_g;
     ".ssh/config".source = ./config/ssh_config;
     ".config/nixpkgs/config.nix".source = ./config/nix-config.nix;
   };
@@ -33,63 +35,48 @@
   #     xxx
   # '';
 
-  home.packages = with pkgs; [
-    trash-cli
-    v2raya
-    pciutils
-    starship
-    nix-search-cli
-    unrar
-    mtr
-    dust
-    tldr
-    cargo-binstall
-    nil
-    zip
-    xz
-    unzip
-    p7zip
-    jq
-    yq-go
-    difftastic
-    feh
-    zellij
-    delta
-    xh
-    # lunarvim
-    pre-commit
-    impala # tui wireless manager
-    nix-tree
-    nix-index
-    # (callPackage ./mynixpkgs/libtas.nix { }) # libtas
-    shfmt
-    mise
-    # gitui
-    taplo
-    podman
-    podman-tui
-    btdu
-    ouch # compress and decompress painlessly
-    efibootmgr # edit efi boot manager
-    bfg-repo-cleaner
-    cachix
-    navi # interactive cli cheatsheet
-    bun
-    # iperf3
-    # ldns # replacement of `dig`, it provide the command `drill`
-    # socat # replacement of openbsd-netcat
-    # nmap # A utility for network discovery and security auditing
+  home.packages =
+    with pkgs;
 
-    # trippy # Network diagnostic TUI tool
-    iftop
-    ltrace
-    sysstat
-    ethtool
-    pciutils # lspci
-    usbutils # lsusb
-  ]
-  # ++ [ inputs.amber.packages.${pkgs.system}.default ]
-  ;
+    [
+      starship
+      nix-search-cli
+      nix-tree
+      nix-index
+      dust
+      tldr
+      zellij
+      # lunarvim
+      impala # tui wireless manager
+      shfmt
+      ouch # compress and decompress painlessly
+      # iperf3
+      # ldns # replacement of `dig`, it provide the command `drill`
+      # socat # replacement of openbsd-netcat
+      # nmap # A utility for network discovery and security auditing
+      pciutils # lspci
+      usbutils # lsusb
+    ]
+    ++ (lib.optionals (!features.mini) [
+      trash-cli
+      # gitui
+      # podman
+      # podman-tui
+      # trippy # Network diagnostic TUI tool
+      iftop # Display bandwidth usage on a network interface
+      cachix
+      navi # interactive cli cheatsheet
+      btdu
+      cargo-binstall
+      # v2raya
+      jq
+      yq-go
+      xh
+      difftastic
+      delta
+      xz
+      dwarfs
+    ]);
 
   programs = {
     home-manager.enable = true;
@@ -104,21 +91,19 @@
       interactiveShellInit = ''
         set fish_greeting # Disable greeting
         bind \t forward-word
-        starship init fish | source
+        # fnm env --use-on-cd --shell fish | source
       '';
       shellAliases = rec {
         e = "$EDITOR";
-        l = "eza";
+        l = "eza --all --long --color-scale size --binary --header --time-style=long-iso";
         gp = "git pull";
-        gc = "git clone --recursive --depth 1";
+        gc = "git clone";
         gcm = "git commit --signoff -am";
-        gfixup = "git commit -a --fixup HEAD && GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash HEAD~2";
         py = "python";
         fd = "fd -H";
-        nb = "sudo nixos-rebuild switch"; # nixos (re)build
+        nb = "sudo nixos-rebuild switch --flake .#${devicename}"; # nixos (re)build
         nbf = "nb --fast";
         nd = "nix develop -c $SHELL";
-        ndb = "git checkout nix -- flake.nix flake.lock && nd && rm flake.nix flake.lock";
         rv = "revertversion";
         jc = "journalctl";
         sc = "systemctl";
@@ -127,29 +112,26 @@
       };
       functions = {
         revertversion = ''
-          set cnt (count $argv)
-
-          if test $cnt -ne 1
-              echo "Usage: revertversion <_version>"
-              return 1
-          end
-
-          set _version $argv[1]
-          echo "Reverting version $_version"
-          git push origin :refs/tags/$_version
-          git tag -d $_version
-          git tag $_version
+          set version $argv[1]
+          echo "Reverting version $version ..."
+          git push origin :refs/tags/$version
+          git tag -d $version
+          git tag $version
           git push --tags
         '';
-        merge_video = ''
-          find . -name "*.mp4" -exec bash -c 'file="{}"; ffmpeg -i -nostats "$file" -i "$\{file%.mp4}.m4a" -c:v copy -c:a copy -strict experimental "/home/absolutex/Videos/$\{file}"' \;
-        '';
-        make_new_subvolume = ''
-          set dir $argv
-          sudo mv $dir{,.bak}
-          sudo btrfs subvolume create $dir
-          sudo cp --archive --one-file-system --reflink=always $dir{.bak/*,}
-          sudo rm -r --one-file-system $dir'.bak'
+        gfixup = ''
+          set commit_hash $argv[1]
+          if test -z "$commit_hash"
+              set commit_hash 'HEAD'
+          end
+          git commit -a --fixup $commit_hash
+          set rebase_target ""
+          if test $commit_hash = 'HEAD'
+              set rebase_target 'HEAD~2'
+          else
+              set rebase_target (string trim -- "$commit_hash")~1
+          end
+          GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash $rebase_target
         '';
       };
     };
@@ -161,6 +143,7 @@
       enableBashIntegration = true;
       enableFishIntegration = true;
       enableZshIntegration = true;
+      enableNushellIntegration = true;
       flags = [ "--disable-ctrl-r" ];
       settings = {
         auto_sync = true;
@@ -168,10 +151,17 @@
         key_path = "/etc/nixos/config/atuin.key";
         show_preview = true;
         style = "compact";
-        sync_frequency = "4h";
+        sync_frequency = "1h";
         sync_address = "https://api.atuin.sh";
         update_check = false;
       };
+    };
+    starship = {
+      enable = true;
+      enableBashIntegration = true;
+      enableFishIntegration = true;
+      enableZshIntegration = true;
+      enableNushellIntegration = true;
     };
     bat = {
       enable = true;
@@ -190,6 +180,7 @@
       enable = true;
       enableBashIntegration = true;
       enableFishIntegration = true;
+      enableZshIntegration = true;
       enableNushellIntegration = true;
       extraOptions = [
         "--group-directories-first"
@@ -206,11 +197,35 @@
       enable = true;
       enableBashIntegration = true;
       enableFishIntegration = true;
+      enableZshIntegration = true;
+      enableNushellIntegration = true;
       # Replace cd with z and add cdi to access zi
       # options = [ "--cmd cd" ];
     };
     btop = {
       enable = true;
+    };
+    feh = {
+      # Light-weight image viewer
+      enable = true;
+      keybindings = {
+        zoom_in = "plus";
+        zoom_out = "minus";
+        scroll_up = "i";
+        scroll_down = "k";
+        scroll_right = "j";
+        scroll_left = "l";
+        delete = "D";
+        next_img = "Right";
+        prev_img = "Left";
+        remove = "d Delete";
+        toggle_filenames = "I";
+        toggle_info = "i";
+        zoom_default = "0";
+        zoom_fit = "C-0";
+        toggle_fullscreen = "f";
+        save_filelist = "F";
+      };
     };
     neovim = {
       enable = true;

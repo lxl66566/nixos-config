@@ -6,6 +6,7 @@
   lib,
   pkgs,
   devicename,
+  features,
   ...
 }@args:
 {
@@ -15,8 +16,8 @@
 
   hardware = {
     enableAllFirmware = true;
-    # cpu.intel.updateMicrocode = true;
-    cpu.amd.updateMicrocode = true;
+    cpu.intel.updateMicrocode = lib.mkDefault true;
+    cpu.amd.updateMicrocode = lib.mkDefault true;
     # nvidia-container-toolkit.enable = false; # 用于 cuda 环境配置与 AI 训练
   };
 
@@ -31,24 +32,20 @@
         efiSupport = true;
         default = "saved";
         useOSProber = lib.mkDefault false;
-        extraEntries = ''
-          menuentry "Windows 11 (zh)" {
-            search --fs-uuid D247-DFCF --set=root
-            chainloader /EFI/Microsoft/Boot/bootmgfw.efi
-          }
-          menuentry "Windows 10 LTSC (jp)" {
-            search --fs-uuid 209D-7E96 --set=root
-            chainloader /EFI/Microsoft/Boot/bootmgfw.efi
-          }
-        '';
       };
       timeout = 15;
       systemd-boot.enable = false;
     };
-    kernel.sysctl = {
+    kernel.sysctl = lib.mkDefault {
       "kernel.sysrq" = 1;
       # "kernel.nmi_watchdog" = 0;
-      "vm.swappiness" = 30;
+      "vm.swappiness" = 130;
+      "vm.watermark_boost_factor" = 0;
+      "vm.watermark_scale_factor" = 125;
+      "vm.page-cluster" = 0;
+      "net.core.default_qdisc" = "cake";
+      "net.core.netdev_max_backlog" = 16384;
+      "net.ipv4.tcp_fastopen" = 3;
       "net.ipv4.tcp_min_snd_mss" = 536;
       "net.ipv4.tcp_congestion_control" = "bbr";
       "net.ipv6.conf.all.disable_ipv6" = 1;
@@ -59,17 +56,10 @@
     kernelModules = lib.mkAfter [
       "kvm-amd"
       "tcp_bbr"
-      "coretemp"
-      # "ryzen_smu" # for ryzenadj
     ];
     kernelParams = [
       "sysrq_always_enabled=1"
       "amdgpu.sg_display=0"
-
-      # 不能开这两行，亲测开了进不去图形界面！
-      # xmrig 会自行分配 huge pages，无需手动分配。
-      # "hugepagesz=1G"
-      # "hugepages=16" # 分配16个1GB的大页，总计16GB
 
       # "nvidia_drm.modeset=1"
       # "nvidia_drm.fbdev=1"
@@ -80,15 +70,17 @@
     supportedFilesystems = [ "ntfs" ];
     tmp = {
       # https://github.com/NixOS/nixpkgs/blob/nixos-24.05/nixos/modules/system/boot/tmp.nix
-      useTmpfs = true;
-      tmpfsSize = "80%";
+      # useTmpfs = true;
+      # tmpfsSize = "80%";
+      useZram = true;
+      zramSettings.zram-size = "ram * 0.7";
     };
   };
   networking = {
-    hostName = "absx";
+    useDHCP = lib.mkDefault true;
+    hostName = lib.mkDefault "absx";
     networkmanager.enable = true;
     firewall.enable = false;
-    # enableIPv6 = false;
     # proxy.default = "http://127.0.0.1:20172/";
     # proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
@@ -180,22 +172,25 @@
       enable = true;
       interval = "15 days";
     };
-    openssh = {
-      settings.PermitRootLogin = lib.mkDefault "no";
-    };
     locate = {
-      package = pkgs.plocate;
       enable = true;
+      package = pkgs.plocate;
       interval = "daily";
-      pruneNames = [
-        ".bzr"
-        ".cache"
-        ".git"
-        ".hg"
-        ".svn"
-        "node_modules"
-        "__pycache__"
+      pruneBindMounts = true;
+      prunePaths = [
+        "/afs"
+        "/media"
+        "/mnt"
+        "/net"
+        "/sfs"
+        "/udev"
+        "/var/lock"
+        "/var/spool"
+        "/var/tmp"
       ];
+      pruneNames = lib.filter (line: line != "" && !lib.strings.hasPrefix "#" (lib.strings.trim line)) (
+        lib.map lib.strings.trim (lib.strings.splitString "\n" (builtins.readFile ./config/.gitignore_g))
+      );
     };
     dae = {
       enable = true;
@@ -225,74 +220,88 @@
     extraGroups = [
       "wheel"
       "networkmanager"
+      "docker"
     ];
     shell = pkgs.fish;
     password = "1"; # must be set if you use impermanence
   };
   environment = {
     # etc.machine-id.source = ./info/machine-id;
-    systemPackages = with pkgs; [
-      busybox
-      git
-      wget
-      curl
-      file
-      which
-      tree
-      gnused
-      gawk # GNU awk
-      gnutar
-      yazi # TUI file browser
-      fzf
-      fd
-      ncdu
-      sd
-      ripgrep
-      htop
-      bat
-      lsof
-      nixfmt-rfc-style
-      python3
-      iotop
-      strace
-      gcc
-      gnumake
-      cmake
-      tree
-      fastfetch
-      dnsutils # `dig` + `nslookup`
-      # linuxKernel.packages.linux_6_6.cpupower
-      # nix-fast-build # why disable this: not usable.
-      # ryzenadj # AMD CPU Power limit, but "Only Ryzen Mobile Series are supported"
-      (
-        let
-          base = pkgs.appimageTools.defaultFhsEnvArgs;
-        in
-        pkgs.buildFHSEnv (
-          base
-          // {
-            name = "fhs";
-            targetPkgs =
-              pkgs:
-              (
-                # pkgs.buildFHSEnv 只提供一个最小的 FHS 环境，缺少很多常用软件所必须的基础包
-                # 所以直接使用它很可能会报错
-                #
-                # pkgs.appimageTools 提供了大多数程序常用的基础包，所以我们可以直接用它来补充
-                (base.targetPkgs pkgs)
-                ++ (with pkgs; [
-                  pkg-config
-                  ncurses
-                  # 如果你的 FHS 程序还有其他依赖，把它们添加在这里
-                ])
-              );
-            profile = "export FHS=1";
-            runScript = "bash";
-            extraOutputsToInstall = [ "dev" ];
-          }
+    systemPackages =
+      with pkgs;
+      [
+        busybox
+        git
+        wget
+        curl
+        file
+        which
+        tree
+        gnused # GNU sed
+        gawk # GNU awk
+        gnutar
+        zip
+        unzip
+        yazi # TUI file browser
+        fzf
+        fd
+        ncdu
+        sd
+        ripgrep
+        htop
+        bat
+        lsof
+        nixfmt-rfc-style
+        python3
+        pciutils
+        iotop
+        strace
+        gcc
+        gnumake
+        cmake
+        tree
+        fastfetch
+        dnsutils # `dig` + `nslookup`
+        efibootmgr # edit efi boot manager
+        ethtool # network card info
+        ltrace # intercepts and records dynamic library calls which are called by an executed process and the signals received by that process
+        sysstat # Collection of performance monitoring tools for Linux (such as sar, iostat and pidstat)
+        # linuxKernel.packages.linux_6_6.cpupower
+        # nix-fast-build # why disable this: not usable.
+        docker-compose
+        lazydocker
+        (
+          let
+            base = pkgs.appimageTools.defaultFhsEnvArgs;
+          in
+          pkgs.buildFHSEnv (
+            base
+            // {
+              name = "fhs";
+              targetPkgs =
+                pkgs:
+                (
+                  # pkgs.buildFHSEnv 只提供一个最小的 FHS 环境，缺少很多常用软件所必须的基础包
+                  # 所以直接使用它很可能会报错
+                  #
+                  # pkgs.appimageTools 提供了大多数程序常用的基础包，所以我们可以直接用它来补充
+                  (base.targetPkgs pkgs)
+                  ++ (with pkgs; [
+                    pkg-config
+                    ncurses
+                    # 如果你的 FHS 程序还有其他依赖，把它们添加在这里
+                  ])
+                );
+              profile = "export FHS=1";
+              runScript = "bash";
+              extraOutputsToInstall = [ "dev" ];
+            }
+          )
         )
-      )
-    ];
+      ]
+      ++ (lib.optionals (!features.mini) [
+
+      ]);
     sessionVariables = rec {
       EDITOR = "nvim";
       SCCACHE_CACHE_SIZE = "50G";
@@ -368,6 +377,24 @@
       pack.threads = 8;
       checkout.workers = 8;
     };
+  };
+
+  virtualisation.docker = {
+    enable = true;
+    autoPrune = {
+      enable = true;
+      dates = "weekly";
+    };
+
+    # If you want to run the docker daemon in rootless mode, you need to specify
+    # either the socket path (using thr DOCKER_HOST environment variable) or the
+    # CLI context using `docker context` explicitly.
+    # https://docs.docker.com/engine/security/rootless/
+    # https://docs.docker.com/engine/security/rootless/#client
+    # rootless = {
+    #   enable = true;
+    #   setSocketVariable = true;
+    # };
   };
 
   # Copy the NixOS configuration file and link it from the resulting system

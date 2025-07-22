@@ -1,6 +1,7 @@
 {
   lib,
   inputs,
+  pkgs,
   ...
 }:
 
@@ -11,6 +12,10 @@
       tailor-gui.enable = true;
     };
   };
+  boot.kernelModules = lib.mkAfter [
+    "coretemp"
+    # "ryzen_smu" # for ryzenadj
+  ];
   powerManagement.cpuFreqGovernor = "ondemand";
   services = {
     tlp = {
@@ -36,6 +41,9 @@
     etc."sysconfig/lm_sensors".text = ''
       HWMON_MODULES="coretemp"
     '';
+    systemPackages = with pkgs; [
+      # ryzenadj # AMD CPU Power limit, but "Only Ryzen Mobile Series are supported"
+    ];
   };
 
   systemd.sleep.extraConfig = ''
