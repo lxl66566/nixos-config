@@ -1,0 +1,69 @@
+[safe]
+	directory = *
+[user]
+	email = <lxl66566@gmail.com>
+	name = lxl66566
+[credential "https://e.coding.net"]
+	provider = generic
+[core]
+	quotepath = false
+	autocrlf = true
+	pager = delta
+	excludesfile = ~/.gitignore_g
+	ignorecase = false
+	attributesfile = ~/.gitattributes_g
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+[push]
+	default = current
+	autoSetupRemote = true
+	useForceIfIncludes = true
+	followTags = true
+[pull]
+	autoSetupRemote = true
+	rebase = true
+[http]
+	proxy = http://127.0.0.1:10450
+[diff]
+	external = difft
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
+[credential "helperselector"]
+	selected = manager
+[init]
+	defaultBranch = main
+[interactive]
+  diffFilter = delta --color-only
+[delta]
+  navigate = true    # use n and N to move between diff sections
+[merge]
+	conflictStyle = diff3
+[rebase]
+	autoSquash = true
+	autoStash = true
+	updateRefs = true
+[column]
+	ui = auto
+[branch]
+	sort = -committerdate
+[tag]
+	sort = version:refname
+[fetch]
+	prune = true
+	pruneTags = true
+	all = true
+[help]
+	autocorrect = prompt
+[commit]
+	verbose = true
+[rerere]
+	enabled = true
+	autoupdate = true
+[merge "mergiraf"]
+	name = mergiraf
+	driver = mergiraf merge --git %O %A %B -s %S -x %X -y %Y -p %P -l %L

@@ -77,6 +77,7 @@
             ++ (lib.optional features.gaming ./features/configuration/gaming.nix)
             ++ (lib.optional features.desktop ./features/configuration/desktop.nix)
             ++ (lib.optional features.server ./features/configuration/server.nix)
+            ++ (lib.optional features.programming ./features/configuration/programming.nix)
             ++ (lib.optional features.laptop ./features/configuration/laptop.nix)
             ++ (lib.optional features.mining ./features/configuration/mining.nix)
             ++ [

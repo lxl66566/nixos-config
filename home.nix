@@ -3,7 +3,6 @@
   pkgs,
   plasma-manager,
   nix-gaming,
-  anyrun,
   lib,
   devicename,
   features,
@@ -14,9 +13,7 @@
   home.homeDirectory = "/home/absx";
   home.enableNixpkgsReleaseCheck = false;
   home.stateVersion = "25.05";
-  home.file = {
-    ".config/cargo/config.toml".source = ./config/cargo.toml;
-    ".gitignore_g".source = ./config/.gitignore_g;
+  home.file = lib.mkDefault {
     ".ssh/config".source = ./config/ssh_config;
     ".config/nixpkgs/config.nix".source = ./config/nix-config.nix;
   };

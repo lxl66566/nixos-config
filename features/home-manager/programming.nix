@@ -4,6 +4,11 @@
   ...
 }:
 {
+  home.file = {
+    ".config/cargo/config.toml".source = ../../config/cargo.toml;
+    ".gitignore_g".source = ../../config/.gitignore_g;
+    ".gitattributes_g".source = ../../config/.gitattributes_g;
+  };
   home.packages = with pkgs; [
     rustup
     pkg-config
@@ -39,6 +44,7 @@
     # ida-free
     # devenv
     libarchive
+    mergiraf
   ];
 
   programs = {
