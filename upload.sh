@@ -4,7 +4,7 @@ set -euxo pipefail
 
 os_kernel=$(uname -s | tr '[:upper:]' '[:lower:]')
 
-if [[ "$os_kernel" == "linux" ]]; then
+if [[ "$os_kernel" == "linux" ]] && ! grep -q -E "(Microsoft|WSL)" /proc/version &> /dev/null; then
     dae validate -c config/absx.dae
     dae validate -c config/example.dae
 fi

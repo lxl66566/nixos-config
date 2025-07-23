@@ -1,10 +1,14 @@
-Host axw
-  User itdep
-  HostName 172.18.58.54
 Host github.com
   User git
   HostName ssh.github.com
   Port 443
+  IdentityFile ~/.ssh/id_ed25519
+Host git.temu.team
+  User git
+  HostName git.temu.team
+  IdentityFile ~/.ssh/id_ed25519_gitlab
+  IdentitiesOnly yes
+  AddKeysToAgent yes
 Host xline
   User xuanle
   HostName frp.whyiscas.top
@@ -12,19 +16,26 @@ Host xline
 Host azure
   User root
   HostName 20.78.33.166
+  IdentityFile ~/.ssh/id_ed25519
+Host xrq
+  User root
+  HostName server.perrykum.top
+  IdentityFile ~/.ssh/id_ed25519
 Host n1
   User root
-  HostName 192.168.10.152
+  HostName 192.168.1.2
+  IdentityFile ~/.ssh/id_ed25519
 Host claw
   User root
   HostName 47.79.33.39
-
+  IdentityFile ~/.ssh/id_ed25519
 
 # whc
 # greencloud
 Host gc
   User root
   HostName 91.199.209.151
+  IdentityFile ~/.ssh/id_ed25519
 # bytevirt
 Host bv
   User root

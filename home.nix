@@ -15,7 +15,6 @@
   home.enableNixpkgsReleaseCheck = false;
   home.stateVersion = "25.05";
   home.file = lib.mkDefault {
-    ".ssh/config".source = ./config/ssh_config;
     ".config/nixpkgs/config.nix".source = ./config/nix-config.nix;
   };
   home.sessionPath = [ "$HOME/.cargo/bin/" ];
@@ -102,7 +101,7 @@
         gcm = "git commit --signoff -am";
         py = "python";
         fd = "fd -H";
-        nb = "sudo nixos-rebuild switch --show-trace --flake .#${devicename}"; # nixos (re)build
+        nb = "sudo nixos-rebuild switch --show-trace --flake .#${devicename} ${lib.optionalString features.wsl " --impure"}"; # nixos (re)build
         nbf = "nb --fast";
         nd = "nix develop -c $SHELL";
         rv = "revertversion";
@@ -138,6 +137,7 @@
     };
     ssh = {
       enable = true;
+      extraConfig = builtins.readFile ./config/ssh_config;
     };
     atuin = {
       enable = true;
