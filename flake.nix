@@ -52,7 +52,7 @@
       plasma-manager,
       # impermanence,
       nix-gaming,
-      niri,
+      # niri,
       ...
     }@inputs:
     let
@@ -68,7 +68,14 @@
         lib.nixosSystem {
           inherit system;
           # specialArgs 会被传递给所有模块
-          specialArgs = { inherit inputs features devicename username; };
+          specialArgs = {
+            inherit
+              inputs
+              features
+              devicename
+              username
+              ;
+          };
           modules =
             [
               # inputs.impermanence.nixosModules.impermanence
@@ -85,13 +92,21 @@
             ++ (lib.optional features.programming ./features/configuration/programming.nix)
             ++ (lib.optional features.laptop ./features/configuration/laptop.nix)
             ++ (lib.optional features.mining ./features/configuration/mining.nix)
+            ++ (lib.optional features.wsl ./features/configuration/wsl.nix)
             ++ [
               # 导入 home-manager 模块
               home-manager.nixosModules.home-manager
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.extraSpecialArgs = { inherit inputs features devicename username; };
+                home-manager.extraSpecialArgs = {
+                  inherit
+                    inputs
+                    features
+                    devicename
+                    username
+                    ;
+                };
                 home-manager.backupFileExtension = "backup";
                 home-manager.users.${username} = {
                   imports =
