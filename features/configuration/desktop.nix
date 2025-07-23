@@ -212,9 +212,9 @@
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
   programs = {
-    niri = {
-      enable = false;
-    };
+    # niri = {
+    #   enable = false;
+    # };
     nix-ld = {
       libraries =
         with pkgs;
