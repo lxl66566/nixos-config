@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  features,
   ...
 }:
 {
@@ -9,43 +10,49 @@
     ".gitignore_g".source = ../../config/.gitignore_g;
     ".gitattributes_g".source = ../../config/.gitattributes_g;
   };
-  home.packages = with pkgs; [
-    rustup
-    pkg-config
-    sccache
-    llvmPackages_18.clang-tools
-    bfg-repo-cleaner
-    bun
-    fnm
-    nodejs_22
-    corepack_22
-    zig # programming language
-    go
-    jdk
-    pre-commit
-    nil # Nix language server
-    taplo
-    # mise # download and run any dev tools
-    # leiningen # clojure package manager
-    # clojure # functional language
-    # cljfmt
-    # jd-gui # java decompiler
-    # jd-gui has been removed due to a dependency on the dead JCenter Bintray. Other Java decompilers in Nixpkgs include bytecode-viewer (GUI), cfr (CLI), and procyon (CLI).
-    # pipx # python binary package manager
-    # octave # scientific computing
-    cargo-msrv
-    # jmeter
-    # postman
-    gradle
-    typst
-    gh
-    android-tools
-    androidStudioPackages.dev
-    # ida-free
-    # devenv
-    libarchive
-    mergiraf
-  ];
+  home.packages =
+    with pkgs;
+    [
+      rustup
+      pkg-config
+      sccache
+      llvmPackages_18.clang-tools
+      bfg-repo-cleaner
+      bun
+      fnm
+      nodejs_22
+      corepack_22
+      zig # programming language
+      go
+      jdk
+      pre-commit
+      nil # Nix language server
+      taplo
+      # mise # download and run any dev tools
+      # leiningen # clojure package manager
+      # clojure # functional language
+      # cljfmt
+      # jd-gui # java decompiler
+      # jd-gui has been removed due to a dependency on the dead JCenter Bintray. Other Java decompilers in Nixpkgs include bytecode-viewer (GUI), cfr (CLI), and procyon (CLI).
+      # pipx # python binary package manager
+      # octave # scientific computing
+      cargo-msrv
+      # jmeter
+      # postman
+      gradle
+      typst
+      gh
+      android-tools
+      # ida-free
+      # devenv
+      libarchive
+    ]
+    ++ (lib.optionals features.desktop [
+      androidStudioPackages.dev
+    ])
+    ++ (lib.optionals (features.like_to_build) [
+      mergiraf # structured merge tool
+    ]);
 
   programs = {
     uv = {

@@ -17,8 +17,8 @@
     # Provide an initial copy of the NixOS channel so that the user
     # doesn't need to run "nix-channel --update" first.
     <nixpkgs/nixos/modules/installer/cd-dvd/channel.nix>
-    # nix-channel --add https://mirrors.ustc.edu.cn/nix-channels/nixpkgs-unstable nixpkg
-    # nix-channel --add https://mirrors.ustc.edu.cn/nix-channels/nixos-24.05 nixos
+    # nix-channel --add https://mirrors.ustc.edu.cn/nix-channels/nixpkgs-unstable nixpkgs
+    # nix-channel --add https://mirrors.ustc.edu.cn/nix-channels/nixos-25.05 nixos
   ];
 
   boot.supportedFilesystems = lib.mkForce [

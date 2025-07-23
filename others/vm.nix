@@ -1,12 +1,12 @@
 # from https://github.com/TechsupportOnHold/Nixos-VM
-{ pkgs, lib, ... }:
+{ pkgs, lib, username, ... }:
 {
 
   # Enable dconf (System Management Tool)
   programs.dconf.enable = true;
 
   # Add user to libvirtd group
-  users.users.absx.extraGroups = lib.mkAfter [ "libvirtd" ];
+  users.users.${username}.extraGroups = lib.mkAfter [ "libvirtd" ];
 
   # Install necessary packages
   environment.systemPackages = with pkgs; [

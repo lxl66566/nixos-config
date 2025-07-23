@@ -52,24 +52,25 @@
       ...
     }@inputs:
     let
-      # 函数，用于生成一个带特定 features 的系统
       lib = nixpkgs.lib;
+      # 函数，用于生成一个带特定 features 的系统
       mkSystem =
         {
           system ? "x86_64-linux",
           features ? { },
           devicename ? "main",
+          username ? "absx",
         }:
         lib.nixosSystem {
           inherit system;
           # specialArgs 会被传递给所有模块
-          specialArgs = { inherit inputs features devicename; };
+          specialArgs = { inherit inputs features devicename username; };
           modules =
             [
               # inputs.impermanence.nixosModules.impermanence
               inputs.daeuniverse.nixosModules.dae
               # inputs.niri.nixosModules.niri
-              { nix.settings.trusted-users = [ "absx" ]; }
+              { nix.settings.trusted-users = [ username ]; }
 
               # 基础配置和所有 feature 模块的定义
               ./configuration.nix
@@ -86,9 +87,9 @@
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.extraSpecialArgs = { inherit inputs features devicename; };
+                home-manager.extraSpecialArgs = { inherit inputs features devicename username; };
                 home-manager.backupFileExtension = "backup";
-                home-manager.users.absx = {
+                home-manager.users.${username} = {
                   imports =
                     [
                       ./home.nix # 基础 home 配置
@@ -106,11 +107,13 @@
       nixosConfigurations = {
         "main" = mkSystem {
           devicename = "main";
-
+          username = "absx";
           # desktop: for graphics displaying system
           # laptop: for laptop, which needs performance control and power management
           # server: for remote connection
           # mini: for device that has very little resources. cannot be used with `desktop`.
+          # wsl: for nixos that on windows subsystem of linux
+          # like_to_build: some packages are not so widely used, so the nix cache often misses and needs to build them.
           features = {
             gaming = true;
             desktop = true;
@@ -119,6 +122,27 @@
             mining = true;
             server = false;
             mini = false;
+            wsl = false;
+            like_to_build = true;
+          };
+        };
+        # https://github.com/nix-community/nixos-wsl
+        # sudo cp -r . /etc/nixos
+        # cd /etc/nixos
+        # sudo nixos-rebuild switch --show-trace --flake .#wsl --impure --option substituters https://mirrors.ustc.edu.cn/nix-channels/store
+        "wsl" = mkSystem {
+          devicename = "wsl";
+          username = "nixos";
+          features = {
+            gaming = false;
+            desktop = false;
+            laptop = false;
+            programming = true;
+            mining = false;
+            server = false;
+            mini = false;
+            wsl = true;
+            like_to_build = false;
           };
         };
       };

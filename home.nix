@@ -5,12 +5,13 @@
   nix-gaming,
   lib,
   devicename,
+  username,
   features,
   ...
 }@inputs:
 {
-  home.username = "absx";
-  home.homeDirectory = "/home/absx";
+  home.username = username;
+  home.homeDirectory = "/home/${username}";
   home.enableNixpkgsReleaseCheck = false;
   home.stateVersion = "25.05";
   home.file = lib.mkDefault {
@@ -72,6 +73,9 @@
       difftastic
       delta
       xz
+
+    ])
+    ++ (lib.optionals (features.like_to_build) [
       dwarfs
     ]);
 

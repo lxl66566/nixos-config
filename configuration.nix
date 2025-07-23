@@ -6,15 +6,18 @@
   lib,
   pkgs,
   devicename,
+  username,
   features,
   ...
 }@args:
 {
-  imports = (lib.optional (devicename == "main") ./hardware/main.nix);
+  imports =
+    (lib.optional (devicename == "main") ./hardware/main.nix)
+    ++ (lib.optional (features.wsl) <nixos-wsl/modules>);
 
   # region hardware
 
-  hardware = {
+  hardware = lib.mkIf (!features.wsl) {
     enableAllFirmware = true;
     cpu.intel.updateMicrocode = lib.mkDefault true;
     cpu.amd.updateMicrocode = lib.mkDefault true;
@@ -22,7 +25,7 @@
   };
 
   # region boot&network
-  boot = {
+  boot = lib.mkIf (!features.wsl) {
     loader = {
       efi.canTouchEfiVariables = true;
       efi.efiSysMountPoint = "/boot";
@@ -76,9 +79,9 @@
       zramSettings.zram-size = "ram * 0.7";
     };
   };
-  networking = {
+  networking = lib.mkIf (!features.wsl) {
     useDHCP = lib.mkDefault true;
-    hostName = lib.mkDefault "absx";
+    hostName = lib.mkDefault username;
     networkmanager.enable = true;
     firewall.enable = false;
     # proxy.default = "http://127.0.0.1:20172/";
@@ -145,7 +148,7 @@
     overlays = [ ];
   };
   nix.settings = {
-    trusted-users = [ "absx" ];
+    trusted-users = [ username ];
     experimental-features = [
       "nix-command"
       "flakes"
@@ -153,8 +156,9 @@
     warn-dirty = false;
     # builders-use-substitutes = true;
     substituters = lib.mkBefore [
-      "https://mirror.sjtu.edu.cn/nix-channels/store"
       "https://mirrors.ustc.edu.cn/nix-channels/store"
+      "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
+      "https://mirror.sjtu.edu.cn/nix-channels/store"
       "https://cache.garnix.io"
       "https://mirrors.cernet.edu.cn/nix-channels/store"
     ];
@@ -168,7 +172,7 @@
 
   # region services
   services = {
-    btrfs.autoScrub = {
+    btrfs.autoScrub = lib.mkIf (!features.wsl) {
       enable = true;
       interval = "15 days";
     };
@@ -192,7 +196,7 @@
         lib.map lib.strings.trim (lib.strings.splitString "\n" (builtins.readFile ./config/.gitignore_g))
       );
     };
-    dae = {
+    dae = lib.mkIf (!features.wsl) {
       enable = true;
       configFile = "/etc/nixos/config/absx.dae";
       # dae needs 0600 permission, but we cannot source file with permission.
@@ -215,7 +219,7 @@
 
   # region Users and Root
 
-  users.users.absx = {
+  users.users.${username} = {
     isNormalUser = true;
     extraGroups = [
       "wheel"
@@ -230,7 +234,8 @@
     systemPackages =
       with pkgs;
       [
-        busybox
+        coreutils
+        # busybox
         git
         wget
         curl
@@ -348,6 +353,7 @@
   programs.git = {
     enable = true;
   };
+  programs.nix-ld.enable = true;
 
   virtualisation.docker = {
     enable = true;
@@ -365,6 +371,11 @@
     #   enable = true;
     #   setSocketVariable = true;
     # };
+  };
+
+  wsl = lib.mkIf (features.wsl) {
+    enable = true;
+    defaultUser = username;
   };
 
   # Copy the NixOS configuration file and link it from the resulting system
