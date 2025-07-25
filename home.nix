@@ -11,7 +11,7 @@
 }@inputs:
 {
   home.username = username;
-  home.homeDirectory = "/home/${username}";
+  # home.homeDirectory = lib.mkDefault "/home/${username}";
   home.enableNixpkgsReleaseCheck = false;
   home.stateVersion = "25.05";
   home.file = lib.mkDefault {
@@ -36,11 +36,7 @@
     with pkgs;
 
     [
-      starship
-      nix-search-cli
       # lunarvim
-      impala # tui wireless manager
-      shfmt
       ouch # compress and decompress painlessly
       # iperf3
       # ldns # replacement of `dig`, it provide the command `drill`
@@ -48,7 +44,11 @@
       # nmap # A utility for network discovery and security auditing
     ]
     ++ (lib.optionals (!features.mini) [
+      impala # tui wireless manager
       trash-cli
+      shfmt
+      starship
+      nix-search-cli
       # gitui
       # podman
       # podman-tui
@@ -135,11 +135,11 @@
       };
     };
     ssh = {
-      enable = true;
+      enable = !features.mini;
       extraConfig = builtins.readFile ./config/ssh_config;
     };
     atuin = {
-      enable = true;
+      enable = !features.mini;
       enableBashIntegration = true;
       enableFishIntegration = true;
       enableZshIntegration = true;
@@ -157,14 +157,14 @@
       };
     };
     starship = {
-      enable = true;
+      enable = !features.mini;
       enableBashIntegration = true;
       enableFishIntegration = true;
       enableZshIntegration = true;
       enableNushellIntegration = true;
     };
     bat = {
-      enable = true;
+      enable = !features.mini;
       extraPackages = with pkgs.bat-extras; [
         batgrep
         batman
@@ -203,11 +203,11 @@
       # options = [ "--cmd cd" ];
     };
     btop = {
-      enable = true;
+      enable = !features.mini;
     };
     feh = {
       # Light-weight image viewer
-      enable = true;
+      enable = !features.mini;
       keybindings = {
         zoom_in = "plus";
         zoom_out = "minus";
@@ -228,7 +228,7 @@
       };
     };
     neovim = {
-      enable = true;
+      enable = !features.mini;
       vimAlias = true;
       withNodeJs = true;
       withPython3 = true;

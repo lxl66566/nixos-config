@@ -191,7 +191,7 @@
       interval = "15 days";
     };
     locate = {
-      enable = true;
+      enable = !features.mini;
       package = pkgs.plocate;
       interval = "daily";
       pruneBindMounts = true;
@@ -210,8 +210,8 @@
         lib.map lib.strings.trim (lib.strings.splitString "\n" (builtins.readFile ./config/.gitignore_g))
       );
     };
-    dae = lib.mkIf (!features.wsl) {
-      enable = true;
+    dae = {
+      enable = !features.wsl && !features.mini;
       configFile = "/etc/nixos/config/absx.dae";
       # dae needs 0600 permission, but we cannot source file with permission.
       # related issue: https://github.com/nix-community/home-manager/issues/3090
@@ -223,8 +223,8 @@
       # disableTxChecksumIpGeneric = true;
     };
     # 防止过热的守护进程
-    thermald.enable = true;
-    vnstat.enable = true;
+    thermald.enable = !features.mini;
+    vnstat.enable = !features.mini;
     logrotate.checkConfig = false;
   };
 
@@ -249,29 +249,16 @@
       with pkgs;
       [
         coreutils
-        # busybox
-        git
         wget
+        fd
+        htop
+        ripgrep
+        lsof
+        ncdu
         curl
         file
         which
         tree
-        gnused # GNU sed
-        gawk # GNU awk
-        gnutar
-        unzip
-        fd
-        ncdu
-        ripgrep
-        htop
-        lsof
-        nixfmt-rfc-style
-        python3
-        pciutils
-        strace
-        fastfetch
-        efibootmgr # edit efi boot manager
-        ethtool # network card info
         # linuxKernel.packages.linux_6_6.cpupower
         # nix-fast-build # why disable this: not usable.
         # nur.repos.lxl66566.git-simple-encrypt
@@ -305,6 +292,18 @@
         )
       ]
       ++ (lib.optionals (!features.mini) [
+        # busybox
+        gnused # GNU sed
+        gawk # GNU awk
+        gnutar
+        unzip
+        nixfmt-rfc-style
+        python3
+        pciutils
+        strace
+        fastfetch
+        efibootmgr # edit efi boot manager
+        ethtool # network card info
         zip
         yazi # TUI file browser
         fzf
@@ -353,18 +352,17 @@
 
   programs.mtr.enable = !features.mini;
   programs.gnupg.agent = {
-    enable = true;
+    enable = !features.mini;
     enableSSHSupport = true;
   };
   programs.vim = {
-    enable = !features.mini;
+    enable = true;
     defaultEditor = lib.mkForce false;
   };
   programs.neovim = {
-    enable = true;
+    enable = !features.mini;
     defaultEditor = true;
   };
-  programs.fish.enable = true;
   programs.git = {
     enable = true;
   };

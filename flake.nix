@@ -179,9 +179,11 @@
             wsl = true;
           };
         };
+        # for building vps-usable image, https://lantian.pub/article/modify-computer/nixos-low-ram-vps.lantian/
+        # nix build .#image
         "vps" = mkSystem {
           devicename = "vps";
-          username = "absx";
+          username = "root";
           userFeatures = {
             wsl = false;
             mini = true;

@@ -42,7 +42,7 @@
   networking = {
     # assume you are using ipv4 server
     enableIPv6 = false;
-    firewall.enable = false;
+    firewall.enable = true; # fail2ban can not be used without a firewall
   };
 
   users = {
@@ -62,7 +62,7 @@
         PermitRootLogin = lib.mkForce "yes";
         UseDns = true;
         PasswordAuthentication = true;
-        X11Forwarding = lib.mkDefault true;
+        X11Forwarding = !features.mini;
         LogLevel = lib.mkDefault "VERBOSE";
       };
       hostKeys = [

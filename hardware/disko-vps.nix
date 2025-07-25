@@ -22,8 +22,8 @@ in
     devices = {
       # 定义一个磁盘
       disk.main = {
-        # 要生成的磁盘镜像的大小，2GB 足够我使用，可以按需调整
-        imageSize = "2G";
+        # 要生成的磁盘镜像的大小，可以按需调整
+        imageSize = "3G";
         # 磁盘路径。Disko 生成磁盘镜像时，实际上是启动一个 QEMU 虚拟机走一遍安装流程。
         # 因此无论你的 VPS 上的硬盘识别成 sda 还是 vda，这里都以 Disko 的虚拟机为准，指定 vda。
         device = "/dev/vda";
@@ -46,8 +46,8 @@ in
             # ESP 分区，或者说是 boot 分区。这套配置理论上同时支持 EFI 模式和 BIOS 模式启动的 VPS。
             ESP = {
               name = "ESP";
-              # 根据我个人的需求预留 512MB 空间。如果你的 boot 分区占用更大/更小，可以按需调整。
-              size = "512M";
+              # 根据我个人的需求预留 256MB 空间。如果你的 boot 分区占用更大/更小，可以按需调整。
+              size = "256M";
               type = "EF00";
               # 优先级设置成第二高，保证在剩余空间的前面
               priority = 1;
