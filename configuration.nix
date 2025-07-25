@@ -30,11 +30,12 @@
       efi.canTouchEfiVariables = true;
       efi.efiSysMountPoint = "/boot";
       grub = {
-        enable = true;
-        devices = [ "nodev" ];
+        enable = !config.boot.isContainer;
+        devices = lib.mkDefault [ "nodev" ];
         efiSupport = true;
         default = "saved";
         useOSProber = lib.mkDefault false;
+
       };
       timeout = 15;
       systemd-boot.enable = false;
@@ -69,7 +70,11 @@
       # "acpi_enforce_resources=lax"
       # "i915.modeset=1"
       # "i915.force_probe=46a6"
-    ];
+    ]
+    ++ (lib.optionals features.server.enable [
+      "audit=0"
+      "net.ifnames=0"
+    ]);
     supportedFilesystems = [ "ntfs" ];
     tmp = {
       # https://github.com/NixOS/nixpkgs/blob/nixos-24.05/nixos/modules/system/boot/tmp.nix
@@ -82,17 +87,26 @@
   networking = lib.mkIf (!features.wsl) {
     useDHCP = lib.mkDefault true;
     hostName = lib.mkDefault username;
-    networkmanager.enable = true;
-    firewall.enable = false;
+    networkmanager.enable = lib.mkDefault true;
+    firewall.enable = lib.mkDefault false;
     # proxy.default = "http://127.0.0.1:20172/";
     # proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
     # use https://tool.chinaz.com/dns/ to info host.
-    extraHosts = ''
+    extraHosts = lib.mkDefault ''
       185.199.110.133 raw.githubusercontent.com
       104.244.42.65 twitter.com
     '';
   };
+  # systemd.network.enable = true;
+  # systemd.network.networks."10-dhcp" = {
+  #   matchConfig.Name = [
+  #     "en*"
+  #     "eth*"
+  #     "wl*"
+  #   ];
+  #   networkConfig.DHCP = "yes";
+  # };
   zramSwap = {
     enable = true;
   };
@@ -219,7 +233,7 @@
 
   # region Users and Root
 
-  users.users.${username} = {
+  users.users.${username} = lib.mkIf (!features.server.enable) {
     isNormalUser = true;
     extraGroups = [
       "wheel"
@@ -245,36 +259,21 @@
         gnused # GNU sed
         gawk # GNU awk
         gnutar
-        zip
         unzip
-        yazi # TUI file browser
-        fzf
         fd
         ncdu
-        sd
         ripgrep
         htop
-        bat
         lsof
         nixfmt-rfc-style
         python3
         pciutils
-        iotop
         strace
-        gcc
-        gnumake
-        cmake
-        tree
         fastfetch
-        dnsutils # `dig` + `nslookup`
         efibootmgr # edit efi boot manager
         ethtool # network card info
-        ltrace # intercepts and records dynamic library calls which are called by an executed process and the signals received by that process
-        sysstat # Collection of performance monitoring tools for Linux (such as sar, iostat and pidstat)
         # linuxKernel.packages.linux_6_6.cpupower
         # nix-fast-build # why disable this: not usable.
-        docker-compose
-        lazydocker
         (
           let
             base = pkgs.appimageTools.defaultFhsEnvArgs;
@@ -305,7 +304,20 @@
         )
       ]
       ++ (lib.optionals (!features.mini) [
-
+        zip
+        yazi # TUI file browser
+        fzf
+        ltrace # intercepts and records dynamic library calls which are called by an executed process and the signals received by that process
+        sysstat # Collection of performance monitoring tools for Linux (such as sar, iostat and pidstat)
+        dnsutils # `dig` + `nslookup`
+        gcc
+        gnumake
+        cmake
+        sd
+        bat
+        iotop
+        docker-compose
+        lazydocker
       ]);
     sessionVariables = rec {
       EDITOR = "nvim";
@@ -336,13 +348,13 @@
 
   # region programs
 
-  programs.mtr.enable = true;
+  programs.mtr.enable = !features.mini;
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
   };
   programs.vim = {
-    enable = true;
+    enable = !features.mini;
     defaultEditor = lib.mkForce false;
   };
   programs.neovim = {
@@ -356,7 +368,7 @@
   programs.nix-ld.enable = true;
 
   virtualisation.docker = {
-    enable = true;
+    enable = !features.mini;
     autoPrune = {
       enable = true;
       dates = "weekly";

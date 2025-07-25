@@ -2,17 +2,62 @@
   lib,
   inputs,
   pkgs,
+  features,
+  config,
   ...
 }:
 
 {
+  imports = [
+    ../../hardware/disko-vps.nix
+  ];
+  boot.initrd = {
+    compressor = "zstd";
+    compressorArgs = [
+      "-19"
+      "-T0"
+    ];
+    systemd.enable = true;
+    postDeviceCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
+      # Set the system time from the hardware clock to work around a
+      # bug in qemu-kvm > 1.5.2 (where the VM clock is initialised
+      # to the *boot time* of the host).
+      hwclock -s
+    '';
+    availableKernelModules = [
+      "virtio_net"
+      "virtio_pci"
+      "virtio_mmio"
+      "virtio_blk"
+      "virtio_scsi"
+    ];
+    kernelModules = [
+      "virtio_balloon"
+      "virtio_console"
+      "virtio_rng"
+    ];
+  };
+  boot.loader.grub.devices = lib.mkIf (features.server.type == "remote") ([ "/dev/vda" ]);
+
   networking = {
     # assume you are using ipv4 server
     enableIPv6 = false;
+    firewall.enable = false;
   };
+
+  users = {
+    users.root = {
+      # my "vps" password
+      hashedPassword = "$6$m6Skk6dB0hu.eU4Y$oVCENpvE/wXpm9m4fw25oZrDG5E/Ovipr3hbaadibYHJ8.H4TzO6WRb1PBqGp2z.lATK3WorX42m/DAr4ruzh1";
+      openssh.authorizedKeys.keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKhsZBFg1jO+wWYvOxtS+q4cuYXCEzCs+qHH6c1pPunX lxl66566@gmail.com" # windows ssh key
+      ];
+    };
+  };
+
   services = {
     openssh = {
-      enable = true;
+      enable = lib.mkForce true;
       settings = {
         PermitRootLogin = lib.mkForce "yes";
         UseDns = true;

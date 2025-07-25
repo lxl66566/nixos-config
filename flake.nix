@@ -18,6 +18,10 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     impermanence.url = "github:nix-community/impermanence";
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -50,21 +54,47 @@
       nixpkgs,
       home-manager,
       plasma-manager,
-      # impermanence,
       nix-gaming,
       # niri,
       ...
     }@inputs:
     let
       lib = nixpkgs.lib;
-      # 函数，用于生成一个带特定 features 的系统
+      # default features
+      #
+      # desktop: for graphics displaying system
+      # laptop: for laptop, which needs performance control and power management
+      # server: for remote connection (openssh) and other setups like disko
+      # mini: for device that has very little resources, often used for bootstrapping. cannot be used with `desktop`.
+      # wsl: for nixos that on windows subsystem of linux
+      # like_to_build: some packages are not so widely used, so the nix cache often misses and needs to build them.
+      defaultFeatures = {
+        gaming = false;
+        desktop = false;
+        laptop = false;
+        programming = false;
+        mining = false;
+        server = {
+          enable = false;
+          type = "local"; # "local" server or "remote" vps
+          as_proxy = false; # use this server as a proxy node
+        };
+        mini = false;
+        wsl = false;
+        like_to_build = false;
+      };
+      # a function to generate a system with specific features
       mkSystem =
         {
           system ? "x86_64-linux",
-          features ? { },
+          userFeatures ? { },
           devicename ? "main",
           username ? "absx",
         }:
+        let
+          # merge default features with user features
+          features = defaultFeatures // userFeatures;
+        in
         lib.nixosSystem {
           inherit system;
           # specialArgs 会被传递给所有模块
@@ -76,50 +106,49 @@
               username
               ;
           };
-          modules =
-            [
-              # inputs.impermanence.nixosModules.impermanence
-              inputs.daeuniverse.nixosModules.dae
-              # inputs.niri.nixosModules.niri
-              { nix.settings.trusted-users = [ username ]; }
+          modules = [
+            inputs.impermanence.nixosModules.impermanence
+            inputs.disko.nixosModules.disko
+            inputs.daeuniverse.nixosModules.dae
+            # inputs.niri.nixosModules.niri
+            { nix.settings.trusted-users = [ username ]; }
 
-              # 基础配置和所有 feature 模块的定义
-              ./configuration.nix
-            ]
-            ++ (lib.optional features.gaming ./features/configuration/gaming.nix)
-            ++ (lib.optional features.desktop ./features/configuration/desktop.nix)
-            ++ (lib.optional features.server ./features/configuration/server.nix)
-            ++ (lib.optional features.programming ./features/configuration/programming.nix)
-            ++ (lib.optional features.laptop ./features/configuration/laptop.nix)
-            ++ (lib.optional features.mining ./features/configuration/mining.nix)
-            ++ (lib.optional features.wsl ./features/configuration/wsl.nix)
-            ++ [
-              # 导入 home-manager 模块
-              home-manager.nixosModules.home-manager
-              {
-                home-manager.useGlobalPkgs = true;
-                home-manager.useUserPackages = true;
-                home-manager.extraSpecialArgs = {
-                  inherit
-                    inputs
-                    features
-                    devicename
-                    username
-                    ;
-                };
-                home-manager.backupFileExtension = "backup";
-                home-manager.users.${username} = {
-                  imports =
-                    [
-                      ./home.nix # 基础 home 配置
-                    ]
-                    ++ (lib.optional features.gaming ./features/home-manager/gaming.nix)
-                    ++ (lib.optional features.desktop ./features/home-manager/desktop.nix)
-                    ++ (lib.optional features.laptop ./features/home-manager/laptop.nix)
-                    ++ (lib.optional features.programming ./features/home-manager/programming.nix);
-                };
-              }
-            ];
+            # 基础配置和所有 feature 模块的定义
+            ./configuration.nix
+          ]
+          ++ (lib.optional features.gaming ./features/configuration/gaming.nix)
+          ++ (lib.optional features.desktop ./features/configuration/desktop.nix)
+          ++ (lib.optional features.server.enable ./features/configuration/server.nix)
+          ++ (lib.optional features.programming ./features/configuration/programming.nix)
+          ++ (lib.optional features.laptop ./features/configuration/laptop.nix)
+          ++ (lib.optional features.mining ./features/configuration/mining.nix)
+          ++ (lib.optional features.wsl ./features/configuration/wsl.nix)
+          ++ [
+            # 导入 home-manager 模块
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = {
+                inherit
+                  inputs
+                  features
+                  devicename
+                  username
+                  ;
+              };
+              home-manager.backupFileExtension = "backup";
+              home-manager.users.${username} = {
+                imports = [
+                  ./home.nix # 基础 home 配置
+                ]
+                ++ (lib.optional features.gaming ./features/home-manager/gaming.nix)
+                ++ (lib.optional features.desktop ./features/home-manager/desktop.nix)
+                ++ (lib.optional features.laptop ./features/home-manager/laptop.nix)
+                ++ (lib.optional features.programming ./features/home-manager/programming.nix);
+              };
+            }
+          ];
         };
     in
     {
@@ -127,19 +156,12 @@
         "main" = mkSystem {
           devicename = "main";
           username = "absx";
-          # desktop: for graphics displaying system
-          # laptop: for laptop, which needs performance control and power management
-          # server: for remote connection
-          # mini: for device that has very little resources. cannot be used with `desktop`.
-          # wsl: for nixos that on windows subsystem of linux
-          # like_to_build: some packages are not so widely used, so the nix cache often misses and needs to build them.
-          features = {
+          userFeatures = {
             gaming = true;
             desktop = true;
             laptop = false;
             programming = true;
             mining = true;
-            server = false;
             mini = false;
             wsl = false;
             like_to_build = true;
@@ -152,18 +174,28 @@
         "wsl" = mkSystem {
           devicename = "wsl";
           username = "nixos";
-          features = {
-            gaming = false;
-            desktop = false;
-            laptop = false;
+          userFeatures = {
             programming = true;
-            mining = false;
-            server = false;
-            mini = false;
             wsl = true;
-            like_to_build = false;
           };
         };
+        "vps" = mkSystem {
+          devicename = "vps";
+          username = "absx";
+          userFeatures = {
+            wsl = true;
+            mini = true;
+            server = {
+              enable = true;
+              type = "remote";
+              as_proxy = true;
+            };
+          };
+        };
+      };
+
+      packages.x86_64-linux = {
+        image = self.nixosConfigurations.vps.config.system.build.diskoImages;
       };
     };
 }

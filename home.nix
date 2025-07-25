@@ -38,11 +38,6 @@
     [
       starship
       nix-search-cli
-      nix-tree
-      nix-index
-      dust
-      tldr
-      zellij
       # lunarvim
       impala # tui wireless manager
       shfmt
@@ -51,8 +46,6 @@
       # ldns # replacement of `dig`, it provide the command `drill`
       # socat # replacement of openbsd-netcat
       # nmap # A utility for network discovery and security auditing
-      pciutils # lspci
-      usbutils # lsusb
     ]
     ++ (lib.optionals (!features.mini) [
       trash-cli
@@ -72,7 +65,13 @@
       difftastic
       delta
       xz
-
+      pciutils # lspci
+      usbutils # lsusb
+      nix-tree
+      nix-index
+      dust
+      tldr
+      zellij
     ])
     ++ (lib.optionals (features.like_to_build) [
       dwarfs
