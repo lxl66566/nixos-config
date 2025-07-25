@@ -100,7 +100,7 @@
         gcm = "git commit --signoff -am";
         py = "python";
         fd = "fd -H";
-        nb = "sudo nixos-rebuild switch --show-trace --flake .#${devicename} ${lib.optionalString features.wsl " --impure"}"; # nixos (re)build
+        nb = "sudo nixos-rebuild switch --show-trace --impure --flake .#${devicename}"; # nixos (re)build, impure is for NUR
         nbf = "nb --fast";
         nd = "nix develop -c $SHELL";
         rv = "revertversion";

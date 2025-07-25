@@ -245,7 +245,7 @@
   };
   environment = {
     # etc.machine-id.source = ./info/machine-id;
-    systemPackages =
+    systemPackages = (
       with pkgs;
       [
         coreutils
@@ -274,6 +274,7 @@
         ethtool # network card info
         # linuxKernel.packages.linux_6_6.cpupower
         # nix-fast-build # why disable this: not usable.
+        # nur.repos.lxl66566.git-simple-encrypt
         (
           let
             base = pkgs.appimageTools.defaultFhsEnvArgs;
@@ -310,6 +311,7 @@
         ltrace # intercepts and records dynamic library calls which are called by an executed process and the signals received by that process
         sysstat # Collection of performance monitoring tools for Linux (such as sar, iostat and pidstat)
         dnsutils # `dig` + `nslookup`
+        mkpasswd
         gcc
         gnumake
         cmake
@@ -318,7 +320,8 @@
         iotop
         docker-compose
         lazydocker
-      ]);
+      ])
+    );
     sessionVariables = rec {
       EDITOR = "nvim";
       SCCACHE_CACHE_SIZE = "50G";

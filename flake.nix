@@ -183,7 +183,7 @@
           devicename = "vps";
           username = "absx";
           userFeatures = {
-            wsl = true;
+            wsl = false;
             mini = true;
             server = {
               enable = true;
