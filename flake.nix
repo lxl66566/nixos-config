@@ -55,6 +55,7 @@
       home-manager,
       plasma-manager,
       nix-gaming,
+      nur,
       # niri,
       ...
     }@inputs:
@@ -68,6 +69,7 @@
       # mini: for device that has very little resources, often used for bootstrapping. cannot be used with `desktop`.
       # wsl: for nixos that on windows subsystem of linux
       # like_to_build: some packages are not so widely used, so the nix cache often misses and needs to build them.
+      # impermanence: for bootstraping to root_on_tmpfs. If set to true, you are aware of the impermanence usage and risks.
       defaultFeatures = {
         gaming = false;
         desktop = false;
@@ -77,11 +79,13 @@
         server = {
           enable = false;
           type = "local"; # "local" server or "remote" vps
+          domain = null; # domain of the remote server
           as_proxy = false; # use this server as a proxy node
         };
         mini = false;
         wsl = false;
         like_to_build = false;
+        impermanence = false;
       };
       # a function to generate a system with specific features
       mkSystem =
@@ -104,6 +108,7 @@
               features
               devicename
               username
+              nur
               ;
           };
           modules = [
@@ -135,6 +140,7 @@
                   features
                   devicename
                   username
+                  nur
                   ;
               };
               home-manager.backupFileExtension = "backup";
@@ -165,6 +171,7 @@
             mini = false;
             wsl = false;
             like_to_build = true;
+            impermanence = true; # If you are installing new nixos, set this to false; after installation, you can set it to true and `sudo nixos-rebuild boot --flake .#main` (do not use switch!)
           };
         };
         # https://github.com/nix-community/nixos-wsl
@@ -190,6 +197,7 @@
             server = {
               enable = true;
               type = "remote";
+              domain = null;
               as_proxy = true;
             };
           };

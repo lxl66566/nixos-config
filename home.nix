@@ -14,7 +14,7 @@
   # home.homeDirectory = lib.mkDefault "/home/${username}";
   home.enableNixpkgsReleaseCheck = false;
   home.stateVersion = "25.05";
-  home.file = lib.mkDefault {
+  home.file = {
     ".config/nixpkgs/config.nix".source = ./config/nix-config.nix;
   };
   home.sessionPath = [ "$HOME/.cargo/bin/" ];

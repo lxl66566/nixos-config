@@ -8,6 +8,7 @@
   devicename,
   username,
   features,
+  nur,
   ...
 }@args:
 {
@@ -149,17 +150,8 @@
   # region nix
 
   nixpkgs = {
-    config = {
-      allowUnfree = true;
-      packageOverrides = pkgs: {
-        nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-          inherit pkgs;
-        };
-        # intel-vaapi-driver = pkgs.intel-vaapi-driver.override { enableHybridCodec = true; };
-        yt-dlp = pkgs.yt-dlp.override { withAlias = true; };
-      };
-    };
-    overlays = [ ];
+    config = import ./config/nix-config.nix;
+    # overlays = [ nur.overlays.default ];
   };
   nix.settings = {
     trusted-users = [ username ];
@@ -190,6 +182,10 @@
       enable = true;
       interval = "15 days";
     };
+    # 为所有可移动的块设备强制 udisks2 使用 sync 挂载选项
+    udev.extraRules = ''
+      ENV{ID_DRIVE_REMOVABLE}=="1", ENV{UDISKS_MOUNT_OPTIONS_DEFAULTS}+="sync"
+    '';
     locate = {
       enable = !features.mini;
       package = pkgs.plocate;
@@ -211,7 +207,7 @@
       );
     };
     dae = {
-      enable = !features.wsl && !features.mini;
+      enable = !(features.wsl || features.mini || features.server.as_proxy);
       configFile = "/etc/nixos/config/absx.dae";
       # dae needs 0600 permission, but we cannot source file with permission.
       # related issue: https://github.com/nix-community/home-manager/issues/3090
@@ -327,24 +323,24 @@
       NIXPKGS_ALLOW_UNFREE = 1;
     };
 
-    # persistence."/nix/persistent" = {
-    #   hideMounts = true;
-    #   directories = [
-    #     "/etc/NetworkManager/system-connections"
-    #     "/root"
-    #     "/etc/nixos"
-    #     # add this two will break my system!
-    #     # "/etc/shadow"
-    #     # "/etc/passwd"
-    #   ];
-    #   files = [
-    #     "/etc/machine-id"
-    #     "/etc/ssh/ssh_host_ed25519_key.pub"
-    #     "/etc/ssh/ssh_host_ed25519_key"
-    #     "/etc/ssh/ssh_host_rsa_key.pub"
-    #     "/etc/ssh/ssh_host_rsa_key"
-    #   ];
-    # };
+    persistence."/oldroot" = lib.mkIf features.impermanence {
+      hideMounts = true;
+      directories = [
+        "/etc/NetworkManager/system-connections"
+        "/root"
+        "/etc/nixos"
+        # add this two will break my system!
+        # "/etc/shadow"
+        # "/etc/passwd"
+      ];
+      files = [
+        "/etc/machine-id"
+        "/etc/ssh/ssh_host_ed25519_key.pub"
+        "/etc/ssh/ssh_host_ed25519_key"
+        "/etc/ssh/ssh_host_rsa_key.pub"
+        "/etc/ssh/ssh_host_rsa_key"
+      ];
+    };
     localBinInPath = true;
   };
 
@@ -355,6 +351,7 @@
     enable = !features.mini;
     enableSSHSupport = true;
   };
+  programs.fish.enable = true;
   programs.vim = {
     enable = true;
     defaultEditor = lib.mkForce false;

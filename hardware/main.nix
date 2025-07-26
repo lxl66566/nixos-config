@@ -7,6 +7,7 @@
   lib,
   pkgs,
   modulesPath,
+  features,
   ...
 }:
 let
@@ -60,16 +61,28 @@ in
   #  package = config.boot.kernelPackages.nvidiaPackages.stable;
   #};
 
-  fileSystems."/" = {
+  fileSystems."/" =
+    if features.impermanence then
+      {
+        device = "tmpfs";
+        fsType = "tmpfs";
+        options = [
+          "relatime"
+          "mode=755"
+        ];
+      }
+    else
+      {
+        device = "/dev/disk/by-uuid/3f9c46c9-efa8-4f9e-9dcf-77226f28b75b";
+        fsType = "btrfs";
+        options = defaultMountOption ++ [ "subvol=root" ];
+      };
+
+  fileSystems."/oldroot" = {
     device = "/dev/disk/by-uuid/3f9c46c9-efa8-4f9e-9dcf-77226f28b75b";
     fsType = "btrfs";
     options = defaultMountOption ++ [ "subvol=root" ];
-    #device = "tmpfs";
-    #fsType = "tmpfs";
-    #options = [
-    #  "relatime"
-    #  "mode=755"
-    #];
+    neededForBoot = true;
   };
 
   fileSystems."/home" = {

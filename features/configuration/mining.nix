@@ -10,4 +10,7 @@
   environment.systemPackages = with pkgs; [
     (callPackage ../../mynixpkgs/xmrig.nix { }) # xmrig
   ];
+  environment.shellAliases = {
+    mine = "sudo nice -n 10 xmrig -c ~/xmrig.json";
+  };
 }
