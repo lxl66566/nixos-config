@@ -80,26 +80,35 @@
   };
 
   # region services
-
-  services.xserver = {
-    enable = true;
-    videoDrivers = lib.mkBefore [
-      "modesetting"
-      "fbdev"
-      # "amdgpu"
-      # "intel-gpu"
-    ];
-  };
-  services.displayManager = {
-    sddm.enable = true;
-    defaultSession = "plasmax11";
-  };
-  services.desktopManager = {
-    plasma6 = {
+  services = {
+    xserver = {
       enable = true;
+      videoDrivers = lib.mkBefore [
+        "modesetting"
+        "fbdev"
+        # "amdgpu"
+        # "intel-gpu"
+      ];
+    };
+    dae = {
+      enable = true;
+      configFile = "/etc/nixos/config/absx.dae";
+      assets = with pkgs; [
+        v2ray-geoip
+        v2ray-domain-list-community
+      ];
+    };
+    libinput.enable = true;
+    displayManager = {
+      sddm.enable = true;
+      defaultSession = "plasmax11";
+    };
+    desktopManager = {
+      plasma6 = {
+        enable = true;
+      };
     };
   };
-  services.libinput.enable = true;
 
   # region Users and Root
 
@@ -132,7 +141,6 @@
       impala
       strace
       v2raya
-      dae
       vscode
       firefox
     ];

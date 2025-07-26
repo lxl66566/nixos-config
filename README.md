@@ -17,17 +17,29 @@ The `features` directory contains two subdirectories:
 
 Sensitive data is encrypted using [git-simple-encrypt](https://github.com/lxl66566/git-simple-encrypt). The password is my "complex password".
 
-## Files
+## Construction
 
 |        Name         |                                            Usage                                            |
 | :-----------------: | :-----------------------------------------------------------------------------------------: |
 |     `flake.nix`     |          Main entry point, defining different machine configurations and features.          |
 |     `features/`     |       Contains modular configurations, as described in the "Features" section above.        |
+|     `hardware/`     |                 Contains hardware configurations for my different machines                  |
 | `configuration.nix` | A basic system configuration that serves as a foundation before applying specific features. |
 |     `home.nix`      |            Manages user-specific configurations and packages using Home Manager.            |
 |      `iso.nix`      |                   Defines a minimal, self-defined NixOS installation ISO.                   |
-|    `minimal.nix`    |            A minimal graphical configuration used for bootstrapping new systems.            |
 |    `mynixpkgs/`     |                      Contains custom Nix packages developed by myself.                      |
 |      `others/`      |               Houses various integrated modules for specific functionalities.               |
 |      `config/`      |               Stores personal configuration files for different applications.               |
+|    `minimal.nix`    |                           (not used, use `mini` feature instead)                            |
 |     `overlays/`     |                                         (not used)                                          |
+
+### Hardware
+
+All of my physical machines has the same partition layout, so I use the `hardware/defaultmount.nix` module for them all.
+
+### ISO
+
+The official installation ISO [sucks](https://absx.pages.dev/articles/linux/nix.html#nixos-%E5%AE%89%E8%A3%85)! So I created my own minimal installation ISO, which is defined in `iso.nix`. It contains some fast scripts to reduce the installation time.
+
+- `dae` service ready to bypass the GFW
+- give me a `/dev/nvme0n1p1`, I can initialize subvolumes and mount them in less than 10 seconds

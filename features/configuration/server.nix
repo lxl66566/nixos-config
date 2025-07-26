@@ -9,7 +9,6 @@
 
 {
   imports = [
-    ../../hardware/disko-vps.nix
     ./server-remote.nix
   ];
 

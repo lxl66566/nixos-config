@@ -198,7 +198,7 @@
       );
     };
     dae = {
-      enable = !(features.wsl || features.mini || features.server.as_proxy);
+      enable = !(features.wsl || features.server.as_proxy);
       configFile = "/etc/nixos/config/absx.dae";
       # dae needs 0600 permission, but we cannot source file with permission.
       # related issue: https://github.com/nix-community/home-manager/issues/3090

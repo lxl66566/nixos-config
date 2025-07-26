@@ -14,5 +14,6 @@
       "main" = ./main.nix;
     })
   ]
-  ++ (lib.optional (features.wsl) <nixos-wsl/modules>);
+  ++ (lib.optional (features.wsl) <nixos-wsl/modules>)
+  ++ (lib.optional (features.server.enable && features.server.type == "remote") ./disko-vps.nix);
 }

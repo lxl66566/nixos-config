@@ -114,7 +114,6 @@
           modules = [
             inputs.impermanence.nixosModules.impermanence
             inputs.disko.nixosModules.disko
-            inputs.daeuniverse.nixosModules.dae
             # inputs.niri.nixosModules.niri
             { nix.settings.trusted-users = [ username ]; }
 
@@ -128,6 +127,7 @@
           ++ (lib.optional features.laptop ./features/configuration/laptop.nix)
           ++ (lib.optional features.mining ./features/configuration/mining.nix)
           ++ (lib.optional features.wsl ./features/configuration/wsl.nix)
+          ++ (lib.optional (!features.mini) inputs.daeuniverse.nixosModules.dae) # use dae flake may need to compile dae from source, which is not acceptable for mini NixOS
           ++ [
             # 导入 home-manager 模块
             home-manager.nixosModules.home-manager
@@ -146,7 +146,7 @@
               home-manager.backupFileExtension = "backup";
               home-manager.users.${username} = {
                 imports = [
-                  ./home.nix # 基础 home 配置
+                  ./home.nix
                 ]
                 ++ (lib.optional features.gaming ./features/home-manager/gaming.nix)
                 ++ (lib.optional features.desktop ./features/home-manager/desktop.nix)
@@ -193,7 +193,7 @@
           devicename = "localserver";
           username = "root";
           userFeatures = {
-            mini = true;
+            mini = false;
             mining = true;
             like_to_build = true;
             server = {

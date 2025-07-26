@@ -13,7 +13,7 @@ let
   ];
 in
 {
-  disko = lib.mkIf (features.server.enable && features.server.type == "remote") {
+  disko = {
     # 不要让 Disko 直接管理 NixOS 的 fileSystems.* 配置。
     # 原因是 Disko 默认通过 GPT 分区表的分区名挂载分区，但分区名很容易被 fdisk 等工具覆盖掉。
     # 导致一旦新配置部署失败，磁盘镜像自带的旧配置也无法正常启动。
