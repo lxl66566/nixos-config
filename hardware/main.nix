@@ -85,6 +85,13 @@ in
     neededForBoot = true;
   };
 
+  fileSystems."/root" = {
+    device = "/dev/disk/by-uuid/3f9c46c9-efa8-4f9e-9dcf-77226f28b75b";
+    fsType = "btrfs";
+    options = defaultMountOption ++ [ "subvol=userroot" ];
+    neededForBoot = true;
+  };
+
   fileSystems."/home" = {
     device = "/dev/disk/by-uuid/3f9c46c9-efa8-4f9e-9dcf-77226f28b75b";
     fsType = "btrfs";

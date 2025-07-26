@@ -88,7 +88,7 @@
         echo "Top-level btrfs volume mounted at $tmp_mnt."
 
         echo "Creating btrfs subvolumes..."
-        for subvol in root home var nix
+        for subvol in root home var nix userroot
           if not btrfs subvolume create "$tmp_mnt/$subvol"
             echo "Failed to create subvolume $subvol."
             umount "$tmp_mnt"
@@ -117,7 +117,7 @@
         set partition $argv[1]
 
         echo "Creating mount points..."
-        for mount_point in /mnt /mnt/home /mnt/var /mnt/nix
+        for mount_point in /mnt /mnt/home /mnt/var /mnt/nix /mnt/userroot
           if not test -d "$mount_point"
             if not mkdir -p "$mount_point"
               echo "Failed to create mount point $mount_point."
@@ -153,6 +153,12 @@
             return 1
         end
         echo "Nix subvolume mounted at /mnt/nix."
+
+        if not mount -o compress=zstd:11,subvol=userroot "$partition" /mnt/root
+            echo "Failed to mount userroot subvolume."
+            return 1
+        end
+        echo "Userroot subvolume mounted at /mnt/root."
 
         echo "All operations completed successfully!"
         return 0

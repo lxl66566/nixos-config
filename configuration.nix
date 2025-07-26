@@ -327,7 +327,6 @@
       hideMounts = true;
       directories = [
         "/etc/NetworkManager/system-connections"
-        "/root"
         "/etc/nixos"
         # add this two will break my system!
         # "/etc/shadow"
