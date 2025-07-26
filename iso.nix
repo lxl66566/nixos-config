@@ -52,7 +52,7 @@ let
 
       partition="$1"
       if [ -z "$partition" ]; then
-        echo "Usage: $0 <partition>"
+        echo "Usage: $0 <partition> [boot_partition]"
         exit 1
       fi
 
@@ -69,6 +69,15 @@ let
       mount -o "$MOUNT_OPTS,subvol=nix" "$partition" /mnt/nix
       mount -o "$MOUNT_OPTS,subvol=userroot" "$partition" /mnt/root
 
+      boot_partition="$2"
+      if [ -z "$boot_partition" ]; then
+        echo "boot partition not specified, skip mounting boot partition"
+      else
+        echo "boot partition specified, mounting boot partition"
+        mkdir -p /mnt/boot
+        mount "$boot_partition" /mnt/boot
+      fi
+
       echo "--> File systems mounted."
     '';
   };
@@ -82,6 +91,17 @@ let
       echo "--> Unmounting all filesystems under /mnt..."
       # 以相反的顺序卸载，避免 "target is busy" 错误
       umount -R /mnt || echo "Failed to unmount /mnt. It might already be unmounted."
+      echo "--> Done."
+    '';
+  };
+
+  cp-nixos = pkgs.writeShellApplication {
+    name = "cp_nixos";
+    runtimeInputs = [ pkgs.coreutils ];
+    text = ''
+      set -e
+      echo "--> Copying NixOS configuration..."
+      cp -r /iso/nixos /mnt/etc/
       echo "--> Done."
     '';
   };
@@ -165,9 +185,13 @@ in
       efibootmgr
       rsync
       fd
+      bat
+      ouch
+      # self defined:
       create-btrfs
       mount-btrfs
       umount-btrfs
+      cp-nixos
     ];
   };
   users.users = {
@@ -189,6 +213,8 @@ in
         gc = "git clone --filter=tree:0";
         gfixup = "git commit -a --fixup HEAD && GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash HEAD~2";
         ni = "sudo nixos-install";
+        jc = "journalctl";
+        sc = "systemctl";
       };
     };
   };
@@ -197,7 +223,7 @@ in
     # getty.autologinUser = "root"; # conflict
     dae = {
       enable = true;
-      configFile = "/etc/dae/config.dae";
+      configFile = "/iso/config.dae";
       assets = with pkgs; [
         v2ray-geoip
         v2ray-domain-list-community
@@ -207,7 +233,7 @@ in
   isoImage.contents = [
     {
       source = ./config/absx.dae;
-      target = "/etc/dae/config.dae";
+      target = "/config.dae";
     }
     {
       source = filteredSource;

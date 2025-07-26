@@ -14,7 +14,6 @@ lib.mkIf (features.server.enable && features.server.type == "remote") {
       "-19"
       "-T0"
     ];
-    systemd.enable = true;
     postDeviceCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
       # Set the system time from the hardware clock to work around a
       # bug in qemu-kvm > 1.5.2 (where the VM clock is initialised

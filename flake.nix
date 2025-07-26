@@ -91,7 +91,7 @@
       mkSystem =
         {
           system ? "x86_64-linux",
-          userFeatures ? { },
+          userFeatures ? defaultFeatures,
           devicename ? "main",
           username ? "absx",
         }:
@@ -159,6 +159,7 @@
     in
     {
       nixosConfigurations = {
+        # region main
         "main" = mkSystem {
           devicename = "main";
           username = "absx";
@@ -174,6 +175,7 @@
             impermanence = true; # If you are installing new nixos, set this to false; after installation, you can set it to true and `sudo nixos-rebuild boot --flake .#main` (do not use switch!)
           };
         };
+        # region wsl
         # https://github.com/nix-community/nixos-wsl
         # sudo cp -r . /etc/nixos
         # cd /etc/nixos
@@ -186,11 +188,11 @@
             wsl = true;
           };
         };
+        # region localserver
         "ls" = mkSystem {
           devicename = "localserver";
           username = "root";
           userFeatures = {
-            wsl = false;
             mini = true;
             mining = true;
             like_to_build = true;
@@ -202,6 +204,7 @@
             };
           };
         };
+        # region vps
         # for building vps-usable image, https://lantian.pub/article/modify-computer/nixos-low-ram-vps.lantian/
         # nix build .#image
         "vps" = mkSystem {

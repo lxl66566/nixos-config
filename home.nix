@@ -106,7 +106,6 @@
         rv = "revertversion";
         jc = "journalctl";
         sc = "systemctl";
-        remove_color = "sed -i -r 's/\x1b\[[0-9;]*m//g'";
         tp = "trash-put";
       };
       functions = {

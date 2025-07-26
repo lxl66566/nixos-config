@@ -12,21 +12,13 @@
   ...
 }@args:
 {
-  imports =
-    (lib.optional (devicename == "main") ./hardware/main.nix)
-    ++ (lib.optional (features.wsl) <nixos-wsl/modules>);
-
-  # region hardware
-
-  hardware = lib.mkIf (!features.wsl) {
-    enableAllFirmware = true;
-    cpu.intel.updateMicrocode = lib.mkDefault true;
-    cpu.amd.updateMicrocode = lib.mkDefault true;
-    # nvidia-container-toolkit.enable = false; # 用于 cuda 环境配置与 AI 训练
-  };
+  imports = [
+    ./hardware
+  ];
 
   # region boot&network
   boot = lib.mkIf (!features.wsl) {
+    initrd.systemd.enable = true;
     loader = {
       efi.canTouchEfiVariables = true;
       efi.efiSysMountPoint = "/boot";
@@ -41,7 +33,7 @@
       timeout = 15;
       systemd-boot.enable = false;
     };
-    kernel.sysctl = lib.mkDefault {
+    kernel.sysctl = {
       "kernel.sysrq" = 1;
       # "kernel.nmi_watchdog" = 0;
       "vm.swappiness" = 130;
@@ -59,7 +51,6 @@
     };
     kernelPackages = pkgs.linuxPackages_zen;
     kernelModules = lib.mkAfter [
-      "kvm-amd"
       "tcp_bbr"
     ];
     kernelParams = [
