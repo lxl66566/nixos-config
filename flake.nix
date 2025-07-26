@@ -186,6 +186,22 @@
             wsl = true;
           };
         };
+        "ls" = mkSystem {
+          devicename = "localserver";
+          username = "root";
+          userFeatures = {
+            wsl = false;
+            mini = true;
+            mining = true;
+            like_to_build = true;
+            server = {
+              enable = true;
+              type = "local";
+              domain = null;
+              as_proxy = false;
+            };
+          };
+        };
         # for building vps-usable image, https://lantian.pub/article/modify-computer/nixos-low-ram-vps.lantian/
         # nix build .#image
         "vps" = mkSystem {

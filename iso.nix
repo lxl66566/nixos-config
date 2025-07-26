@@ -10,6 +10,97 @@
   lib,
   ...
 }:
+let
+  # 使用 pkgs.writeShellApplication 可以自动处理 shebang 和可执行权限
+  create-btrfs = pkgs.writeShellApplication {
+    name = "create_btrfs";
+    runtimeInputs = [ pkgs.btrfs-progs ]; # 明确脚本依赖
+    text = ''
+      set -euxo pipefail
+
+      partition="$1"
+      if [ -z "$partition" ]; then
+        echo "Usage: $0 <partition>"
+        exit 1
+      fi
+
+      echo "--> Formatting $partition with Btrfs..."
+      mkfs.btrfs -f "$partition"
+
+      tmp_mnt=$(mktemp -d)
+      # 使用 trap 确保临时目录总能被清理
+      trap 'rm -r "$tmp_mnt"' EXIT
+
+      mount "$partition" "$tmp_mnt"
+
+      echo "--> Creating Btrfs subvolumes..."
+      for subvol in root home var nix userroot; do
+        btrfs subvolume create "$tmp_mnt/$subvol"
+      done
+
+      btrfs subvolume list "$tmp_mnt"
+      umount "$tmp_mnt"
+      echo "--> Done."
+    '';
+  };
+
+  mount-btrfs = pkgs.writeShellApplication {
+    name = "mount_btrfs";
+    runtimeInputs = [ pkgs.btrfs-progs ];
+    text = ''
+      set -euxo pipefail
+
+      partition="$1"
+      if [ -z "$partition" ]; then
+        echo "Usage: $0 <partition>"
+        exit 1
+      fi
+
+      MOUNT_OPTS="compress=zstd:11"
+
+      echo "--> Mounting Btrfs subvolumes from $partition to /mnt..."
+      # 确保挂载点存在
+      mkdir -p /mnt
+      mount -o "$MOUNT_OPTS,subvol=root" "$partition" /mnt
+
+      mkdir -p /mnt/{home,var,nix,root}
+      mount -o "$MOUNT_OPTS,subvol=home" "$partition" /mnt/home
+      mount -o "$MOUNT_OPTS,subvol=var" "$partition" /mnt/var
+      mount -o "$MOUNT_OPTS,subvol=nix" "$partition" /mnt/nix
+      mount -o "$MOUNT_OPTS,subvol=userroot" "$partition" /mnt/root
+
+      echo "--> File systems mounted."
+    '';
+  };
+
+  # 卸载脚本，方便清理
+  umount-btrfs = pkgs.writeShellApplication {
+    name = "umount_btrfs";
+    runtimeInputs = [ pkgs.coreutils ];
+    text = ''
+      set -e
+      echo "--> Unmounting all filesystems under /mnt..."
+      # 以相反的顺序卸载，避免 "target is busy" 错误
+      umount -R /mnt || echo "Failed to unmount /mnt. It might already be unmounted."
+      echo "--> Done."
+    '';
+  };
+
+  filteredSource = builtins.filterSource (
+    path: type:
+    let
+      # 获取路径的基本名称 (例如, "file.txt" 或 "folder")
+      baseName = baseNameOf (toString path);
+    in
+    # 规则: 当文件名不是以下任何一个时，保留该文件 (返回 true)
+    baseName != ".git"
+    # 排除 .git 目录
+    && baseName != "result"
+    # 排除 nix-build 的输出结果
+    && !lib.hasSuffix ".iso" baseName # 排除所有 .iso 文件
+  ) ./.;
+
+in
 {
   imports = [
     <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix>
@@ -21,6 +112,23 @@
     # nix-channel --add https://mirrors.ustc.edu.cn/nix-channels/nixos-25.05 nixos
   ];
 
+  nixpkgs.config.allowUnfree = true; # needed for enableAllFirmware
+  hardware.enableAllFirmware = true;
+  console = {
+    keyMap = "us";
+  };
+  networking.wireless.iwd = {
+    enable = true;
+    settings = {
+      Network = {
+        EnableIPv6 = true;
+        RoutePriorityOffset = 300;
+      };
+      Settings = {
+        AutoConnect = true;
+      };
+    };
+  };
   boot.supportedFilesystems = lib.mkForce [
     "btrfs"
     "reiserfs"
@@ -41,6 +149,7 @@
       USTC = "https://mirrors.ustc.edu.cn/nix-channels/store";
     };
     systemPackages = with pkgs; [
+      sudo
       vim
       ncdu
       lsof
@@ -56,125 +165,36 @@
       efibootmgr
       rsync
       fd
-      eza
+      create-btrfs
+      mount-btrfs
+      umount-btrfs
     ];
   };
-  programs.fish = {
-    enable = true;
-    interactiveShellInit = ''
-      set fish_greeting # Disable greeting
-      set -g fish_trace 1
-
-      function create_btrfs
-        if test -z "$argv[1]"
-          echo "Usage: create_btrfs <partition>"
-          return 1
-        end
-
-        set partition $argv[1]
-
-        echo "Creating btrfs filesystem on $partition..."
-        if not mkfs.btrfs -f "$partition"
-          echo "Failed to create btrfs filesystem on $partition."
-          return 1
-        end
-        echo "Btrfs filesystem created successfully."
-
-        set tmp_mnt (mktemp -d)
-        if not mount "$partition" "$tmp_mnt"
-          echo "Failed to mount the top-level btrfs volume."
-          return 1
-        end
-        echo "Top-level btrfs volume mounted at $tmp_mnt."
-
-        echo "Creating btrfs subvolumes..."
-        for subvol in root home var nix userroot
-          if not btrfs subvolume create "$tmp_mnt/$subvol"
-            echo "Failed to create subvolume $subvol."
-            umount "$tmp_mnt"
-            rm -r "$tmp_mnt"
-            return 1
-          end
-          echo "Subvolume $subvol created successfully."
-        end
-
-
-        # 4. Unmount the top-level btrfs volume
-        if not umount "$tmp_mnt"
-          echo "Failed to unmount the top-level btrfs volume."
-          rm -r "$tmp_mnt"
-          return 1
-        end
-        rm -r "$tmp_mnt"
-        echo "Top-level btrfs volume unmounted."
-      end
-
-      function mount_btrfs
-        if test -z "$argv[1]"
-            echo "Usage: mount_btrfs <partition>"
-            return 1
-        end
-        set partition $argv[1]
-
-        echo "Creating mount points..."
-        for mount_point in /mnt /mnt/home /mnt/var /mnt/nix /mnt/userroot
-          if not test -d "$mount_point"
-            if not mkdir -p "$mount_point"
-              echo "Failed to create mount point $mount_point."
-              return 1
-            end
-            echo "Mount point $mount_point created successfully."
-          else
-            echo "Mount point $mount_point already exists."
-          end
-        end
-
-        echo "Mounting subvolumes..."
-        if not mount -o compress=zstd:11,subvol=root "$partition" /mnt
-            echo "Failed to mount root subvolume."
-            return 1
-        end
-        echo "Root subvolume mounted at /mnt."
-
-        if not mount -o compress=zstd:11,subvol=home "$partition" /mnt/home
-            echo "Failed to mount home subvolume."
-            return 1
-        end
-        echo "Home subvolume mounted at /mnt/home."
-
-        if not mount -o compress=zstd:11,subvol=var "$partition" /mnt/var
-            echo "Failed to mount var subvolume."
-            return 1
-        end
-        echo "Var subvolume mounted at /mnt/var."
-
-        if not mount -o compress=zstd:11,subvol=nix "$partition" /mnt/nix
-            echo "Failed to mount nix subvolume."
-            return 1
-        end
-        echo "Nix subvolume mounted at /mnt/nix."
-
-        if not mount -o compress=zstd:11,subvol=userroot "$partition" /mnt/root
-            echo "Failed to mount userroot subvolume."
-            return 1
-        end
-        echo "Userroot subvolume mounted at /mnt/root."
-
-        echo "All operations completed successfully!"
-        return 0
-      end
-
-      bind \t forward-word
-    '';
-    shellAliases = rec {
-      e = "vim";
-      l = "eza --all --long --color-scale size --binary --header --time-style=long-iso";
-      gp = "git pull";
-      gc = "git clone --filter=tree:0";
-      gfixup = "git commit -a --fixup HEAD && GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash HEAD~2";
+  users.users = {
+    root.shell = pkgs.fish;
+    nixos.shell = pkgs.fish;
+  };
+  programs = {
+    fish = {
+      enable = true;
+      interactiveShellInit = ''
+        set fish_greeting # Disable greeting
+        set -g fish_trace 1
+        bind \t forward-word
+      '';
+      shellAliases = rec {
+        e = "vim";
+        l = "ls -alF";
+        gp = "git pull";
+        gc = "git clone --filter=tree:0";
+        gfixup = "git commit -a --fixup HEAD && GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash HEAD~2";
+        ni = "sudo nixos-install";
+      };
     };
   };
+
   services = {
+    # getty.autologinUser = "root"; # conflict
     dae = {
       enable = true;
       configFile = "/etc/dae/config.dae";
@@ -189,6 +209,10 @@
       source = ./config/absx.dae;
       target = "/etc/dae/config.dae";
     }
+    {
+      source = filteredSource;
+      target = "/nixos";
+    }
   ];
-  isoImage.squashfsCompression = "zstd";
+  isoImage.squashfsCompression = "zstd -Xcompression-level 19";
 }
