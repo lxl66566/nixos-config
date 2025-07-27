@@ -8,12 +8,14 @@
   ...
 }:
 {
-  imports = [
-    (builtins.getAttr devicename {
-      "localserver" = ./localserver.nix;
-      "main" = ./main.nix;
-    })
-  ]
-  ++ (lib.optional (features.wsl) <nixos-wsl/modules>)
-  ++ (lib.optional (features.server.enable && features.server.type == "remote") ./disko-vps.nix);
+  imports =
+    let
+      knownDevices = {
+        "localserver" = ./localserver.nix;
+        "main" = ./main.nix;
+      };
+    in
+    lib.optional (builtins.hasAttr devicename knownDevices) (builtins.getAttr devicename knownDevices)
+    ++ (lib.optional (features.wsl) <nixos-wsl/modules>)
+    ++ (lib.optional (features.server.enable && features.server.type == "remote") ./disko-vps.nix);
 }

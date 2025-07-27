@@ -75,6 +75,9 @@
     ])
     ++ (lib.optionals (features.like_to_build) [
       dwarfs
+    ])
+    ++ (lib.optionals (features.wsl) [
+      proxychains-ng
     ]);
 
   programs = {
