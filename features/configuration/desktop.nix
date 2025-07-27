@@ -187,6 +187,11 @@
       kwalletmanager
       elisa
     ];
+    etc."xdg/baloofilerc".source = (pkgs.formats.ini { }).generate "baloorc" {
+      "Basic Settings" = {
+        "Indexing-Enabled" = false;
+      };
+    };
   };
 
   xdg.portal.enable = true;

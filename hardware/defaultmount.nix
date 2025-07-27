@@ -27,24 +27,36 @@ in
   };
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
-  boot.initrd.availableKernelModules = [
-    "xhci_pci"
-    "ahci"
-    "nvme"
-    "usbhid"
-    "usb_storage"
-    "sd_mod"
-    "sdhci_pci"
-  ];
-  boot.initrd.kernelModules = [ ];
-  # https://gist.github.com/CMCDragonkai/810f78ee29c8fce916d072875f7e1751
-  boot.kernelModules = [
-    "kvm-intel"
-    "kvm-amd"
-    "coretemp"
-    "k10temp"
-  ];
-  boot.extraModulePackages = [ ];
+  boot = {
+    initrd.availableKernelModules = [
+      "xhci_pci"
+      "ahci"
+      "nvme"
+      "usbhid"
+      "usb_storage"
+      "sd_mod"
+      "sdhci_pci"
+    ];
+    initrd.kernelModules = [ ];
+    # https://gist.github.com/CMCDragonkai/810f78ee29c8fce916d072875f7e1751
+    kernelModules = [
+      "kvm-intel"
+      "kvm-amd"
+      "coretemp"
+      "k10temp"
+    ];
+    extraModulePackages = [ ];
+    tmp = {
+      # https://github.com/NixOS/nixpkgs/blob/nixos-24.05/nixos/modules/system/boot/tmp.nix
+      # useTmpfs = true;
+      # tmpfsSize = "80%";
+      useZram = true;
+      zramSettings = {
+        zram-size = lib.mkDefault "ram * 0.7";
+        compression-algorithm = "zstd";
+      };
+    };
+  };
 
   fileSystems."/" =
     if features.impermanence then

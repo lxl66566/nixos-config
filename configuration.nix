@@ -68,13 +68,6 @@
       "net.ifnames=0"
     ]);
     supportedFilesystems = [ "ntfs" ];
-    tmp = {
-      # https://github.com/NixOS/nixpkgs/blob/nixos-24.05/nixos/modules/system/boot/tmp.nix
-      # useTmpfs = true;
-      # tmpfsSize = "80%";
-      useZram = true;
-      zramSettings.zram-size = "ram * 0.7";
-    };
   };
   networking = lib.mkIf (!features.wsl) {
     useDHCP = lib.mkDefault true;
@@ -99,6 +92,7 @@
   #   ];
   #   networkConfig.DHCP = "yes";
   # };
+
   zramSwap = {
     enable = true;
   };
