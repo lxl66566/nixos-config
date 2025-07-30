@@ -26,10 +26,10 @@
       url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    daeuniverse = {
-      url = "github:daeuniverse/flake.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # daeuniverse = {
+    #   url = "github:daeuniverse/flake.nix";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -127,7 +127,7 @@
           ++ (lib.optional features.laptop ./features/configuration/laptop.nix)
           ++ (lib.optional features.mining ./features/configuration/mining.nix)
           ++ (lib.optional features.wsl ./features/configuration/wsl.nix)
-          ++ (lib.optional (!features.mini) inputs.daeuniverse.nixosModules.dae) # use dae flake may need to compile dae from source, which is not acceptable for mini NixOS
+          # ++ (lib.optional (!features.mini) inputs.daeuniverse.nixosModules.dae) # use dae flake may need to compile dae from source, which is not acceptable for mini NixOS
           ++ [
             # 导入 home-manager 模块
             home-manager.nixosModules.home-manager
