@@ -8,7 +8,7 @@
   devicename,
   username,
   features,
-  nur,
+  overlays,
   ...
 }@args:
 {
@@ -136,7 +136,7 @@
 
   nixpkgs = {
     config = import ./config/nix-config.nix;
-    # overlays = [ nur.overlays.default ];
+    overlays = overlays;
   };
   nix.settings = {
     trusted-users = [ username ];
@@ -242,7 +242,7 @@
         tree
         # linuxKernel.packages.linux_6_6.cpupower
         # nix-fast-build # why disable this: not usable.
-        # nur.repos.lxl66566.git-simple-encrypt
+        nur.repos.lxl66566.git-simple-encrypt
         (
           let
             base = pkgs.appimageTools.defaultFhsEnvArgs;

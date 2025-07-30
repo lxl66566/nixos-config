@@ -61,6 +61,7 @@
     }@inputs:
     let
       lib = nixpkgs.lib;
+      overlays = [ nur.overlays.default ];
       # default features
       #
       # desktop: for graphics displaying system
@@ -108,7 +109,7 @@
               features
               devicename
               username
-              nur
+              overlays
               ;
           };
           modules = [
