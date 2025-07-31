@@ -2,13 +2,14 @@
   lib,
   pkgs,
   features,
+  config,
   ...
 }:
 {
   home.file = {
-    ".config/cargo/config.toml".source = ../../config/cargo.toml;
-    ".gitignore_g".source = ../../config/.gitignore_g;
-    ".gitattributes_g".source = ../../config/.gitattributes_g;
+    ".config/cargo/config.toml".source = config.lib.file.mkOutOfStoreSymlink ../../config/cargo.toml;
+    ".gitignore_g".source = config.lib.file.mkOutOfStoreSymlink ../../config/.gitignore_g;
+    ".gitattributes_g".source = config.lib.file.mkOutOfStoreSymlink ../../config/.gitattributes_g;
   };
   home.packages =
     with pkgs;
@@ -83,6 +84,93 @@
       enableNushellIntegration = true;
       config = {
         load_dotenv = true;
+      };
+    };
+
+    git = {
+      enable = true;
+      # user and email are set in home.file
+      delta.enable = true;
+      extraConfig = {
+        safe.directory = "*";
+        core = {
+          quotepath = false;
+          excludesfile = toString (
+            pkgs.writeText "gitignore_g" (builtins.readFile ../../config/.gitignore_g)
+          );
+          autocrlf = true;
+          ignorecase = false;
+        };
+        credential."https://e.coding.net" = {
+          provider = "generic";
+        };
+        filter.lfs = {
+          smudge = "git-lfs smudge -- %f";
+          process = "git-lfs filter-process";
+          required = true;
+          clean = "git-lfs clean -- %f";
+        };
+        push = {
+          default = "current";
+          autoSetupRemote = true;
+          useForceIfIncludes = true;
+          followTags = true;
+        };
+        pull = {
+          autoSetupRemote = true;
+          rebase = true;
+          ff = "only";
+        };
+        diff = {
+          external = "difft";
+          algorithm = "histogram";
+          colorMoved = "plain";
+          mnemonicPrefix = true;
+          renames = true;
+        };
+        init.defaultBranch = "main";
+        delta.navigate = true;
+        rebase = {
+          autoSquash = true;
+          autoStash = true;
+          updateRefs = true;
+        };
+        alias = {
+          cs = "commit --signoff";
+        };
+        column = {
+          ui = "auto";
+        };
+        branch = {
+          sort = "-committerdate";
+        };
+        tag = {
+          sort = "version:refname";
+        };
+        fetch = {
+          prune = true;
+          pruneTags = true;
+          all = true;
+        };
+        help = {
+          autocorrect = "prompt";
+        };
+        commit = {
+          verbose = true;
+        };
+        rerere = {
+          enabled = true;
+          autoupdate = true;
+        };
+        merge = {
+          conflictStyle = "diff3";
+          mergiraf = {
+            name = "mergiraf";
+            driver = "mergiraf merge --git %O %A %B -s %S -x %X -y %Y -p %P -l %L";
+          };
+        };
+        pack.threads = 8;
+        checkout.workers = 8;
       };
     };
   };

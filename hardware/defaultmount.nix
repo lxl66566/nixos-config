@@ -44,6 +44,7 @@ in
       "kvm-amd"
       "coretemp"
       "k10temp"
+      "zram"
     ];
     extraModulePackages = [ ];
     tmp = {

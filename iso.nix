@@ -137,15 +137,26 @@ in
   console = {
     keyMap = "us";
   };
-  networking.wireless.iwd = {
-    enable = true;
-    settings = {
-      Network = {
-        EnableIPv6 = true;
-        RoutePriorityOffset = 300;
-      };
-      Settings = {
-        AutoConnect = true;
+  networking = {
+    networkmanager.enable = true;
+    useDHCP = true;
+    firewall.enable = false;
+    wireless.iwd = {
+      enable = true;
+      settings = {
+        IPv6 = {
+          Enabled = true;
+        };
+        General = {
+          EnableNetworkConfiguration = true;
+        };
+        Network = {
+          EnableIPv6 = true;
+          RoutePriorityOffset = 300;
+        };
+        Settings = {
+          AutoConnect = true;
+        };
       };
     };
   };

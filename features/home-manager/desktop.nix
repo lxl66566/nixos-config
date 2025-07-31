@@ -13,8 +13,8 @@
   ];
 
   home.file = {
-    ".config/mpv".source = ../../config/mpv;
-    ".config/niri/config.kdl".source = ../../config/niri.kdl;
+    ".config/mpv".source = config.lib.file.mkOutOfStoreSymlink ../../config/mpv;
+    ".config/niri/config.kdl".source = config.lib.file.mkOutOfStoreSymlink ../../config/niri.kdl;
   };
 
   home.packages = with pkgs; [
@@ -27,7 +27,7 @@
     qq
     wechat-uos
     onlyoffice-desktopeditors
-    flameshot
+    # flameshot # many bugs!
     fsearch # fast file search
     # libreoffice-qt6-still
     xclip
@@ -78,7 +78,6 @@
       # APP launcher
       enable = true;
     };
-    alacritty.enable = false;
   };
 
   services = {

@@ -15,7 +15,8 @@
   home.enableNixpkgsReleaseCheck = false;
   home.stateVersion = "25.05";
   home.file = {
-    ".config/nixpkgs/config.nix".source = ./config/nix-config.nix;
+    # config.lib.file.mkOutOfStoreSymlink: https://nixos-and-flakes.thiscute.world/zh/best-practices/accelerating-dotfiles-debugging
+    ".config/nixpkgs/config.nix".source = config.lib.file.mkOutOfStoreSymlink ./config/nix-config.nix;
   };
   home.sessionPath = [ "$HOME/.cargo/bin/" ];
   xsession.numlock.enable = true;
@@ -84,7 +85,6 @@
     home-manager.enable = true;
     git = {
       enable = true;
-      delta.enable = true;
       userName = "lxl66566";
       userEmail = "lxl66566@gmail.com";
     };

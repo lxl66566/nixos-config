@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  features,
   ...
 }:
 {
@@ -101,7 +102,10 @@
       ];
     };
     displayManager = {
-      sddm.enable = true;
+      sddm = {
+        enable = true;
+        autoNumlock = true;
+      };
       defaultSession = "plasmax11";
     };
     desktopManager = {
