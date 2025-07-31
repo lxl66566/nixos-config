@@ -62,15 +62,7 @@
     let
       lib = nixpkgs.lib;
       overlays = [ nur.overlays.default ];
-      # default features
-      #
-      # desktop: for graphics displaying system
-      # laptop: for laptop, which needs performance control and power management
-      # server: for remote connection (openssh) and other setups like disko
-      # mini: for device that has very little resources, often used for bootstrapping. cannot be used with `desktop`.
-      # wsl: for nixos that on windows subsystem of linux
-      # like_to_build: some packages are not so widely used, so the nix cache often misses and needs to build them.
-      # impermanence: for bootstraping to root_on_tmpfs. If set to true, you are aware of the impermanence usage and risks.
+      # default features. you can find the meaning of them in ./features/types.nix
       defaultFeatures = {
         gaming = false;
         desktop = false;
@@ -98,11 +90,11 @@
         }:
         let
           # merge default features with user features
-          features = defaultFeatures // userFeatures;
+          features = lib.recursiveUpdate defaultFeatures userFeatures;
         in
         lib.nixosSystem {
           inherit system;
-          # specialArgs 会被传递给所有模块
+          # specialArgs will be passed to all modules
           specialArgs = {
             inherit
               inputs
@@ -118,19 +110,21 @@
             # inputs.niri.nixosModules.niri
             { nix.settings.trusted-users = [ username ]; }
 
-            # 基础配置和所有 feature 模块的定义
+            # base configuration and all feature modules
             ./configuration.nix
+
+            # types of features
+            ./features/types.nix
           ]
           ++ (lib.optional features.gaming ./features/configuration/gaming.nix)
           ++ (lib.optional features.desktop ./features/configuration/desktop.nix)
           ++ (lib.optional features.server.enable ./features/configuration/server.nix)
-          ++ (lib.optional features.programming ./features/configuration/programming.nix)
           ++ (lib.optional features.laptop ./features/configuration/laptop.nix)
           ++ (lib.optional features.mining ./features/configuration/mining.nix)
           ++ (lib.optional features.wsl ./features/configuration/wsl.nix)
           # ++ (lib.optional (!features.mini) inputs.daeuniverse.nixosModules.dae) # use dae flake may need to compile dae from source, which is not acceptable for mini NixOS
           ++ [
-            # 导入 home-manager 模块
+            # home-manager module
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;

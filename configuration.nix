@@ -243,6 +243,8 @@
         # linuxKernel.packages.linux_6_6.cpupower
         # nix-fast-build # why disable this: not usable.
         nur.repos.lxl66566.git-simple-encrypt
+
+        # https://nixos-and-flakes.thiscute.world/zh/best-practices/run-downloaded-binaries-on-nixos
         (
           let
             base = pkgs.appimageTools.defaultFhsEnvArgs;
