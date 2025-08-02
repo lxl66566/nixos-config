@@ -44,18 +44,17 @@ in
       "kvm-amd"
       "coretemp"
       "k10temp"
-      "zram"
     ];
     extraModulePackages = [ ];
     tmp = {
       # https://github.com/NixOS/nixpkgs/blob/nixos-24.05/nixos/modules/system/boot/tmp.nix
-      # useTmpfs = true;
-      # tmpfsSize = "80%";
-      useZram = true;
-      zramSettings = {
-        zram-size = lib.mkDefault "ram * 0.7";
-        compression-algorithm = "zstd";
-      };
+      useTmpfs = true;
+      tmpfsSize = "80%";
+      # useZram = true;
+      # zramSettings = {
+      #   zram-size = lib.mkDefault "ram * 0.7";
+      #   compression-algorithm = "zstd";
+      # };
     };
   };
 
