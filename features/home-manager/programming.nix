@@ -29,6 +29,7 @@
       pre-commit
       nil # Nix language server
       taplo
+      difftastic # diff tool, better pager and structured diff
       # mise # download and run any dev tools
       # leiningen # clojure package manager
       # clojure # functional language
@@ -98,7 +99,7 @@
           excludesfile = toString (
             pkgs.writeText "gitignore_g" (builtins.readFile ../../config/.gitignore_g)
           );
-          autocrlf = true;
+          autocrlf = "input";
           ignorecase = false;
         };
         credential."https://e.coding.net" = {

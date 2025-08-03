@@ -9,6 +9,36 @@
   features,
   ...
 }@inputs:
+
+let
+  revertversion = pkgs.writeShellScriptBin "rv" ''
+    set -euxo pipefail
+    if [[ -z "$1" ]]; then
+      echo "Error: No version tag provided."
+    fi
+    VERSION_TAG="$1"
+    echo "Reverting version $VERSION_TAG ..."
+    git push origin :refs/tags/$VERSION_TAG
+    git tag -d $VERSION_TAG
+    git tag $VERSION_TAG
+    git push --tags
+  '';
+  gfixup = pkgs.writeShellScriptBin "gfixup" ''
+    set -euxo pipefail
+    commit_hash="''${1:-HEAD}"
+    git commit -a --fixup "$commit_hash"
+
+    if [ "$commit_hash" = "HEAD" ]; then
+      rebase_target="HEAD~2"
+    else
+      rebase_target="''${commit_hash}~1"
+    fi
+    GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash "$rebase_target"
+  '';
+  record = pkgs.writeShellScriptBin "record" ''
+    script -q -c "$*" test.log
+  '';
+in
 {
   home.username = username;
   # home.homeDirectory = lib.mkDefault "/home/${username}";
@@ -63,7 +93,6 @@
       jq
       yq-go
       xh
-      difftastic
       delta
       xz
       pciutils # lspci
@@ -73,6 +102,11 @@
       dust
       tldr
       zellij
+
+      # my bash scripts
+      revertversion
+      gfixup
+      record
     ])
     ++ (lib.optionals (features.like_to_build) [
       dwarfs
@@ -106,34 +140,10 @@
         nb = "sudo nixos-rebuild switch --show-trace --impure --flake .#${devicename}"; # nixos (re)build, impure is for NUR
         nbf = "nb --fast";
         nd = "nix develop -c $SHELL";
-        rv = "revertversion";
+        ndc = "git checkout nix -- flake.nix flake.lock && nd";
         jc = "journalctl";
         sc = "systemctl";
         tp = "trash-put";
-      };
-      functions = {
-        revertversion = ''
-          set version $argv[1]
-          echo "Reverting version $version ..."
-          git push origin :refs/tags/$version
-          git tag -d $version
-          git tag $version
-          git push --tags
-        '';
-        gfixup = ''
-          set commit_hash $argv[1]
-          if test -z "$commit_hash"
-              set commit_hash 'HEAD'
-          end
-          git commit -a --fixup $commit_hash
-          set rebase_target ""
-          if test $commit_hash = 'HEAD'
-              set rebase_target 'HEAD~2'
-          else
-              set rebase_target (string trim -- "$commit_hash")~1
-          end
-          GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash $rebase_target
-        '';
       };
     };
     ssh = {
