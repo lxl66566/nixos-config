@@ -38,6 +38,25 @@ let
   record = pkgs.writeShellScriptBin "record" ''
     script -q -c "$*" test.log
   '';
+  repeat = pkgs.writeShellScriptBin "repeat" ''
+    if [ "$#" -eq 0 ]; then
+      echo "usage: $0 <command> [args...]"
+      exit 1
+    fi
+    MAX_ATTEMPTS=10000
+    for ((i=1; i<=MAX_ATTEMPTS; i++)); do
+      echo "---"
+      echo "第 $i 次尝试: 正在执行 '$@'"
+      "$@"
+      exit_code=$?
+      if [ ''${exit_code} -ne 0 ]; then
+        echo "---"
+        echo "命令在第 $i 次尝试时失败，退出码为 ''${exit_code}。脚本已停止。"
+        exit ''${exit_code}
+      fi
+    done
+    echo "命令成功执行了 ''${MAX_ATTEMPTS} 次而未失败。"
+  '';
 in
 {
   home.username = username;
@@ -99,7 +118,8 @@ in
       usbutils # lsusb
       nix-tree
       nix-index
-      dust
+      # dust # disk usage
+      parallel-disk-usage # fastest disk usage
       tldr
       zellij
 
@@ -132,6 +152,7 @@ in
       shellAliases = rec {
         e = "$EDITOR";
         l = "eza --all --long --color-scale size --binary --header --time-style=long-iso";
+        dust = "pdu";
         gp = "git pull";
         gc = "git clone";
         gcm = "git commit --signoff -am";

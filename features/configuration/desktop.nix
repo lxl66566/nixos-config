@@ -2,6 +2,7 @@
   pkgs,
   lib,
   features,
+  username,
   ...
 }:
 {
@@ -107,6 +108,10 @@
         autoNumlock = true;
       };
       defaultSession = "plasmax11";
+      autoLogin = {
+        enable = true;
+        user = username;
+      };
     };
     desktopManager = {
       plasma6 = {

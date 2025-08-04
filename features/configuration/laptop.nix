@@ -35,6 +35,7 @@
       enable = false; # tlp
     };
     power-profiles-daemon.enable = false;
+    xserver.libinput.enable = true;
   };
 
   environment = {
