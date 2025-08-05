@@ -8,7 +8,7 @@
 }:
 
 {
-  imports = [
+  imports = lib.optionals (features.server.enable && features.server.type == "remote") [
     ./server-remote.nix
   ];
 
@@ -27,6 +27,14 @@
       ];
     };
   };
+
+  environment.systemPackages =
+    with pkgs;
+    [
+    ]
+    ++ (lib.optionals (features.server.type == "local") [
+      pciutils
+    ]);
 
   services = {
     openssh = {

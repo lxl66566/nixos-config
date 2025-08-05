@@ -14,6 +14,9 @@
   home.packages =
     with pkgs;
     [
+      gcc
+      gnumake
+      cmake
       rustup
       pkg-config
       sccache

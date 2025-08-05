@@ -104,16 +104,12 @@ in
       # podman-tui
       # trippy # Network diagnostic TUI tool
       iftop # Display bandwidth usage on a network interface
-      cachix
       navi # interactive cli cheatsheet
       btdu
       cargo-binstall
       # v2raya
       jq
-      yq-go
       xh
-      delta
-      xz
       pciutils # lspci
       usbutils # lsusb
       nix-tree

@@ -180,7 +180,7 @@
 
   environment = {
     systemPackages = with pkgs; [
-
+      fzf
     ];
     plasma6.excludePackages = with pkgs.kdePackages; [
       plasma-browser-integration

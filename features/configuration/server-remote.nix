@@ -7,7 +7,18 @@
   ...
 }:
 
-lib.mkIf (features.server.enable && features.server.type == "remote") {
+let
+  cert_path_crt = "/var/lib/caddy/certificates/acme-v02.api.letsencrypt.org-directory/${features.server.domain or ""}/${features.server.domain or ""}.crt";
+  cert_path_key = "/var/lib/caddy/certificates/acme-v02.api.letsencrypt.org-directory/${features.server.domain or ""}/${features.server.domain or ""}.key";
+in
+
+{
+  imports =
+    lib.optionals (features.server.domain != null && features.server.as_proxy && !features.mini)
+      [
+        ./server-remote-proxy.nix
+      ];
+
   boot.initrd = {
     compressor = "zstd";
     compressorArgs = [
@@ -34,17 +45,4 @@ lib.mkIf (features.server.enable && features.server.type == "remote") {
     ];
   };
   boot.loader.grub.devices = [ "/dev/vda" ];
-
-  services = {
-    caddy = {
-      enable = features.server.domain != null && features.server.as_proxy && !features.mini;
-      configFile = pkgs.writeText "Caddyfile" ''
-        {
-          ${features.server.domain}
-
-          reverse_proxy https://caddyserver.com/
-        }
-      '';
-    };
-  };
 }

@@ -201,17 +201,16 @@
         };
         # region vps
         # for building vps-usable image, https://lantian.pub/article/modify-computer/nixos-low-ram-vps.lantian/
-        # nix build .#image
+        # nix build .#image -o result
         "vps" = mkSystem {
           devicename = "vps";
           username = "root";
           userFeatures = {
-            wsl = false;
-            mini = true;
+            mini = false;
             server = {
               enable = true;
               type = "remote";
-              domain = null;
+              domain = "claw.852456.xyz";
               as_proxy = true;
             };
           };

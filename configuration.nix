@@ -286,21 +286,16 @@
         unzip
         nixfmt-rfc-style
         python3
-        pciutils
         strace
         fastfetch
         efibootmgr # edit efi boot manager
         ethtool # network card info
         zip
         yazi # TUI file browser
-        fzf
         ltrace # intercepts and records dynamic library calls which are called by an executed process and the signals received by that process
         sysstat # Collection of performance monitoring tools for Linux (such as sar, iostat and pidstat)
         dnsutils # `dig` + `nslookup`
         mkpasswd
-        gcc
-        gnumake
-        cmake
         sd
         bat
         iotop
