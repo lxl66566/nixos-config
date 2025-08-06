@@ -14,7 +14,7 @@
 
   swapDevices = lib.mkDefault [
     {
-      device = "/swapfile";
+      device = "/nix/swapfile";
       size = 2 * 1024; # 2GB
     }
   ];
@@ -22,8 +22,10 @@
   networking = {
     # assume you are using ipv4 server
     enableIPv6 = false;
-    networkmanager.enable = false; # Disable NetworkManager for server because uses systemd.network
-    useNetworkd = true;
+    networkmanager = {
+      enable = features.server.network == null;
+      dhcp = "dhcpcd";
+    };
     useDHCP = false;
     firewall = {
       enable = true; # fail2ban can not be used without a firewall
@@ -44,21 +46,15 @@
     nameservers = [
       "8.8.8.8"
       "8.8.4.4"
+      "1.1.1.1"
+      "1.0.0.1"
       "223.5.5.5"
     ];
   };
 
   systemd.network =
     features.server.network or {
-      enable = true;
-      networks."10-dhcp" = {
-        matchConfig.Name = [
-          "en*"
-          "eth*"
-          "wl*"
-        ];
-        networkConfig.DHCP = "yes";
-      };
+      enable = false;
     };
 
   users = {
@@ -71,13 +67,15 @@
     };
   };
 
-  environment.systemPackages =
-    with pkgs;
-    [
-    ]
-    ++ (lib.optionals (features.server.type == "local") [
-      pciutils
-    ]);
+  environment = {
+    systemPackages =
+      with pkgs;
+      [
+      ]
+      ++ (lib.optionals (features.server.type == "local") [
+        pciutils
+      ]);
+  };
 
   services = {
     resolved.enable = false;

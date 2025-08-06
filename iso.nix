@@ -215,10 +215,20 @@ in
       cp-nixos
     ];
   };
-  users.users = {
-    root.shell = pkgs.fish;
-    nixos.shell = pkgs.fish;
-  };
+  users.users =
+    let
+      conf = {
+        shell = pkgs.fish;
+        extraGroups = [
+          "wheel"
+          "networkmanager"
+        ];
+      };
+    in
+    {
+      root = conf;
+      nixos = conf;
+    };
   programs = {
     fish = {
       enable = true;

@@ -155,7 +155,7 @@ in
         py = "python";
         fd = "fd -H";
         nb = "sudo nixos-rebuild switch --show-trace --impure --flake .#${devicename}"; # nixos (re)build, impure is for NUR
-        nbf = "nb --fast";
+        nbf = "sudo nix-fast-build -- --flake .#${devicename}";
         nd = "nix develop -c $SHELL";
         ndc = "git checkout nix -- flake.nix flake.lock && nd";
         jc = "journalctl";

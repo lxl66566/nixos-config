@@ -83,15 +83,7 @@
       104.244.42.65 twitter.com
     '';
   };
-  # systemd.network.enable = true;
-  # systemd.network.networks."10-dhcp" = {
-  #   matchConfig.Name = [
-  #     "en*"
-  #     "eth*"
-  #     "wl*"
-  #   ];
-  #   networkConfig.DHCP = "yes";
-  # };
+  systemd.network.enable = lib.mkDefault false;
 
   zramSwap = {
     enable = true;
@@ -146,14 +138,18 @@
     ];
     warn-dirty = false;
     # builders-use-substitutes = true;
-    substituters = lib.mkBefore [
-      "https://mirrors.ustc.edu.cn/nix-channels/store"
-      "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
-      "https://mirror.sjtu.edu.cn/nix-channels/store"
-      "https://cache.garnix.io"
-      "https://mirrors.cernet.edu.cn/nix-channels/store"
-      "https://nix-community.cachix.org"
-    ];
+    substituters = lib.mkBefore (
+      lib.optionals (!(features.server.enable && features.server.type == "remote")) [
+        "https://mirrors.ustc.edu.cn/nix-channels/store"
+        "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
+        "https://mirror.sjtu.edu.cn/nix-channels/store"
+      ]
+      ++ [
+        "https://cache.garnix.io"
+        "https://mirrors.cernet.edu.cn/nix-channels/store"
+        "https://nix-community.cachix.org"
+      ]
+    );
     trusted-public-keys = [
       "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
@@ -218,22 +214,22 @@
 
   # region Users and Root
 
-  users.users.${username} = lib.mkIf (!features.server.enable) {
-    isNormalUser = true;
+  users.users.${username} = {
+    isNormalUser = username != "root";
     extraGroups = [
       "wheel"
       "networkmanager"
       "docker"
     ];
     shell = pkgs.fish;
-    password = "1"; # must be set if you use impermanence
+    password = lib.mkIf (features.impermanence || !features.server.enable) "1"; # must be set if you use impermanence
   };
   environment = {
-    # etc.machine-id.source = ./info/machine-id;
     systemPackages = (
       with pkgs;
       [
         coreutils
+        parted
         wget
         fd
         htop
@@ -285,6 +281,7 @@
         gnutar
         unzip
         nixfmt-rfc-style
+        nix-fast-build
         python3
         strace
         fastfetch

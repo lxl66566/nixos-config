@@ -8,8 +8,9 @@
 }:
 
 let
-  cert_path_crt = "/var/lib/caddy/certificates/acme-v02.api.letsencrypt.org-directory/${features.server.domain}/${features.server.domain}.crt";
-  cert_path_key = "/var/lib/caddy/certificates/acme-v02.api.letsencrypt.org-directory/${features.server.domain}/${features.server.domain}.key";
+  cert_base = "/var/lib/caddy/.local/share/caddy/certificates/acme-v02.api.letsencrypt.org-directory/${features.server.domain}/${features.server.domain}";
+  cert_path_crt = cert_base + ".crt";
+  cert_path_key = cert_base + ".key";
   geoip = "${pkgs.v2ray-geoip}/share/v2ray/geoip.dat";
   geosite = "${pkgs.v2ray-domain-list-community}/share/v2ray/geosite.dat";
   password = pkgs.lib.fileContents ../../config/proxy_password;
@@ -220,11 +221,8 @@ in
     caddy = {
       enable = true;
       configFile = pkgs.writeText "Caddyfile" ''
-        {
-          ${features.server.domain}
-
-          reverse_proxy https://caddyserver.com/
-        }
+        ${features.server.domain}
+        reverse_proxy caddyserver.com
       '';
     };
   };

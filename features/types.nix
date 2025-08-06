@@ -70,7 +70,7 @@
             description = "The disk name of the remote server.";
           };
           network = lib.mkOption {
-            type = config.systemd.network.type;
+            type = lib.types.nullOr config.systemd.network.type;
             description = "The systemd network options of the remote server.";
           };
         };

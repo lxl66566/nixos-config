@@ -13,15 +13,20 @@ let
 in
 
 {
-  imports =
-    lib.optionals (features.server.domain != null && features.server.as_proxy && !features.mini)
-      [
-        ./server-remote-proxy.nix
-      ];
+  imports = lib.optionals (features.server.domain != null && features.server.as_proxy) [
+    ./server-remote-proxy.nix
+  ];
+
+  environment = {
+    systemPackages = with pkgs; [
+      cloud-utils
+    ];
+    # etc."nixos/config/atuin.key".source = ./config/atuin.key; # cannot source a file with remote build
+  };
 
   swapDevices = lib.mkForce [
     {
-      device = "/swapfile";
+      device = "/nix/swapfile";
       size = 512; # 512MB
     }
   ];
