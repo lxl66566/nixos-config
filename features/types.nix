@@ -65,6 +65,14 @@
             type = lib.types.bool;
             description = "Use this server as a proxy node.";
           };
+          disk_name = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            description = "The disk name of the remote server.";
+          };
+          network = lib.mkOption {
+            type = config.systemd.network.type;
+            description = "The systemd network options of the remote server.";
+          };
         };
       };
       description = "for remote connection (openssh) and other setups like disko";

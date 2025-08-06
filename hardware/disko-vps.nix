@@ -11,6 +11,7 @@ let
     "compress=zstd:3"
     "noatime"
   ];
+  device = features.server.disk_name or "/dev/vda";
 in
 {
   disko = {
@@ -26,7 +27,7 @@ in
         imageSize = "4G";
         # 磁盘路径。Disko 生成磁盘镜像时，实际上是启动一个 QEMU 虚拟机走一遍安装流程。
         # 因此无论你的 VPS 上的硬盘识别成 sda 还是 vda，这里都以 Disko 的虚拟机为准，指定 vda。
-        device = "/dev/vda";
+        device = device;
         type = "disk";
         # 定义这块磁盘上的分区表
         content = {
@@ -108,7 +109,7 @@ in
 
   # /boot 分区，是磁盘镜像上的第二个分区。由于我的 VPS 将硬盘识别为 sda，因此这里用 sda2。如果你的 VPS 识别结果不同请按需修改
   fileSystems."/boot" = {
-    device = "/dev/vda2";
+    device = device + "2";
     fsType = "vfat";
     options = [
       "fmask=0077"
@@ -118,7 +119,7 @@ in
 
   # /nix 分区，是磁盘镜像上的第三个分区。由于我的 VPS 将硬盘识别为 sda，因此这里用 sda3。如果你的 VPS 识别结果不同请按需修改
   fileSystems."/nix" = {
-    device = "/dev/vda3";
+    device = device + "3";
     fsType = "btrfs";
     options = defaultMountOption;
   };

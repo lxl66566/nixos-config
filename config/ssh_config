@@ -29,6 +29,10 @@ Host claw
   User root
   HostName 47.79.33.39
   IdentityFile ~/.ssh/id_ed25519
+Host ss
+  User root
+  HostName 31.58.223.50
+  IdentityFile ~/.ssh/id_ed25519
 
 # whc
 # greencloud

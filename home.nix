@@ -161,6 +161,7 @@ in
         jc = "journalctl";
         sc = "systemctl";
         tp = "trash-put";
+        sync = "rsync -aviuzP --compress-choice=zstd --compress-level=3";
       };
     };
     ssh = {

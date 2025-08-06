@@ -19,6 +19,13 @@ in
         ./server-remote-proxy.nix
       ];
 
+  swapDevices = lib.mkForce [
+    {
+      device = "/swapfile";
+      size = 512; # 512MB
+    }
+  ];
+
   boot.initrd = {
     compressor = "zstd";
     compressorArgs = [

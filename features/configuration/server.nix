@@ -12,11 +12,54 @@
     ./server-remote.nix
   ];
 
+  swapDevices = lib.mkDefault [
+    {
+      device = "/swapfile";
+      size = 2 * 1024; # 2GB
+    }
+  ];
+
   networking = {
     # assume you are using ipv4 server
     enableIPv6 = false;
-    firewall.enable = true; # fail2ban can not be used without a firewall
+    networkmanager.enable = false; # Disable NetworkManager for server because uses systemd.network
+    useNetworkd = true;
+    useDHCP = false;
+    firewall = {
+      enable = true; # fail2ban can not be used without a firewall
+      # allow all ports
+      allowedTCPPortRanges = [
+        {
+          from = 0;
+          to = 65535;
+        }
+      ];
+      allowedUDPPortRanges = [
+        {
+          from = 0;
+          to = 65535;
+        }
+      ];
+    };
+    nameservers = [
+      "8.8.8.8"
+      "8.8.4.4"
+      "223.5.5.5"
+    ];
   };
+
+  systemd.network =
+    features.server.network or {
+      enable = true;
+      networks."10-dhcp" = {
+        matchConfig.Name = [
+          "en*"
+          "eth*"
+          "wl*"
+        ];
+        networkConfig.DHCP = "yes";
+      };
+    };
 
   users = {
     users.root = {
@@ -37,6 +80,7 @@
     ]);
 
   services = {
+    resolved.enable = false;
     openssh = {
       enable = lib.mkForce true;
       settings = {
