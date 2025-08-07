@@ -52,3 +52,12 @@
   };
   boot.loader.grub.devices = [ "/dev/vda" ];
 }
+
+# network reconnect:
+# ip addr flush dev eth0
+# ip addr add 31.58.223.50/32 dev eth0
+# ip link set eth0 up
+# ip route add 31.58.223.1 dev eth0
+# ip route add default via 31.58.223.1
+# nano /etc/resolv.conf
+# nameserver 8.8.8.8

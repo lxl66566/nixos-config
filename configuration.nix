@@ -210,7 +210,7 @@
   # region Users and Root
 
   users.users.${username} = {
-    isNormalUser = username != "root";
+    isNormalUser = lib.mkIf (username != "root") true;
     extraGroups = [
       "wheel"
       "networkmanager"

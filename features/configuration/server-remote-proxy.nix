@@ -9,9 +9,10 @@
 
 let
   domain = features.server.domain;
-  cert_base = "/nix/certs";
-  cert_path_crt = "${cert_base}/${domain}/${domain}.crt";
-  cert_path_key = "${cert_base}/${domain}/${domain}.key";
+  targetHost = "https://absx.pages.dev"; # for redirecting
+  cert_base = "/var/lib/acme";
+  cert_path_crt = "${cert_base}/${domain}/cert.pem";
+  cert_path_key = "${cert_base}/${domain}/key.pem";
   geoip = "${pkgs.v2ray-geoip}/share/v2ray/geoip.dat";
   geosite = "${pkgs.v2ray-domain-list-community}/share/v2ray/geosite.dat";
   password = pkgs.lib.fileContents ../../config/proxy_password;
@@ -29,7 +30,7 @@ let
       masquerade = {
         type = "proxy";
         proxy = {
-          url = "https://absx.pages.dev";
+          url = targetHost;
           rewriteHost = true;
         };
       };
@@ -154,16 +155,18 @@ let
   };
 in
 {
-  security.acme = rec {
+  security.acme = {
     acceptTerms = true;
-    defaults.email = "lxl66566@gmail.com";
-    directory = cert_base;
+    defaults = {
+      email = "lxl66566@gmail.com";
+      webroot = "/var/lib/acme/acme-challenge";
+    };
+    # directory = cert_base; # no longer has any effect; ACME Directory is now hardcoded to /var/lib/acme and its permissions are managed by systemd.
     certs."${domain}" = {
       postRun = ''
-        chmod o+x ${directory}/${domain}
-        chmod o+r ${directory}/${domain}/*.crt
-        chmod o+r ${directory}/${domain}/*.pem
-        chmod o+r ${directory}/${domain}/*.key
+        chmod o+rx ${cert_base}/${domain}
+        chmod o+r ${cert_path_crt}
+        chmod o+r ${cert_path_key}
       '';
     };
   };
@@ -210,6 +213,7 @@ in
           NoNewPrivileges = true;
           ExecStart = "${pkgs.trojan-go}/bin/trojan-go -config ${trojan-go-config}";
           LimitNOFILE = "infinity";
+          Group = "acme";
         }
         // restart_policy;
 
@@ -233,20 +237,31 @@ in
   };
 
   services = {
-    caddy = {
+    nginx = {
       enable = true;
-      configFile = pkgs.writeText "Caddyfile" ''
-        ${domain}
-        reverse_proxy caddyserver.com
-      '';
+      recommendedOptimisation = true;
+      virtualHosts."${domain}" = {
+        # 自动处理 ACME 的 http-01 验证。
+        enableACME = true;
+        forceSSL = false;
+        locations."/" = {
+          extraConfig = ''
+            return 301 ${targetHost}$request_uri;
+          '';
+        };
+      };
     };
   };
 
-  users.users.hysteria = {
-    isSystemUser = true;
-    group = "hysteria";
-    home = "/var/lib/hysteria";
-    createHome = true;
+  users.users = {
+    hysteria = {
+      isSystemUser = true;
+      group = "hysteria";
+      extraGroups = [ "acme" ];
+      home = "/var/lib/hysteria";
+      createHome = true;
+    };
+    nginx.extraGroups = [ "acme" ];
   };
   users.groups.hysteria = { };
 }
