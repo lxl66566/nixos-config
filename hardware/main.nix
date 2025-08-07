@@ -8,17 +8,9 @@
 }:
 {
   imports = [
+    ./types.nix
     ./defaultmount.nix
   ];
-
-  options.userHardware = {
-    boot_uuid = lib.mkOption {
-      type = lib.types.str;
-    };
-    main_uuid = lib.mkOption {
-      type = lib.types.str;
-    };
-  };
 
   config = {
     userHardware = {
