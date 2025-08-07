@@ -178,7 +178,7 @@ in
       settings = {
         auto_sync = true;
         dialect = "uk";
-        key_path = "/etc/nixos/config/atuin.key";
+        key_path = config.lib.file.mkOutOfStoreSymlink ./config/atuin.key;
         show_preview = true;
         style = "compact";
         sync_frequency = "1h";

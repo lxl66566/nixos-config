@@ -73,6 +73,7 @@
           type = "local"; # "local" server or "remote" vps
           domain = null; # domain of the remote server
           as_proxy = false; # use this server as a proxy node
+          network = null;
         };
         mini = false;
         wsl = false;

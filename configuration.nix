@@ -188,7 +188,10 @@
     };
     dae = {
       enable = !(features.wsl || features.server.as_proxy);
-      configFile = "/etc/nixos/config/absx.dae";
+      configFile = pkgs.mylib.configToStoreWithMode {
+        configFile = ./config/absx.dae;
+        mode = "0600";
+      };
       # dae needs 0600 permission, but we cannot source file with permission.
       # related issue: https://github.com/nix-community/home-manager/issues/3090
       # configFile = "/home/absx/.config/absx_.dae";
@@ -229,15 +232,40 @@
         fd
         htop
         ripgrep
-        lsof
         ncdu
         curl
-        file
         which
-        tree
         # linuxKernel.packages.linux_6_6.cpupower
         # nix-fast-build # why disable this: not usable.
         nur.repos.lxl66566.git-simple-encrypt
+      ]
+      ++ (lib.optionals (!features.mini) [
+        # busybox
+        file
+        tree
+        lsof
+        gnused # GNU sed
+        gawk # GNU awk
+        gnutar
+        unzip
+        nixfmt-rfc-style
+        nix-fast-build
+        python3
+        strace
+        fastfetch
+        efibootmgr # edit efi boot manager
+        ethtool # network card info
+        zip
+        yazi # TUI file browser
+        ltrace # intercepts and records dynamic library calls which are called by an executed process and the signals received by that process
+        sysstat # Collection of performance monitoring tools for Linux (such as sar, iostat and pidstat)
+        dnsutils # `dig` + `nslookup`
+        mkpasswd
+        sd
+        bat
+        iotop
+        docker-compose
+        lazydocker
 
         # https://nixos-and-flakes.thiscute.world/zh/best-practices/run-downloaded-binaries-on-nixos
         (
@@ -268,31 +296,6 @@
             }
           )
         )
-      ]
-      ++ (lib.optionals (!features.mini) [
-        # busybox
-        gnused # GNU sed
-        gawk # GNU awk
-        gnutar
-        unzip
-        nixfmt-rfc-style
-        nix-fast-build
-        python3
-        strace
-        fastfetch
-        efibootmgr # edit efi boot manager
-        ethtool # network card info
-        zip
-        yazi # TUI file browser
-        ltrace # intercepts and records dynamic library calls which are called by an executed process and the signals received by that process
-        sysstat # Collection of performance monitoring tools for Linux (such as sar, iostat and pidstat)
-        dnsutils # `dig` + `nslookup`
-        mkpasswd
-        sd
-        bat
-        iotop
-        docker-compose
-        lazydocker
       ])
     );
     sessionVariables = rec {
