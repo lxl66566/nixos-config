@@ -137,7 +137,7 @@ in
   console = {
     keyMap = "us";
   };
-  networking = {
+  networking = lib.mkForce {
     networkmanager.enable = true;
     useDHCP = true;
     firewall.enable = false;
@@ -198,7 +198,7 @@ in
       wget
       curl
       gnutar
-      htop
+      btop
       ripgrep
       fatresize
       yazi
@@ -208,6 +208,8 @@ in
       fd
       bat
       ouch
+      nixfmt-rfc-style
+      xmrig
       # self defined:
       create-btrfs
       mount-btrfs
@@ -222,6 +224,9 @@ in
         extraGroups = [
           "wheel"
           "networkmanager"
+        ];
+        openssh.authorizedKeys.keys = [
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA8MA5ciuFugeCNfPwI5yKIuqP4QQvPdWrHZDm9vSgel absx@absx"
         ];
       };
     in
@@ -246,6 +251,8 @@ in
         ni = "sudo nixos-install";
         jc = "journalctl";
         sc = "systemctl";
+        nixnix = "sudo nix --extra-experimental-features \"nix-command flakes\"";
+        disko-run = "sudo nix --extra-experimental-features \"nix-command flakes\" run github:nix-community/disko/latest -- --mode destroy,format,mount ";
       };
     };
   };
@@ -269,6 +276,10 @@ in
     {
       source = filteredSource;
       target = "/nixos";
+    }
+    {
+      source = ./config/xmrig.json;
+      target = "/xmrig.json";
     }
   ];
   isoImage.squashfsCompression = "zstd -Xcompression-level 19";

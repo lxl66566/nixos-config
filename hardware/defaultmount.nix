@@ -15,11 +15,6 @@ let
     "discard=async"
   ];
   userHardware = config.userHardware;
-  useDiskoMount =
-    !(
-      (builtins.hasAttr "boot_uuid" userHardware && userHardware.boot_uuid != null)
-      && (builtins.hasAttr "main_uuid" userHardware && userHardware.main_uuid != null)
-    ); # 只要不是两个选项都设了，就让 disko 管理挂载
 in
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
@@ -63,104 +58,56 @@ in
     };
   };
 
-  disko = lib.mkIf (builtins.hasAttr "disk" userHardware && userHardware.disk != null) {
-    enableConfig = useDiskoMount;
-    devices = {
-      disk = {
-        main-disk = {
-          device = userHardware.disk;
-          type = "disk";
-          partitioningMode = "gpt";
-
-          partitions = {
-            ESP = {
-              size = "2G";
-              type = "EF00";
-              content = {
-                type = "filesystem";
-                format = "vfat";
-                mountpoint = "/boot";
-                mountOptions = [ "umask=0077" ];
-              };
-            };
-
-            btrfs = {
-              end = "-20G";
-              bootable = true;
-              content = {
-                type = "btrfs";
-                subvolumes = {
-                  "root" = {
-                    mountpoint = if (!features.impermanence) then "/" else "/oldroot";
-                    mountOptions = defaultMountOption;
-                  };
-                  "home" = {
-                    mountpoint = "/home";
-                    mountOptions = defaultMountOption;
-                  };
-                  "var" = {
-                    mountpoint = "/var";
-                    mountOptions = defaultMountOption;
-                  };
-                  "nix" = {
-                    mountpoint = "/nix";
-                    mountOptions = defaultMountOption;
-                  };
-                  "userroot" = {
-                    mountpoint = "/root";
-                    mountOptions = defaultMountOption;
-                  };
-                };
-              };
-            };
-          };
-        };
+  fileSystems."/" =
+    if features.impermanence then
+      {
+        device = "tmpfs";
+        fsType = "tmpfs";
+        options = [
+          "relatime"
+          "mode=755"
+        ];
+      }
+    else
+      {
+        device = userHardware.main_uuid;
+        fsType = "btrfs";
+        options = defaultMountOption ++ [ "subvol=root" ];
       };
-    };
-  };
 
-  fileSystems."/" = lib.mkIf features.impermanence {
-    device = "tmpfs";
-    fsType = "tmpfs";
-    options = [
-      "relatime"
-      "mode=755"
-    ];
-  };
-
-  fileSystems."/oldroot" = lib.mkIf (!useDiskoMount) {
+  fileSystems."/oldroot" = {
     device = userHardware.main_uuid;
     fsType = "btrfs";
     options = defaultMountOption ++ [ "subvol=root" ];
     neededForBoot = true;
   };
 
-  fileSystems."/root" = lib.mkIf (!useDiskoMount) {
+  fileSystems."/root" = {
     device = userHardware.main_uuid;
     fsType = "btrfs";
     options = defaultMountOption ++ [ "subvol=userroot" ];
     neededForBoot = true;
   };
 
-  fileSystems."/home" = lib.mkIf (!useDiskoMount) {
+  fileSystems."/home" = {
     device = userHardware.main_uuid;
     fsType = "btrfs";
     options = defaultMountOption ++ [ "subvol=home" ];
   };
 
-  fileSystems."/nix" = lib.mkIf (!useDiskoMount) {
+  fileSystems."/nix" = {
     device = userHardware.main_uuid;
     fsType = "btrfs";
     options = defaultMountOption ++ [ "subvol=nix" ];
   };
 
-  fileSystems."/var" = lib.mkIf (!useDiskoMount) {
+  fileSystems."/var" = {
     device = userHardware.main_uuid;
     fsType = "btrfs";
     options = defaultMountOption ++ [ "subvol=var" ];
   };
 
-  fileSystems."/boot" = lib.mkIf (!useDiskoMount) {
+  fileSystems."/boot" = {
     device = userHardware.boot_uuid;
     fsType = "vfat";
     options = [
