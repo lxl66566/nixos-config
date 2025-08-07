@@ -30,8 +30,8 @@ Sensitive data is encrypted using [git-simple-encrypt](https://github.com/lxl665
 |    `mynixpkgs/`     |                      Contains custom Nix packages developed by myself.                      |
 |      `others/`      |               Houses various integrated modules for specific functionalities.               |
 |      `config/`      |               Stores personal configuration files for different applications.               |
+|     `overlays/`     |                                  my self-defined functions                                  |
 |    `minimal.nix`    |                           (not used, use `mini` feature instead)                            |
-|     `overlays/`     |                                         (not used)                                          |
 
 ### Hardware
 

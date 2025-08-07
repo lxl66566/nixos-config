@@ -6,12 +6,6 @@
   config,
   ...
 }:
-
-let
-  cert_path_crt = "/var/lib/caddy/certificates/acme-v02.api.letsencrypt.org-directory/${features.server.domain or ""}/${features.server.domain or ""}.crt";
-  cert_path_key = "/var/lib/caddy/certificates/acme-v02.api.letsencrypt.org-directory/${features.server.domain or ""}/${features.server.domain or ""}.key";
-in
-
 {
   imports = lib.optionals (features.server.domain != null && features.server.as_proxy) [
     ./server-remote-proxy.nix

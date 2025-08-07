@@ -1,3 +1,0 @@
-# Overlays
-
-Currently not used

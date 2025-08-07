@@ -8,9 +8,10 @@
 }:
 
 let
-  cert_base = "/var/lib/caddy/.local/share/caddy/certificates/acme-v02.api.letsencrypt.org-directory/${features.server.domain}/${features.server.domain}";
-  cert_path_crt = cert_base + ".crt";
-  cert_path_key = cert_base + ".key";
+  domain = features.server.domain;
+  cert_base = "/nix/certs";
+  cert_path_crt = "${cert_base}/${domain}/${domain}.crt";
+  cert_path_key = "${cert_base}/${domain}/${domain}.key";
   geoip = "${pkgs.v2ray-geoip}/share/v2ray/geoip.dat";
   geosite = "${pkgs.v2ray-domain-list-community}/share/v2ray/geosite.dat";
   password = pkgs.lib.fileContents ../../config/proxy_password;
@@ -54,7 +55,7 @@ let
         cert = cert_path_crt;
         key = cert_path_key;
         fallback_port = 80;
-        sni = features.server.domain;
+        sni = domain;
       };
       mux = {
         enabled = true;
@@ -153,6 +154,20 @@ let
   };
 in
 {
+  security.acme = rec {
+    acceptTerms = true;
+    defaults.email = "lxl66566@gmail.com";
+    directory = cert_base;
+    certs."${domain}" = {
+      postRun = ''
+        chmod o+x ${directory}/${domain}
+        chmod o+r ${directory}/${domain}/*.crt
+        chmod o+r ${directory}/${domain}/*.pem
+        chmod o+r ${directory}/${domain}/*.key
+      '';
+    };
+  };
+
   systemd = {
     services = {
       hysteria = {
@@ -221,7 +236,7 @@ in
     caddy = {
       enable = true;
       configFile = pkgs.writeText "Caddyfile" ''
-        ${features.server.domain}
+        ${domain}
         reverse_proxy caddyserver.com
       '';
     };

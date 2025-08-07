@@ -8,7 +8,6 @@
   devicename,
   username,
   features,
-  overlays,
   ...
 }@args:
 {
@@ -126,10 +125,6 @@
 
   # region nix
 
-  nixpkgs = {
-    config = import ./config/nix-config.nix;
-    overlays = overlays;
-  };
   nix.settings = {
     trusted-users = [ username ];
     experimental-features = [

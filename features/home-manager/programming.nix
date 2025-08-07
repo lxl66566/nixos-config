@@ -99,9 +99,7 @@
         safe.directory = "*";
         core = {
           quotepath = false;
-          excludesfile = toString (
-            pkgs.writeText "gitignore_g" (builtins.readFile ../../config/.gitignore_g)
-          );
+          excludesfile = pkgs.mylib.configToStore ../../config/.gitignore_g;
           autocrlf = "input";
           ignorecase = false;
         };

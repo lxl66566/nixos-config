@@ -61,7 +61,6 @@
     }@inputs:
     let
       lib = nixpkgs.lib;
-      overlays = [ nur.overlays.default ];
       # default features. you can find the meaning of them in ./features/types.nix
       defaultFeatures = {
         gaming = false;
@@ -91,9 +90,17 @@
         let
           # merge default features with user features
           features = lib.recursiveUpdate defaultFeatures userFeatures;
+          pkgs = import nixpkgs {
+            inherit system;
+            overlays = [
+              nur.overlays.default
+              (import ./overlays)
+            ];
+            config = import ./config/nix-config.nix;
+          };
         in
         lib.nixosSystem {
-          inherit system;
+          inherit pkgs;
           # specialArgs will be passed to all modules
           specialArgs = {
             inherit
@@ -101,7 +108,6 @@
               features
               devicename
               username
-              overlays
               ;
           };
           modules = [
