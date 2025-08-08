@@ -33,5 +33,8 @@ in
         message = "必须设置 userHardware.disk，或者同时设置 userHardware.boot_uuid 和 userHardware.main_uuid。";
       }
     ];
+    warnings = lib.optionals (cfg.boot_uuid == null || cfg.main_uuid == null) [
+      "如果没有设置 userHardware.boot_uuid 和 userHardware.main_uuid，则可能会导致 NixOS 启动失败。"
+    ];
   };
 }

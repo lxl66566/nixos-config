@@ -264,6 +264,7 @@
         sd
         bat
         iotop
+        bubblewrap
         docker-compose
         lazydocker
 
