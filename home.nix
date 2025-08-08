@@ -155,13 +155,14 @@ in
         py = "python";
         fd = "fd -H";
         nb = "sudo nixos-rebuild switch --show-trace --impure --flake .#${devicename}"; # nixos (re)build, impure is for NUR
-        nbf = "sudo nix-fast-build -- --flake .#${devicename}";
+        nbf = "sudo nix-fast-build --flake .#${devicename}";
         nd = "nix develop -c $SHELL";
         ndc = "git checkout nix -- flake.nix flake.lock && nd";
         jc = "journalctl";
         sc = "systemctl";
         tp = "trash-put";
         sync = "rsync -aviuzP --compress-choice=zstd --compress-level=3";
+        bbwrap = "bwrap --bind / / --dev /dev --proc /proc --tmpfs /tmp";
       };
     };
     ssh = {

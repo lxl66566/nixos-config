@@ -137,7 +137,7 @@
       lib.optionals (!(features.server.enable && features.server.type == "remote")) [
         "https://mirrors.ustc.edu.cn/nix-channels/store"
         "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
-        "https://mirror.sjtu.edu.cn/nix-channels/store"
+        # "https://mirror.sjtu.edu.cn/nix-channels/store" # it sucks
       ]
       ++ [
         "https://cache.garnix.io"

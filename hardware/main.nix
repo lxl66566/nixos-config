@@ -10,7 +10,10 @@
   imports = [
     ./types.nix
     ./defaultmount.nix
-  ];
+  ]
+  ++ (lib.optionals (features.desktop && features.like_to_build) [
+    ./specific/amdgpu.nix
+  ]);
 
   config = {
     userHardware = {
@@ -21,25 +24,7 @@
     nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
     hardware.graphics = {
       enable = true;
-      extraPackages = with pkgs; [
-        vpl-gpu-rt # for intel Arc A750 GPU
-        # intel-media-driver # LIBVA_DRIVER_NAME=iHD
-        # intel-ocl
-        # intel-vaapi-driver # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
-        # intel-compute-runtime
-        # vaapiVdpau
-        # libvdpau-va-gl
-        # mesa
-        # nvidia-vaapi-driver
-        # nv-codec-headers-12
-      ];
-      # extraPackages32 = with pkgs.pkgsi686Linux; [
-      #   intel-media-driver
-      #   intel-vaapi-driver
-      #   vaapiVdpau
-      #   mesa
-      #   libvdpau-va-gl
-      # ];
+      enable32Bit = true;
     };
     boot.loader.grub.extraEntries = ''
       menuentry "Windows 11 (zh)" {
