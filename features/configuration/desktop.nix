@@ -195,6 +195,7 @@
       kwallet-pam
       kwalletmanager
       elisa
+      kio-gdrive
     ];
     etc."xdg/baloofilerc".source = (pkgs.formats.ini { }).generate "baloorc" {
       "Basic Settings" = {

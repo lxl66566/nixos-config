@@ -11,6 +11,8 @@
       "yakuake"."toggle-window-state" = "Meta+R";
     };
     configFile = {
+      "baloofilerc"."Basic Settings"."Indexing-Enabled" = false;
+      "baloorc"."Basic Settings"."Indexing-Enabled" = false;
       "kcminputrc"."Keyboard"."NumLock" = 0;
       "kcminputrc"."Keyboard"."RepeatDelay" = 394;
       "kcminputrc"."Keyboard"."RepeatRate" = 32.934400000000004;
@@ -18,10 +20,10 @@
       "kdeglobals"."KFileDialog Settings"."Automatically select filename extension" = true;
       "kdeglobals"."KFileDialog Settings"."Show Bookmarks" = false;
       "kdeglobals"."KFileDialog Settings"."Show Full Path" = true;
+      "kdeglobals"."KFileDialog Settings"."Show hidden files" = true;
       "kdeglobals"."KFileDialog Settings"."Show Inline Previews" = true;
       "kdeglobals"."KFileDialog Settings"."Show Preview" = false;
       "kdeglobals"."KFileDialog Settings"."Show Speedbar" = true;
-      "kdeglobals"."KFileDialog Settings"."Show hidden files" = true;
       "kdeglobals"."KFileDialog Settings"."Sort by" = "Name";
       "kdeglobals"."KFileDialog Settings"."Sort directories first" = true;
       "kdeglobals"."KFileDialog Settings"."Sort hidden files last" = false;
@@ -32,6 +34,7 @@
       "kdeglobals"."KScreen"."ScreenScaleFactors" = "eDP-1=1.25;HDMI-1=1.25;DP-1=1.25;HDMI-2=1.25;";
       "kscreenlockerrc"."Daemon"."LockGrace" = 30;
       "kscreenlockerrc"."Daemon"."Timeout" = 15;
+      "kwalletrc"."Wallet"."Enabled" = false;
       "kwinrc"."Desktops"."Number" = 1;
       "kwinrc"."Desktops"."Rows" = 1;
       "kwinrc"."NightColor"."Active" = true;

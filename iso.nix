@@ -160,6 +160,7 @@ in
       };
     };
   };
+  # boot.kernelParams = [ "copytoram" ]; # no needed
   boot.supportedFilesystems = lib.mkForce [
     "btrfs"
     "reiserfs"
