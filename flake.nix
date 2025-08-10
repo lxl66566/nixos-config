@@ -151,7 +151,7 @@
                   ./home.nix
                 ]
                 ++ (lib.optional features.gaming ./features/home-manager/gaming.nix)
-                ++ (lib.optional features.desktop ./features/home-manager/desktop.nix)
+                ++ (lib.optional features.desktop ./features/home-manager/desktop)
                 ++ (lib.optional features.laptop ./features/home-manager/laptop.nix)
                 ++ (lib.optional features.programming ./features/home-manager/programming.nix);
               };

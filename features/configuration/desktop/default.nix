@@ -8,7 +8,7 @@
 {
   imports = [
     ./niri.nix
-    ../../others/vm.nix
+    ../../../others/vm.nix
   ];
   hardware = {
     bluetooth = {
