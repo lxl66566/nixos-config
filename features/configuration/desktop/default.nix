@@ -7,6 +7,7 @@
 }:
 {
   imports = [
+    ./niri.nix
     ../../others/vm.nix
   ];
   hardware = {
@@ -37,29 +38,34 @@
     ipafont
     vistafonts-chs
   ];
-  fonts.fontconfig = {
-    defaultFonts = {
-      emoji = [ "Noto Color Emoji" ];
-      monospace = [
-        "Fira Code"
-        "Noto Sans Mono CJK SC"
-        "Sarasa Mono SC"
-        "DejaVu Sans Mono"
-      ];
-      sansSerif = [
-        "Fira Code Sans"
-        "Noto Sans CJK SC"
-        "Source Han Sans SC"
-        "DejaVu Sans"
-      ];
-      serif = [
-        "Fira Code Serif"
-        "Noto Serif CJK SC"
-        "Source Han Serif SC"
-        "DejaVu Serif"
-      ];
+  fonts = {
+    fontDir.enable = true;
+    fontconfig = {
+      defaultFonts = {
+        emoji = [ "Noto Color Emoji" ];
+        monospace = [
+          "DejaVu Sans Mono"
+          "Fira Code"
+          "Maple Mono NF CN"
+          "Noto Sans Mono CJK SC"
+          "Sarasa Mono SC"
+        ];
+        sansSerif = [
+          "DejaVu Sans"
+          "Fira Code Sans"
+          "Noto Sans CJK SC"
+          "Source Han Sans SC"
+        ];
+        serif = [
+          "DejaVu Serif"
+          "Fira Code Serif"
+          "Noto Serif CJK SC"
+          "Source Han Serif SC"
+        ];
+      };
+      cache32Bit = true;
+      antialias = true; # 抗锯齿
     };
-    cache32Bit = true;
   };
   i18n = rec {
     defaultLocale = "zh_CN.UTF-8";
@@ -208,9 +214,6 @@
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
   programs = {
-    # niri = {
-    #   enable = false;
-    # };
     nix-ld = {
       libraries =
         with pkgs;

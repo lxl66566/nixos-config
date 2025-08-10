@@ -124,7 +124,7 @@
             ./features/types.nix
           ]
           ++ (lib.optional features.gaming ./features/configuration/gaming.nix)
-          ++ (lib.optional features.desktop ./features/configuration/desktop.nix)
+          ++ (lib.optional features.desktop ./features/configuration/desktop)
           ++ (lib.optional features.server.enable ./features/configuration/server.nix)
           ++ (lib.optional features.laptop ./features/configuration/laptop.nix)
           ++ (lib.optional features.mining ./features/configuration/mining.nix)

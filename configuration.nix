@@ -327,24 +327,26 @@
 
   # region programs
 
-  programs.mtr.enable = !features.mini;
-  programs.gnupg.agent = {
-    enable = !features.mini;
-    enableSSHSupport = true;
+  programs = {
+    mtr.enable = !features.mini;
+    gnupg.agent = {
+      enable = !features.mini;
+      enableSSHSupport = true;
+    };
+    fish.enable = true;
+    vim = {
+      enable = true;
+      defaultEditor = lib.mkForce false;
+    };
+    neovim = {
+      enable = !features.mini;
+      defaultEditor = true;
+    };
+    git = {
+      enable = true;
+    };
+    nix-ld.enable = true;
   };
-  programs.fish.enable = true;
-  programs.vim = {
-    enable = true;
-    defaultEditor = lib.mkForce false;
-  };
-  programs.neovim = {
-    enable = !features.mini;
-    defaultEditor = true;
-  };
-  programs.git = {
-    enable = true;
-  };
-  programs.nix-ld.enable = true;
 
   virtualisation.docker = {
     enable = !features.mini;
