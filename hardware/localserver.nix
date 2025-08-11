@@ -15,8 +15,8 @@
   config = {
     userHardware = {
       # disk = "/dev/nvme0n1";
-      boot_uuid = "/dev/disk/by-uuid/114E-D812";
-      main_uuid = "/dev/disk/by-uuid/713b8682-b459-49eb-9676-c02c61eff50e";
+      boot_uuid = "/dev/disk/by-uuid/4A07-0E8B";
+      main_uuid = "/dev/disk/by-uuid/b39dc135-00a1-4fa7-9b8d-e32740c0031f";
     };
     nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   };
