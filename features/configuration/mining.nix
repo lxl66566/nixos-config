@@ -6,7 +6,7 @@
 }:
 
 {
-  boot.kernel.sysctl."vm.swappiness" = lib.mkIf (!features.desktop) (lib.mkForce 30);
+  boot.kernel.sysctl."vm.swappiness" = lib.mkIf (features.desktop == [ ]) (lib.mkForce 30);
   environment.systemPackages = with pkgs; [
     xmrig
   ];

@@ -131,7 +131,6 @@
       wget
       curl
       yazi
-      fzf
       fd
       ncdu
       ripgrep

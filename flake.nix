@@ -53,7 +53,6 @@
       self,
       nixpkgs,
       home-manager,
-      plasma-manager,
       nix-gaming,
       nur,
       # niri,
@@ -64,7 +63,7 @@
       # default features. you can find the meaning of them in ./features/types.nix
       defaultFeatures = {
         gaming = false;
-        desktop = false;
+        desktop = [ ];
         laptop = false;
         programming = false;
         mining = false;
@@ -124,7 +123,9 @@
             ./features/types.nix
           ]
           ++ (lib.optional features.gaming ./features/configuration/gaming.nix)
-          ++ (lib.optional features.desktop ./features/configuration/desktop)
+          ++ (lib.optional (features.desktop != [ ] && !features.wsl) ./features/configuration/desktop.nix)
+          ++ (lib.optional (builtins.elem "niri" features.desktop) ./others/niri)
+          ++ (lib.optional (builtins.elem "plasma" features.desktop) ./others/plasma)
           ++ (lib.optional features.server.enable ./features/configuration/server.nix)
           ++ (lib.optional features.laptop ./features/configuration/laptop.nix)
           ++ (lib.optional features.mining ./features/configuration/mining.nix)
@@ -151,7 +152,9 @@
                   ./home.nix
                 ]
                 ++ (lib.optional features.gaming ./features/home-manager/gaming.nix)
-                ++ (lib.optional features.desktop ./features/home-manager/desktop)
+                ++ (lib.optional (features.desktop != [ ] && !features.wsl) ./features/home-manager/desktop.nix)
+                ++ (lib.optional (builtins.elem "niri" features.desktop) ./others/niri/home.nix)
+                ++ (lib.optional (builtins.elem "plasma" features.desktop) ./others/plasma/home.nix)
                 ++ (lib.optional features.laptop ./features/home-manager/laptop.nix)
                 ++ (lib.optional features.programming ./features/home-manager/programming.nix);
               };
@@ -167,7 +170,10 @@
           username = "absx";
           userFeatures = {
             gaming = true;
-            desktop = true;
+            desktop = [
+              "plasma"
+              "niri"
+            ];
             laptop = false;
             programming = true;
             mining = true;
@@ -186,6 +192,7 @@
           devicename = "wsl";
           username = "nixos";
           userFeatures = {
+            desktop = [ "niri" ];
             programming = true;
             wsl = true;
           };

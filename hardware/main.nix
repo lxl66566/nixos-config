@@ -11,7 +11,7 @@
     ./types.nix
     ./defaultmount.nix
   ]
-  ++ (lib.optionals (features.desktop && features.like_to_build) [
+  ++ (lib.optionals (features.desktop != [ ] && !features.wsl && features.like_to_build) [
     ./specific/amdgpu.nix
   ]);
 

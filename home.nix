@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  plasma-manager,
   nix-gaming,
   lib,
   devicename,
@@ -66,7 +65,6 @@ in
   home.file = {
     # config.lib.file.mkOutOfStoreSymlink: https://nixos-and-flakes.thiscute.world/zh/best-practices/accelerating-dotfiles-debugging
     # but it's a shit
-    ".config/niri/config.kdl".source = ./config/niri.kdl;
     ".config/nixpkgs/config.nix".source = ./config/nix-config.nix;
   };
   home.sessionPath = [ "$HOME/.cargo/bin/" ];

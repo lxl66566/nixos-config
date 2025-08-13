@@ -1,13 +1,16 @@
 {
+  config,
   pkgs,
+  nix-gaming,
   lib,
-  features,
+  devicename,
   username,
+  features,
   ...
-}:
+}@inputs:
 {
   home.file = {
-    ".config/niri/config.kdl".source = ./config/niri.kdl;
+    ".config/niri/config.kdl".source = ../../config/niri.kdl;
   };
   programs = {
     waybar = {
@@ -31,8 +34,21 @@
     };
 
     # console for niri
-    alacritty = {
+    ghostty = {
       enable = true;
+      enableFishIntegration = true;
+      enableBashIntegration = true;
+      enableZshIntegration = true;
+      # https://ghostty.org/docs/config/reference
+      settings = {
+        font-size = 13;
+        font-family = "Fira Code";
+      };
+    };
+
+    # console for niri
+    alacritty = {
+      enable = false; # it sucks
       settings = {
         window = {
           decorations = "None"; # Show neither borders nor title bar

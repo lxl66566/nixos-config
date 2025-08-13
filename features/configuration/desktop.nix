@@ -7,8 +7,7 @@
 }:
 {
   imports = [
-    ./niri.nix
-    ../../../others/vm.nix
+    ../../others/vm.nix
   ];
   hardware = {
     bluetooth = {
@@ -46,7 +45,6 @@
         monospace = [
           "DejaVu Sans Mono"
           "Fira Code"
-          "Maple Mono NF CN"
           "Noto Sans Mono CJK SC"
           "Sarasa Mono SC"
         ];
@@ -115,13 +113,8 @@
       };
       defaultSession = "plasmax11";
       autoLogin = {
-        enable = true;
+        enable = false;
         user = username;
-      };
-    };
-    desktopManager = {
-      plasma6 = {
-        enable = true;
       };
     };
     safeeyes.enable = false;
@@ -181,32 +174,6 @@
           }
         '')
       ];
-    };
-  };
-
-  environment = {
-    systemPackages = with pkgs; [
-      fzf
-    ];
-    plasma6.excludePackages = with pkgs.kdePackages; [
-      plasma-browser-integration
-      oxygen
-      baloo
-      baloo-widgets
-      milou
-      plasma-workspace-wallpapers
-      ocean-sound-theme
-      phonon-vlc
-      kwallet
-      kwallet-pam
-      kwalletmanager
-      elisa
-      kio-gdrive
-    ];
-    etc."xdg/baloofilerc".source = (pkgs.formats.ini { }).generate "baloorc" {
-      "Basic Settings" = {
-        "Indexing-Enabled" = false;
-      };
     };
   };
 

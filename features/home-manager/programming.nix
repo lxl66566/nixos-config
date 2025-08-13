@@ -55,7 +55,7 @@
       protobuf
       capnproto
     ]
-    ++ (lib.optionals features.desktop [
+    ++ (lib.optionals (features.desktop != [ ] && !features.wsl) [
       androidStudioPackages.dev
     ])
     ++ (lib.optionals (features.like_to_build) [

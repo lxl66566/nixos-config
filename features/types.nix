@@ -13,9 +13,14 @@
       description = "Enable gaming features and steam.";
     };
     desktop = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "for graphics displaying system.";
+      type = lib.types.listOf (
+        lib.types.enum [
+          "plasma"
+          "niri"
+        ]
+      );
+      default = [ ];
+      description = "graphics displaying systems to use.";
     };
     laptop = lib.mkOption {
       type = lib.types.bool;

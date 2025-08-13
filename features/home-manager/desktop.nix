@@ -7,13 +7,6 @@
 }:
 
 {
-  imports = [
-    inputs.plasma-manager.homeManagerModules.plasma-manager
-    ../../../others/plasma.nix
-    ../../../others/eye-protection.nix
-    ./niri.nix
-  ];
-
   home.file = {
     ".config/mpv".source = ../../config/mpv;
   };
@@ -58,7 +51,7 @@
     xcolor
     localsend
     hyperfine # A command-line benchmarking tool
-    aria2
+    # aria2
     # flatpak
     # flatpak-builder
   ];
