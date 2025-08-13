@@ -15,8 +15,7 @@
   ];
 
   home.file = {
-    ".config/mpv".source = config.lib.file.mkOutOfStoreSymlink ../../config/mpv;
-    ".config/niri/config.kdl".source = config.lib.file.mkOutOfStoreSymlink ../../config/niri.kdl;
+    ".config/mpv".source = ../../config/mpv;
   };
 
   home.packages = with pkgs; [

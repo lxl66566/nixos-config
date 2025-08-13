@@ -6,6 +6,9 @@
   ...
 }:
 {
+  home.file = {
+    ".config/niri/config.kdl".source = ./config/niri.kdl;
+  };
   programs = {
     waybar = {
       enable = true;

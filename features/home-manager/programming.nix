@@ -7,9 +7,9 @@
 }:
 {
   home.file = {
-    ".config/cargo/config.toml".source = config.lib.file.mkOutOfStoreSymlink ../../config/cargo.toml;
-    ".gitignore_g".source = config.lib.file.mkOutOfStoreSymlink ../../config/.gitignore_g;
-    ".gitattributes_g".source = config.lib.file.mkOutOfStoreSymlink ../../config/.gitattributes_g;
+    ".config/cargo/config.toml".source = ../../config/cargo.toml;
+    ".gitignore_g".source = ../../config/.gitignore_g;
+    ".gitattributes_g".source = ../../config/.gitattributes_g;
   };
   home.packages =
     with pkgs;
@@ -49,8 +49,11 @@
       gh
       android-tools
       # ida-free
-      # devenv
       libarchive
+
+      # work
+      protobuf
+      capnproto
     ]
     ++ (lib.optionals features.desktop [
       androidStudioPackages.dev

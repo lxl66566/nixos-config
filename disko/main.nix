@@ -33,7 +33,7 @@ in
               };
 
               btrfs = {
-                end = "-20G";
+                end = "-30G";
                 content = {
                   type = "btrfs";
                   subvolumes = {

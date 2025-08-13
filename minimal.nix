@@ -92,6 +92,7 @@
     };
     dae = {
       enable = true;
+      # do not change, it's minimal
       configFile = "/etc/nixos/config/absx.dae";
       assets = with pkgs; [
         v2ray-geoip

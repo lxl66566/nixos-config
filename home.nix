@@ -65,7 +65,9 @@ in
   home.stateVersion = "25.05";
   home.file = {
     # config.lib.file.mkOutOfStoreSymlink: https://nixos-and-flakes.thiscute.world/zh/best-practices/accelerating-dotfiles-debugging
-    ".config/nixpkgs/config.nix".source = config.lib.file.mkOutOfStoreSymlink ./config/nix-config.nix;
+    # but it's a shit
+    ".config/niri/config.kdl".source = ./config/niri.kdl;
+    ".config/nixpkgs/config.nix".source = ./config/nix-config.nix;
   };
   home.sessionPath = [ "$HOME/.cargo/bin/" ];
   xsession.numlock.enable = true;
@@ -179,7 +181,7 @@ in
       settings = {
         auto_sync = true;
         dialect = "uk";
-        key_path = config.lib.file.mkOutOfStoreSymlink ./config/atuin.key;
+        key_path = pkgs.mylib.configToStore ./config/atuin.key;
         show_preview = true;
         style = "compact";
         sync_frequency = "1h";
