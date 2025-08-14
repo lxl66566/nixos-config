@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  nix-gaming,
   lib,
   devicename,
   username,
@@ -9,12 +8,23 @@
   ...
 }@inputs:
 {
+  imports = [
+    ./DankMaterialShell.nix
+  ];
+
   home.file = {
     ".config/niri/config.kdl".source = ../../config/niri.kdl;
   };
+
+  home.packages = with pkgs; [
+    xwayland-satellite
+    xdg-desktop-portal-gtk
+  ];
+
   programs = {
+    # bar for niri
     waybar = {
-      enable = true;
+      enable = false; # it sucks
       settings = {
         mainBar = {
           layer = "top";

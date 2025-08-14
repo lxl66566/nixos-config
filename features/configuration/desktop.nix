@@ -21,24 +21,25 @@
   };
 
   # region fonts and ime
-  fonts.packages = with pkgs; [
-    noto-fonts
-    # 'noto-fonts-cjk' has been renamed to/replaced by 'noto-fonts-cjk-sans'
-    noto-fonts-cjk-serif
-    noto-fonts-cjk-sans
-    noto-fonts-emoji
-    liberation_ttf
-    fira-code
-    fira-code-symbols
-    source-code-pro
-    source-han-sans
-    source-han-serif
-    sarasa-gothic
-    ipafont
-    vistafonts-chs
-  ];
   fonts = {
     fontDir.enable = true;
+    enableDefaultPackages = true;
+    packages = with pkgs; [
+      noto-fonts
+      # 'noto-fonts-cjk' has been renamed to/replaced by 'noto-fonts-cjk-sans'
+      noto-fonts-cjk-serif
+      noto-fonts-cjk-sans
+      noto-fonts-emoji
+      liberation_ttf
+      fira-code
+      fira-code-symbols
+      source-code-pro
+      source-han-sans
+      source-han-serif
+      sarasa-gothic
+      ipafont
+      vistafonts-chs
+    ];
     fontconfig = {
       defaultFonts = {
         emoji = [ "Noto Color Emoji" ];

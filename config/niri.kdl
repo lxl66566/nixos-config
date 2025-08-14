@@ -259,7 +259,10 @@ layout {
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
 // spawn-at-startup "alacritty" "-e" "fish"
-spawn-at-startup "waybar"
+// spawn-at-startup "waybar"
+spawn-at-startup "xwayland-satellite"
+spawn-at-startup "bash" "-c" "wl-paste --watch cliphist store &"
+spawn-at-startup "qs" "-c" "DankMaterialShell"
 
 hotkey-overlay {
     // Uncomment this line to disable the "Important Hotkeys" pop-up at startup.
@@ -334,6 +337,17 @@ window-rule {
     clip-to-geometry true
 }
 
+// /etc/profiles/per-user/nixos/share/icons
+cursor {
+    xcursor-theme "catppuccin-mocha-dark-cursors"
+    xcursor-size 20
+    hide-when-typing
+}
+
+environment {
+    DISPLAY ":0" // xwayland-satellite
+}
+
 binds {
     // Keys consist of modifiers separated by + signs, followed by an XKB key name
     // in the end. To find an XKB name for a particular key, you may use a program
@@ -352,7 +366,7 @@ binds {
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+R hotkey-overlay-title="Open a Terminal: ghostty" { spawn "ghostty"; }
     Mod+Space hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
-    Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
+    // Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
 
     // You can also use a shell. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument in the end.
@@ -521,9 +535,9 @@ binds {
     Mod+BracketRight { consume-or-expel-window-right; }
 
     // Consume one window from the right into the focused column.
-    Mod+Comma  { consume-window-into-column; }
+    // Mod+Comma  { consume-window-into-column; }
     // Expel one window from the focused column to the right.
-    Mod+Period { expel-window-from-column; }
+    // Mod+Period { expel-window-from-column; }
 
     Mod+E { switch-preset-column-width; }
     Mod+Shift+R { switch-preset-window-height; }
@@ -555,8 +569,8 @@ binds {
     Mod+Shift+Equal { set-window-height "+10%"; }
 
     // Move the focused window between the floating and the tiling layout.
-    Mod+V       { toggle-window-floating; }
-    Mod+Shift+V { switch-focus-between-floating-and-tiling; }
+    // Mod+V       { toggle-window-floating; }
+    // Mod+Shift+V { switch-focus-between-floating-and-tiling; }
 
     // Toggle tabbed column display mode.
     // Windows in this column will appear as vertical tabs,
@@ -592,4 +606,22 @@ binds {
     // Powers off the monitors. To turn them back on, do any input like
     // moving the mouse or pressing any other key.
     Mod+Shift+P { power-off-monitors; }
+
+
+    // region DankMaterialShell
+    Mod+V hotkey-overlay-title="Clipboard Manager" {
+        spawn "qs" "-c" "DankMaterialShell" "ipc" "call" "clipboard" "toggle";
+    }
+    Mod+M hotkey-overlay-title="Task Manager" {
+        spawn "qs" "-c" "DankMaterialShell" "ipc" "call" "processlist" "toggle";
+    }
+    Mod+N hotkey-overlay-title="Notification Center" {
+        spawn "qs" "-c" "DankMaterialShell" "ipc" "call" "notifications" "toggle";
+    }
+    Mod+Comma hotkey-overlay-title="Settings" {
+        spawn "qs" "-c" "DankMaterialShell" "ipc" "call" "settings" "toggle";
+    }
+    Super+Alt+L hotkey-overlay-title="Lock Screen" {
+        spawn "qs" "-c" "DankMaterialShell" "ipc" "call" "lock" "lock";
+    }
 }
