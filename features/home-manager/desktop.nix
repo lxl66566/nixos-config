@@ -22,7 +22,7 @@
     wechat-uos
     onlyoffice-desktopeditors
     # flameshot # many bugs!
-    fsearch # fast file search
+    fsearch # fast file search like everything
     # libreoffice-qt6-still
     xclip
     # nvtopPackages.nvidia
