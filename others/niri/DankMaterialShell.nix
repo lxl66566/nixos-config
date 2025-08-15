@@ -17,10 +17,6 @@
     # fonts
     fira-code
     inter
-
-    # cursor
-    catppuccin-cursors.mochaDark
-    # capitaine-cursors
   ];
 
   xdg.configFile = {

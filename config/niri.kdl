@@ -19,6 +19,9 @@ input {
 
         // Enable numlock on startup, omitting this setting disables it.
         numlock
+
+        repeat-delay 300
+        repeat-rate 30
     }
 
     // Next sections include libinput settings.
@@ -40,11 +43,10 @@ input {
     mouse {
         // off
         // natural-scroll
-        accel-speed 0.0
-        // accel-profile "flat"
+        accel-speed -0.25
+        accel-profile "flat"
         // scroll-method "no-scroll"
     }
-
     trackpoint {
         // off
         // natural-scroll
@@ -57,11 +59,21 @@ input {
     }
 
     // Uncomment this to make the mouse warp to the center of newly focused windows.
-    // warp-mouse-to-focus
+    warp-mouse-to-focus
 
     // Focus windows and outputs automatically when moving the mouse into them.
     // Setting max-scroll-amount="0%" makes it work only on windows already fully on screen.
     focus-follows-mouse max-scroll-amount="0%"
+
+    workspace-auto-back-and-forth
+}
+
+// /etc/profiles/per-user/nixos/share/icons
+cursor {
+    xcursor-theme "catppuccin-mocha-dark-cursors"
+    xcursor-size 24
+    hide-when-typing
+    hide-after-inactive-ms 3000
 }
 
 // You can configure outputs by their name, which you can find
@@ -83,7 +95,7 @@ output "eDP-1" {
     mode "1920x1080@120.030"
 
     // You can use integer or fractional scale, for example use 1.5 for 150% scale.
-    scale 1.25
+    scale 1.5
 
     // Transform allows to rotate the output counter-clockwise, valid values are:
     // normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
@@ -99,6 +111,12 @@ output "eDP-1" {
     // If the position is unset or results in an overlap, the output is instead placed
     // automatically.
     position x=1280 y=0
+
+    // only enable VRR when this output shows a window matching the variable-refresh-rate window rule
+    // https://github.com/YaLTeR/niri/wiki/Configuration:-Outputs#variable-refresh-rate
+    variable-refresh-rate on-demand=true
+
+    focus-at-startup
 }
 
 // Settings that influence how windows are positioned and sized.
@@ -106,7 +124,7 @@ output "eDP-1" {
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Layout
 layout {
     // Set gaps around windows in logical pixels.
-    gaps 16
+    gaps 12
 
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
@@ -154,7 +172,7 @@ layout {
         // off
 
         // How many logical pixels the ring extends out from the windows.
-        width 4
+        width 2
 
         // Colors can be set in a variety of ways:
         // - CSS named colors: "red"
@@ -189,7 +207,7 @@ layout {
         // If you enable the border, you probably want to disable the focus ring.
         off
 
-        width 4
+        width 2
         active-color "#ffc87f"
         inactive-color "#505050"
 
@@ -263,6 +281,7 @@ layout {
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "bash" "-c" "wl-paste --watch cliphist store &"
 spawn-at-startup "qs" "-c" "DankMaterialShell"
+spawn-at-startup "swayidle" "-w" "timeout" "1800" "swaylock -f -c 000000"
 
 hotkey-overlay {
     // Uncomment this line to disable the "Important Hotkeys" pop-up at startup.
@@ -335,13 +354,6 @@ window-rule {
 window-rule {
     geometry-corner-radius 3
     clip-to-geometry true
-}
-
-// /etc/profiles/per-user/nixos/share/icons
-cursor {
-    xcursor-theme "catppuccin-mocha-dark-cursors"
-    xcursor-size 20
-    hide-when-typing
 }
 
 environment {
@@ -453,11 +465,9 @@ binds {
     Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
     Mod+Ctrl+U         { move-column-to-workspace-down; }
     Mod+Ctrl+I         { move-column-to-workspace-up; }
-
     // Alternatively, there are commands to move just a single window:
     // Mod+Ctrl+Page_Down { move-window-to-workspace-down; }
     // ...
-
     Mod+Shift+Page_Down { move-workspace-down; }
     Mod+Shift+Page_Up   { move-workspace-up; }
     Mod+Shift+U         { move-workspace-down; }
@@ -469,15 +479,10 @@ binds {
     // To avoid scrolling through workspaces really fast, you can use
     // the cooldown-ms property. The bind will be rate-limited to this value.
     // You can set a cooldown on any bind, but it's most useful for the wheel.
-    Mod+WheelScrollDown      cooldown-ms=150 { focus-workspace-down; }
-    Mod+WheelScrollUp        cooldown-ms=150 { focus-workspace-up; }
-    Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
-    Mod+Ctrl+WheelScrollUp   cooldown-ms=150 { move-column-to-workspace-up; }
-
-    Mod+WheelScrollRight      { focus-column-right; }
-    Mod+WheelScrollLeft       { focus-column-left; }
-    Mod+Ctrl+WheelScrollRight { move-column-right; }
-    Mod+Ctrl+WheelScrollLeft  { move-column-left; }
+    Mod+WheelScrollDown      cooldown-ms=150 { focus-column-right; }
+    Mod+WheelScrollUp        cooldown-ms=150 { focus-column-left; }
+    Mod+Ctrl+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
+    Mod+Ctrl+WheelScrollUp   cooldown-ms=150 { focus-workspace-up; }
 
     // Usually scrolling up and down with Shift in applications results in
     // horizontal scrolling; these binds replicate that.
@@ -585,8 +590,7 @@ binds {
     // Mod+Space       { switch-layout "next"; }
     // Mod+Shift+Space { switch-layout "prev"; }
 
-    Print { screenshot-window; }
-    Ctrl+Print { screenshot-screen; }
+    Print { screenshot-screen; }
     Alt+Print { screenshot-window; }
 
     // Applications such as remote-desktop clients and software KVM switches may

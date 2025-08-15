@@ -19,6 +19,14 @@
   home.packages = with pkgs; [
     xwayland-satellite
     xdg-desktop-portal-gtk
+
+    # auto turn off screen when inactive
+    swayidle
+    swaylock
+
+    # cursor
+    catppuccin-cursors.mochaDark
+    # capitaine-cursors
   ];
 
   programs = {
@@ -51,7 +59,7 @@
       enableZshIntegration = true;
       # https://ghostty.org/docs/config/reference
       settings = {
-        font-size = 13;
+        font-size = 10.5;
         font-family = "Fira Code";
       };
     };
