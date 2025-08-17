@@ -7,6 +7,9 @@
 }:
 
 {
+  imports = [
+    inputs.stylix.homeModules.stylix
+  ];
   home.file = {
     ".config/mpv".source = ../../config/mpv;
   };

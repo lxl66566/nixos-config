@@ -3,10 +3,12 @@
   lib,
   features,
   username,
+  inputs,
   ...
 }:
 {
   imports = [
+    inputs.stylix.nixosModules.stylix
     ../../others/vm.nix
   ];
   hardware = {
@@ -241,5 +243,10 @@
           zlib
         ];
     };
+  };
+
+  stylix = {
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
+    polarity = "dark";
   };
 }

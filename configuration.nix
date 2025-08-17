@@ -268,6 +268,7 @@
         bat
         iotop
         bubblewrap
+        skim # RIIR of fzf
         docker-compose
         lazydocker
 
@@ -339,7 +340,7 @@
     fish.enable = true;
     vim = {
       enable = true;
-      defaultEditor = lib.mkForce false;
+      defaultEditor = features.mini;
     };
     neovim = {
       enable = !features.mini;
@@ -348,7 +349,16 @@
     git = {
       enable = true;
     };
-    nix-ld.enable = true;
+    nix-ld.enable = true; # for vscode server
+    # nix cli helper, useful
+    nh = {
+      enable = true;
+      flake = "/etc/nixos";
+      clean = {
+        enable = true;
+        extraArgs = "--keep 5 --keep-since 3d";
+      };
+    };
   };
 
   virtualisation.docker = {
