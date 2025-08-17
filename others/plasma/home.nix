@@ -14,4 +14,9 @@
     ./plasma-manager.nix
     ../eye-protection.nix
   ];
+
+  home.packages = with pkgs; [
+    kdePackages.yakuake
+    kdePackages.spectacle
+  ];
 }

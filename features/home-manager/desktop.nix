@@ -16,8 +16,6 @@
 
   home.packages = with pkgs; [
     ayugram-desktop
-    kdePackages.yakuake
-    kdePackages.spectacle
     anki
     jellyfin-ffmpeg
     losslesscut-bin # lossless video/audio editing
