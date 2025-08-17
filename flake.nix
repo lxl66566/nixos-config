@@ -95,6 +95,7 @@
             overlays = [
               nur.overlays.default
               (import ./overlays)
+              (import ./overlays/desktop.nix)
             ];
             config = import ./config/nix-config.nix;
           };
