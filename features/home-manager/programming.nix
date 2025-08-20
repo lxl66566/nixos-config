@@ -51,6 +51,8 @@
       # ida-free
       libarchive
 
+      podman
+
       # work
       protobuf
       capnproto

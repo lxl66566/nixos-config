@@ -9,7 +9,8 @@
 }@inputs:
 {
   imports = [
-    ./DankMaterialShell.nix
+    # ./DankMaterialShell.nix
+    ./eww.nix
   ];
 
   home.file = {
@@ -113,6 +114,23 @@
           # It's used by zellij to copy text to the system clipboard.
           osc52 = "CopyPaste";
         };
+      };
+    };
+  };
+
+  services = {
+    # https://github.com/emersion/mako: A lightweight Wayland notification daemon
+    mako = {
+      enable = true;
+      settings = {
+        sort = "-time";
+        layer = "overlay";
+        icons = 1;
+        default-timeout = 3000;
+        background-color = "#303030";
+        text-color = "#ebdbb2";
+        border-size = 0;
+        border-radius = 5;
       };
     };
   };

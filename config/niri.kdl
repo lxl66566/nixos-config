@@ -281,8 +281,11 @@ layout {
 // spawn-at-startup "waybar"
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "bash" "-c" "wl-paste --watch cliphist store &"
-spawn-at-startup "qs" "-c" "DankMaterialShell"
 spawn-at-startup "swayidle" "-w" "timeout" "1800" "swaylock -f -c 000000"
+spawn-at-startup "mako"
+// spawn-at-startup "qs" "-c" "DankMaterialShell"
+spawn-at-startup "eww" "daemon"
+spawn-at-startup "eww" "open-many" "main" "pfp" "song" "sys_usg" "song_prog" "song_ctl" "audio" "quote" "sys_tray" "time"
 
 hotkey-overlay {
     // Uncomment this line to disable the "Important Hotkeys" pop-up at startup.
@@ -614,19 +617,19 @@ binds {
 
 
     // region DankMaterialShell
-    Mod+V hotkey-overlay-title="Clipboard Manager" {
-        spawn "qs" "-c" "DankMaterialShell" "ipc" "call" "clipboard" "toggle";
-    }
-    Mod+M hotkey-overlay-title="Task Manager" {
-        spawn "qs" "-c" "DankMaterialShell" "ipc" "call" "processlist" "toggle";
-    }
-    Mod+N hotkey-overlay-title="Notification Center" {
-        spawn "qs" "-c" "DankMaterialShell" "ipc" "call" "notifications" "toggle";
-    }
-    Mod+Comma hotkey-overlay-title="Settings" {
-        spawn "qs" "-c" "DankMaterialShell" "ipc" "call" "settings" "toggle";
-    }
-    Super+Alt+L hotkey-overlay-title="Lock Screen" {
-        spawn "qs" "-c" "DankMaterialShell" "ipc" "call" "lock" "lock";
-    }
+    // Mod+V hotkey-overlay-title="Clipboard Manager" {
+    //     spawn "qs" "-c" "DankMaterialShell" "ipc" "call" "clipboard" "toggle";
+    // }
+    // Mod+M hotkey-overlay-title="Task Manager" {
+    //     spawn "qs" "-c" "DankMaterialShell" "ipc" "call" "processlist" "toggle";
+    // }
+    // Mod+N hotkey-overlay-title="Notification Center" {
+    //     spawn "qs" "-c" "DankMaterialShell" "ipc" "call" "notifications" "toggle";
+    // }
+    // Mod+Comma hotkey-overlay-title="Settings" {
+    //     spawn "qs" "-c" "DankMaterialShell" "ipc" "call" "settings" "toggle";
+    // }
+    // Super+Alt+L hotkey-overlay-title="Lock Screen" {
+    //     spawn "qs" "-c" "DankMaterialShell" "ipc" "call" "lock" "lock";
+    // }
 }

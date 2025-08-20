@@ -28,7 +28,7 @@ Sensitive data is encrypted using [git-simple-encrypt](https://github.com/lxl665
 |     `home.nix`      |            Manages user-specific configurations and packages using Home Manager.            |
 |      `iso.nix`      |                   Defines a minimal, self-defined NixOS installation ISO.                   |
 |    `mynixpkgs/`     |                      Contains custom Nix packages developed by myself.                      |
-|      `others/`      |               Houses various integrated modules for specific functionalities.               |
+|      `others/`      |                                 per-software configurations                                 |
 |      `config/`      |               Stores personal configuration files for different applications.               |
 |     `overlays/`     |                                  my self-defined functions                                  |
 |      `disko/`       |                      Disko scripts (definition) used for installation.                      |

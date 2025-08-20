@@ -106,9 +106,4 @@
       };
     };
   };
-
-  # https://github.com/emersion/mako: A lightweight Wayland notification daemon
-  # services.mako = {
-  #   enable = true;
-  # };
 }
