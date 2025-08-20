@@ -222,10 +222,10 @@
         #
         # after dd, you can:
         #
-        # nixos-rebuild boot --flake .#vps --target-host root@<ip>
+        # nixos-rebuild boot --flake .#rfc --target-host root@<ip>
         #
         # to use that.
-        "vps" = mkSystem {
+        "rfc" = mkSystem {
           devicename = "vps";
           username = "root";
           userFeatures = {
@@ -233,18 +233,17 @@
             server = {
               enable = true;
               type = "remote";
-              domain = "ss.852456.xyz";
+              domain = "rfc.852456.xyz";
               as_proxy = true;
-              disk_name = "/dev/sda";
-              # This vps cannot use networkmanager, so we need to set it manually.
-              network = {
-                enable = true;
-                networks.eth0 = {
-                  address = [ "31.58.223.50/32" ];
-                  gateway = [ "31.58.223.1" ];
-                  networkConfig.DHCP = "yes";
-                };
-              };
+              disk_name = "/dev/vda";
+              # network = {
+              #   enable = true;
+              #   networks.eth0 = {
+              #     address = [ "198.176.52.113" ];
+              #     gateway = [ "198.176.52.1" ];
+              #     networkConfig.DHCP = "yes";
+              #   };
+              # };
             };
           };
         };

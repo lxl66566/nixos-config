@@ -6,6 +6,24 @@
   config,
   ...
 }:
+let
+  netconn = pkgs.writeShellApplication {
+    name = "netconn";
+    text = ''
+      if [ "$#" -ne 2 ]; then
+        echo "Usage: $0 <ip> <gateway>"
+        exit 1
+      fi
+      set -euxo pipefail
+      ip addr flush dev eth0
+      ip addr add $1 dev eth0
+      ip link set eth0 up
+      ip route add $2 dev eth0
+      ip route add default via $2
+      echo "nameserver 8.8.8.8" > /etc/resolv.conf
+    '';
+  };
+in
 {
   imports = lib.optionals (features.server.domain != null && features.server.as_proxy) [
     ./server-remote-proxy.nix
@@ -14,6 +32,9 @@
   environment = {
     systemPackages = with pkgs; [
       cloud-utils
+
+      # my package
+      netconn
     ];
     # etc."nixos/config/atuin.key".source = ./config/atuin.key; # cannot source a file with remote build
   };
