@@ -240,6 +240,10 @@ in
     nginx = {
       enable = true;
       recommendedOptimisation = true;
+      sslProtocols = "TLSv1 TLSv1.1 TLSv1.2 TLSv1.3";
+      # 这是一个兼容性较好的加密套件列表，同时兼顾了安全性和对旧客户端的支持。
+      # 它优先使用现代的 ECDHE 和 AES-GCM 算法，同时也包含了旧协议可能需要的算法。
+      sslCiphers = "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!SRP:!CAMELLIA";
       virtualHosts."${domain}" = {
         # 自动处理 ACME 的 http-01 验证。
         enableACME = true;

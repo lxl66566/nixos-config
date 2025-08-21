@@ -29,10 +29,6 @@ in
     ./server-remote-proxy.nix
   ];
 
-  boot.loader.grub.devices = lib.lists.unique (
-    [ "/dev/vda" ] ++ lib.optional (features.server.disk_name != null) features.server.disk_name
-  );
-
   environment = {
     systemPackages = with pkgs; [
       # cloud-utils
