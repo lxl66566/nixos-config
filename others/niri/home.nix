@@ -9,8 +9,8 @@
 }@inputs:
 {
   imports = [
-    # ./DankMaterialShell.nix
-    ./eww.nix
+    ./DankMaterialShell.nix
+    # ./eww.nix
   ];
 
   home.file = {
