@@ -285,7 +285,7 @@ spawn-at-startup "swayidle" "-w" "timeout" "1800" "swaylock -f -c 000000"
 spawn-at-startup "mako"
 // spawn-at-startup "qs" "-c" "DankMaterialShell"
 spawn-at-startup "eww" "daemon"
-spawn-at-startup "eww" "open-many" "main" "pfp" "song" "sys_usg" "song_prog" "song_ctl" "audio" "quote" "sys_tray" "time"
+spawn-at-startup "eww" "open-many" "bar"
 
 hotkey-overlay {
     // Uncomment this line to disable the "Important Hotkeys" pop-up at startup.

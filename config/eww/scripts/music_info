@@ -1,8 +1,9 @@
 #!/bin/bash
+# scripts by adi1090x
 
 ## Get data
 STATUS="$(mpc status)"
-COVER="/tmp/.music_cover.jpg"
+COVER="/tmp/.music_cover.png"
 MUSIC_DIR="$HOME/Music"
 
 ## Get status
@@ -18,7 +19,7 @@ get_status() {
 get_song() {
 	song=`mpc -f %title% current`
 	if [[ -z "$song" ]]; then
-		echo "song"
+		echo "Offline"
 	else
 		echo "$song"
 	fi	
@@ -28,7 +29,7 @@ get_song() {
 get_artist() {
 	artist=`mpc -f %artist% current`
 	if [[ -z "$artist" ]]; then
-		echo "artist"
+		echo ""
 	else
 		echo "$artist"
 	fi	
@@ -73,17 +74,6 @@ get_cover() {
 	fi
 }
 
-
-loop_st() {
-    LOOP="$(mpc status | grep "repeat:" | awk '{ print $3 }')"
-    if [[ $LOOP == *"on"* ]]; then
-        icon="凌"
-    else
-        icon="稜"
-    fi
-    echo $icon
-}
-
 ## Execute accordingly
 if [[ "$1" == "--song" ]]; then
 	get_song
@@ -105,8 +95,4 @@ elif [[ "$1" == "--next" ]]; then
 	{ mpc -q next; get_cover; }
 elif [[ "$1" == "--prev" ]]; then
 	{ mpc -q prev; get_cover; }
-elif [[ "$1" == "--loop" ]]; then
-    mpc -q repeat 
-elif [[ "$1" == "--loop_ic" ]]; then
-    loop_st
 fi
