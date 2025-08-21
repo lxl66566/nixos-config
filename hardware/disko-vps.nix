@@ -1,4 +1,5 @@
 # https://lantian.pub/article/modify-computer/nixos-low-ram-vps.lantian/
+
 {
   config,
   pkgs,
@@ -8,7 +9,7 @@
 }:
 let
   defaultMountOption = [
-    "compress=zstd:3"
+    "compress=zstd:1"
     "noatime"
   ];
   device = features.server.disk_name or "/dev/vda";

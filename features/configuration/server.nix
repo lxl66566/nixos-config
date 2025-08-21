@@ -8,7 +8,7 @@
 }:
 
 {
-  imports = lib.optionals (features.server.enable && features.server.type == "remote") [
+  imports = lib.optionals (features.server.type == "remote") [
     ./server-remote.nix
   ];
 
@@ -22,11 +22,6 @@
   networking = {
     # assume you are using ipv4 server
     enableIPv6 = false;
-    networkmanager = {
-      enable = features.server.network == null;
-      dhcp = "dhcpcd";
-    };
-    useDHCP = false;
     firewall = {
       enable = true; # fail2ban can not be used without a firewall
       # allow all ports
@@ -50,7 +45,15 @@
       "1.0.0.1"
       "223.5.5.5"
     ];
-  };
+  }
+  // (features.server.networking or {
+    networkmanager = {
+      enable = true;
+      dhcp = "dhcpcd";
+    };
+    useDHCP = false;
+  }
+  );
 
   systemd.network =
     features.server.network or {

@@ -68,7 +68,7 @@
     ]);
     supportedFilesystems = [ "ntfs" ];
   };
-  networking = lib.mkIf (!features.wsl) {
+  networking = lib.mkIf (!features.wsl && !features.server.enable) {
     useDHCP = lib.mkDefault true;
     hostName = lib.mkDefault username;
     networkmanager.enable = lib.mkDefault true;
@@ -81,6 +81,10 @@
       185.199.110.133 raw.githubusercontent.com
       104.244.42.65 twitter.com
     '';
+    proxy = lib.mkIf features.wsl {
+      default = "http://127.0.0.1:10450";
+      noProxy = "localhost,127.0.0.1,internal.domain.com";
+    };
   };
   systemd.network.enable = lib.mkDefault false;
 
@@ -161,8 +165,8 @@
 
   # region services
   services = {
-    btrfs.autoScrub = lib.mkIf (!features.wsl) {
-      enable = true;
+    btrfs.autoScrub = {
+      enable = builtins.hasAttr "/" config.fileSystems && config.fileSystems."/".fsType == "btrfs";
       interval = "15 days";
     };
     # 为所有可移动的块设备强制 udisks2 使用 sync 挂载选项

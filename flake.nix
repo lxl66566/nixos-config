@@ -73,7 +73,8 @@
           type = "local"; # "local" server or "remote" vps
           domain = null; # domain of the remote server
           as_proxy = false; # use this server as a proxy node
-          network = null;
+          network = { };
+          disko = false;
         };
         mini = false;
         wsl = false;
@@ -216,34 +217,50 @@
           };
         };
         # region vps
-        # for building vps-usable image, https://lantian.pub/article/modify-computer/nixos-low-ram-vps.lantian/
+        # old method (currently not used): https://lantian.pub/article/modify-computer/nixos-low-ram-vps.lantian/ , nix build .#image
         #
-        # nix build .#image
+        # now I use https://github.com/bin456789/reinstall :
         #
-        # after dd, you can:
+        # curl -O https://raw.githubusercontent.com/bin456789/reinstall/main/reinstall.sh || wget -O reinstall.sh $_
+        # bash reinstall.sh nixos --ssh-key ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKhsZBFg1jO+wWYvOxtS+q4cuYXCEzCs+qHH6c1pPunX lxl66566@gmail.com
         #
-        # nixos-rebuild boot --flake .#rfc --target-host root@<ip>
+        # after installation, you can:
         #
-        # to use that.
+        # (get the hardware config from remote /etc/nixos/hardware-configuration.nix to this repo: hardware/rfc.nix)
+        # (get the network config from remote /etc/nixos/configuration.nix to this repo: see below)
+        # nixos-rebuild boot --flake .#rfc --target-host rfc
+        # or
+        # nh os switch . -H rfc --target-host rfc -- --impure
         "rfc" = mkSystem {
-          devicename = "vps";
+          devicename = "rfc";
           username = "root";
           userFeatures = {
-            mini = false;
+            mini = true;
             server = {
               enable = true;
               type = "remote";
               domain = "rfc.852456.xyz";
               as_proxy = true;
               disk_name = "/dev/vda";
-              # network = {
-              #   enable = true;
-              #   networks.eth0 = {
-              #     address = [ "198.176.52.113" ];
-              #     gateway = [ "198.176.52.1" ];
-              #     networkConfig.DHCP = "yes";
-              #   };
-              # };
+              networking = {
+                usePredictableInterfaceNames = false;
+                interfaces.eth0.ipv4.addresses = [
+                  {
+                    address = "198.176.52.113";
+                    prefixLength = 24;
+                  }
+                ];
+                defaultGateway = {
+                  address = "198.176.52.1";
+                  interface = "eth0";
+                };
+                nameservers = [
+                  "1.1.1.1"
+                  "8.8.8.8"
+                  "2606:4700:4700::1111"
+                  "2001:4860:4860::8888"
+                ];
+              };
             };
           };
         };

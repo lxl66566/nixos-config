@@ -155,22 +155,6 @@ let
   };
 in
 {
-  security.acme = {
-    acceptTerms = true;
-    defaults = {
-      email = "lxl66566@gmail.com";
-      webroot = "/var/lib/acme/acme-challenge";
-    };
-    # directory = cert_base; # no longer has any effect; ACME Directory is now hardcoded to /var/lib/acme and its permissions are managed by systemd.
-    certs."${domain}" = {
-      postRun = ''
-        chmod o+rx ${cert_base}/${domain}
-        chmod o+r ${cert_path_crt}
-        chmod o+r ${cert_path_key}
-      '';
-    };
-  };
-
   systemd = {
     services = {
       hysteria = {
@@ -233,6 +217,22 @@ in
         }
         // restart_policy;
       };
+    };
+  };
+
+  security.acme = {
+    acceptTerms = true;
+    defaults = {
+      email = "lxl66566@gmail.com";
+      webroot = "/var/lib/acme/acme-challenge";
+    };
+    # directory = cert_base; # no longer has any effect; ACME Directory is now hardcoded to /var/lib/acme and its permissions are managed by systemd.
+    certs."${domain}" = {
+      postRun = ''
+        chmod o+rx ${cert_base}/${domain}
+        chmod o+r ${cert_path_crt}
+        chmod o+r ${cert_path_key}
+      '';
     };
   };
 

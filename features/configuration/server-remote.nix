@@ -16,10 +16,10 @@ let
       fi
       set -euxo pipefail
       ip addr flush dev eth0
-      ip addr add $1 dev eth0
+      ip addr add "$1" dev eth0
       ip link set eth0 up
-      ip route add $2 dev eth0
-      ip route add default via $2
+      ip route add "$2" dev eth0
+      ip route add default via "$2"
       echo "nameserver 8.8.8.8" > /etc/resolv.conf
     '';
   };
@@ -29,9 +29,13 @@ in
     ./server-remote-proxy.nix
   ];
 
+  boot.loader.grub.devices = lib.lists.unique (
+    [ "/dev/vda" ] ++ lib.optional (features.server.disk_name != null) features.server.disk_name
+  );
+
   environment = {
     systemPackages = with pkgs; [
-      cloud-utils
+      # cloud-utils
 
       # my package
       netconn
@@ -39,7 +43,7 @@ in
     # etc."nixos/config/atuin.key".source = ./config/atuin.key; # cannot source a file with remote build
   };
 
-  swapDevices = lib.mkForce [
+  swapDevices = lib.mkDefault [
     {
       device = "/nix/swapfile";
       size = 512; # 512MB
@@ -71,7 +75,6 @@ in
       "virtio_rng"
     ];
   };
-  boot.loader.grub.devices = [ "/dev/vda" ];
 }
 
 # network reconnect:

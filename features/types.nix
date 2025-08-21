@@ -88,15 +88,25 @@
             default = null;
             description = "The disk name of the remote server.";
           };
-          network = lib.mkOption {
-            type = lib.types.nullOr config.systemd.network.type;
+          disko = lib.mkOption {
+            type = lib.types.nullOr lib.types.bool;
             default = null;
-            description = "The systemd network options of the remote server.";
+            description = "whether to use disko to generate image and dd to vps.";
+          };
+          networking = lib.mkOption {
+            type = lib.types.nullOr config.networking.type;
+            default = null;
+            description = "The nixos network options of the remote server, will be merged with the default networking config.";
           };
         };
       };
-      description = "for remote connection (openssh) and other setups like disko";
+      description = "for remote connection (openssh) and other setups like proxy, disko, etc.";
     };
   };
+
   config.features = features;
+  config.assertions = lib.optional (config.disko == true) {
+    assertion = config.disk_name != null;
+    message = "When disko is enabled, disk_name must be set.";
+  };
 }
