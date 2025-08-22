@@ -235,7 +235,7 @@
           devicename = "rfc";
           username = "root";
           userFeatures = {
-            mini = true;
+            mini = false;
             server = {
               enable = true;
               type = "remote";

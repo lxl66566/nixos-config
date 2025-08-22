@@ -14,48 +14,54 @@
     ".config/mpv".source = ../../config/mpv;
   };
 
-  home.packages = with pkgs; [
-    ayugram-desktop
-    anki
-    jellyfin-ffmpeg
-    losslesscut-bin # lossless video/audio editing
-    qq
-    wechat-uos
-    onlyoffice-desktopeditors
-    # flameshot # many bugs!
-    fsearch # fast file search like everything
-    # libreoffice-qt6-still
-    xclip
-    # nvtopPackages.nvidia
-    # qpwgraph
-    # qbittorrent
-    easyeffects
-    # coppwr  # Low level control GUI for the PipeWire multimedia server
-    obs-studio
-    # xonsh
-    tabiew # tw: Tabiew is a lightweight, terminal-based application to view and query delimiter separated value formatted documents, such as CSV and TSV files
-    mpv
-    yt-dlp
+  home.packages =
+    with pkgs;
+    [
+      trash-cli
+      ayugram-desktop
+      anki
+      jellyfin-ffmpeg
+      losslesscut-bin # lossless video/audio editing
+      qq
+      wechat-uos
+      onlyoffice-desktopeditors
+      # flameshot # many bugs!
+      fsearch # fast file search like everything
+      # libreoffice-qt6-still
+      xclip
+      # nvtopPackages.nvidia
+      # qpwgraph
+      # qbittorrent
+      easyeffects
+      # coppwr  # Low level control GUI for the PipeWire multimedia server
+      obs-studio
+      # xonsh
+      tabiew # tw: Tabiew is a lightweight, terminal-based application to view and query delimiter separated value formatted documents, such as CSV and TSV files
+      mpv
+      yt-dlp
 
-    microsoft-edge
-    firefox
-    chromium
-    # floorp
-    # arc-browser # not supported on x86_64 unknown linux
-    # brave
-    # vivaldi # track https://github.com/NixOS/nixpkgs/issues/309056
+      microsoft-edge
+      firefox
+      chromium
+      # floorp
+      # arc-browser # not supported on x86_64 unknown linux
+      # brave
+      # vivaldi # track https://github.com/NixOS/nixpkgs/issues/309056
 
-    # discord # chat platform
-    gimp # image editor
-    # mtpaint # a simple whiteboard
-    xorg.libxcb.dev
-    xcolor
-    localsend
-    hyperfine # A command-line benchmarking tool
-    # aria2
-    # flatpak
-    # flatpak-builder
-  ];
+      # discord # chat platform
+      gimp # image editor
+      # mtpaint # a simple whiteboard
+      xorg.libxcb.dev
+      xcolor
+      localsend
+      hyperfine # A command-line benchmarking tool
+      # aria2
+      # flatpak
+      # flatpak-builder
+    ]
+    ++ (lib.optional (
+      builtins.hasAttr "/" config.fileSystems && config.fileSystems."/".fsType == "btrfs"
+    ) btdu);
 
   programs = {
     vscode = {
@@ -68,6 +74,29 @@
         vscodevim.vim
         rust-lang.rust-analyzer
       ];
+    };
+
+    feh = {
+      # Light-weight image viewer
+      enable = !features.mini;
+      keybindings = {
+        zoom_in = "plus";
+        zoom_out = "minus";
+        scroll_up = "i";
+        scroll_down = "k";
+        scroll_right = "j";
+        scroll_left = "l";
+        delete = "D";
+        next_img = "Right";
+        prev_img = "Left";
+        remove = "d Delete";
+        toggle_filenames = "I";
+        toggle_info = "i";
+        zoom_default = "0";
+        zoom_fit = "C-0";
+        toggle_fullscreen = "f";
+        save_filelist = "F";
+      };
     };
   };
 

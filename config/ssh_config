@@ -1,3 +1,5 @@
+IdentityAgent none
+
 Host github.com
   User git
   HostName ssh.github.com

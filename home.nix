@@ -95,7 +95,6 @@ in
     ]
     ++ (lib.optionals (!features.mini) [
       impala # tui wireless manager
-      trash-cli
       shfmt
       starship
       nix-search-cli
@@ -105,7 +104,6 @@ in
       # trippy # Network diagnostic TUI tool
       iftop # Display bandwidth usage on a network interface
       navi # interactive cli cheatsheet
-      btdu
       cargo-binstall
       # v2raya
       jq
@@ -147,7 +145,7 @@ in
       '';
       shellAliases = rec {
         e = "$EDITOR";
-        l = "eza --all --long --color-scale size --binary --header --time-style=long-iso";
+        l = "eza --all --long --color-scale size --binary --header --time-style=long-iso || ls -alF";
         dust = "pdu";
         gp = "git pull";
         gc = "git clone";
@@ -169,6 +167,7 @@ in
     ssh = {
       enable = !features.mini;
       extraConfig = builtins.readFile ./config/ssh_config;
+      forwardAgent = lib.mkForce false;
     };
     atuin = {
       enable = !features.mini;
@@ -199,17 +198,17 @@ in
       enable = !features.mini;
       extraPackages = with pkgs.bat-extras; [
         batgrep
-        batman
+        # batman
         # batdiff
         batwatch
-        prettybat
+        # prettybat # fucking big
       ];
       # config = {
       #   style = "plain";
       # };
     };
     eza = {
-      enable = true;
+      enable = !features.mini || !features.wsl;
       enableBashIntegration = true;
       enableFishIntegration = true;
       enableZshIntegration = true;
@@ -237,34 +236,16 @@ in
     btop = {
       enable = !features.mini;
     };
-    feh = {
-      # Light-weight image viewer
-      enable = !features.mini;
-      keybindings = {
-        zoom_in = "plus";
-        zoom_out = "minus";
-        scroll_up = "i";
-        scroll_down = "k";
-        scroll_right = "j";
-        scroll_left = "l";
-        delete = "D";
-        next_img = "Right";
-        prev_img = "Left";
-        remove = "d Delete";
-        toggle_filenames = "I";
-        toggle_info = "i";
-        zoom_default = "0";
-        zoom_fit = "C-0";
-        toggle_fullscreen = "f";
-        save_filelist = "F";
-      };
-    };
     neovim = {
       enable = !features.mini;
       vimAlias = true;
       withNodeJs = true;
       withPython3 = true;
     };
+  };
+
+  services = {
+    ssh-agent.enable = lib.mkForce false;
   };
 
   xdg.configFile = {

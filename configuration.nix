@@ -341,7 +341,7 @@
     mtr.enable = !features.mini;
     gnupg.agent = {
       enable = !features.mini;
-      enableSSHSupport = true;
+      enableSSHSupport = false;
     };
     fish.enable = true;
     vim = {
@@ -360,6 +360,9 @@
     nh = {
       enable = true;
       flake = "/etc/nixos";
+    };
+    ssh = {
+      startAgent = lib.mkForce false;
     };
   };
 
