@@ -101,6 +101,8 @@
             ];
             config = import ./config/nix-config.nix;
           };
+          useBtrfs =
+            !features.mini && !(features.server.enable && features.server.type == "local") && !features.wsl;
         in
         lib.nixosSystem {
           inherit pkgs;
@@ -111,6 +113,7 @@
               features
               devicename
               username
+              useBtrfs
               ;
           };
           modules = [
@@ -147,6 +150,7 @@
                   devicename
                   username
                   nur
+                  useBtrfs
                   ;
               };
               home-manager.backupFileExtension = "backup";

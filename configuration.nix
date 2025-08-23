@@ -8,6 +8,7 @@
   devicename,
   username,
   features,
+  useBtrfs,
   ...
 }@args:
 {
@@ -166,7 +167,7 @@
   # region services
   services = {
     btrfs.autoScrub = {
-      enable = builtins.hasAttr "/" config.fileSystems && config.fileSystems."/".fsType == "btrfs";
+      enable = useBtrfs;
       interval = "15 days";
     };
     # 为所有可移动的块设备强制 udisks2 使用 sync 挂载选项

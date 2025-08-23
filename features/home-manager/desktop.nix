@@ -3,6 +3,8 @@
   pkgs,
   inputs,
   config,
+  features,
+  useBtrfs,
   ...
 }:
 
@@ -59,10 +61,7 @@
       # flatpak
       # flatpak-builder
     ]
-    ++ (lib.optional (
-      builtins.hasAttr "/" config.fileSystems && config.fileSystems."/".fsType == "btrfs"
-    ) btdu);
-
+    ++ (lib.optional (useBtrfs) btdu);
   programs = {
     vscode = {
       enable = true;
