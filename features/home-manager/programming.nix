@@ -32,7 +32,7 @@
       pre-commit
       nil # Nix language server
       taplo
-      difftastic # diff tool, better pager and structured diff
+      # difftastic # diff tool, better pager and structured diff
       # mise # download and run any dev tools
       # leiningen # clojure package manager
       # clojure # functional language
@@ -129,7 +129,7 @@
           ff = "only";
         };
         diff = {
-          external = "difft";
+          # external = "difft";
           algorithm = "histogram";
           colorMoved = "plain";
           mnemonicPrefix = true;

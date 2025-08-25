@@ -367,22 +367,24 @@
     };
   };
 
-  virtualisation.docker = {
-    enable = !features.mini;
-    autoPrune = {
-      enable = true;
-      dates = "weekly";
-    };
+  virtualisation = {
+    docker = {
+      enable = !features.mini;
+      autoPrune = {
+        enable = true;
+        dates = "weekly";
+      };
 
-    # If you want to run the docker daemon in rootless mode, you need to specify
-    # either the socket path (using thr DOCKER_HOST environment variable) or the
-    # CLI context using `docker context` explicitly.
-    # https://docs.docker.com/engine/security/rootless/
-    # https://docs.docker.com/engine/security/rootless/#client
-    # rootless = {
-    #   enable = true;
-    #   setSocketVariable = true;
-    # };
+      # If you want to run the docker daemon in rootless mode, you need to specify
+      # either the socket path (using thr DOCKER_HOST environment variable) or the
+      # CLI context using `docker context` explicitly.
+      # https://docs.docker.com/engine/security/rootless/
+      # https://docs.docker.com/engine/security/rootless/#client
+      # rootless = {
+      #   enable = true;
+      #   setSocketVariable = true;
+      # };
+    };
   };
 
   # Copy the NixOS configuration file and link it from the resulting system

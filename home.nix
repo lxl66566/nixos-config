@@ -56,6 +56,13 @@ let
     done
     echo "命令成功执行了 ''${MAX_ATTEMPTS} 次而未失败。"
   '';
+  l = pkgs.writeShellScriptBin "l" ''
+    if command -v eza &>/dev/null; then
+      eza --all --long --color-scale size --binary --header --time-style=long-iso "$@"
+    else
+      ls -alF "$@"
+    fi
+  '';
 in
 {
   home.username = username;
@@ -116,11 +123,13 @@ in
       parallel-disk-usage # fastest disk usage
       tldr
       zellij
+      dysk
 
       # my bash scripts
       revertversion
       gfixup
       record
+      l
     ])
     ++ (lib.optionals (features.like_to_build) [
       dwarfs
@@ -145,7 +154,6 @@ in
       '';
       shellAliases = rec {
         e = "$EDITOR";
-        l = "eza --all --long --color-scale size --binary --header --time-style=long-iso || ls -alF";
         dust = "pdu";
         gp = "git pull";
         gc = "git clone";
@@ -207,12 +215,9 @@ in
       #   style = "plain";
       # };
     };
-    eza = {
-      enable = !features.mini || !features.wsl;
-      enableBashIntegration = true;
-      enableFishIntegration = true;
-      enableZshIntegration = true;
-      enableNushellIntegration = true;
+    eza = lib.mkIf (!(features.mini)) {
+      enable = true;
+      # enableFishIntegration = true; # This will cause infinite loop
       extraOptions = [
         "--group-directories-first"
         "--header"
