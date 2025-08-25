@@ -22,7 +22,7 @@
 
         # 定义流量入口规则
         ingress = {
-          "reader2.852456.xyz" = "http://localhost:4396";
+          "reader.852456.xyz" = "http://localhost:4396";
         };
       };
     };

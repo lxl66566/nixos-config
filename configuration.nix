@@ -333,8 +333,6 @@
       ];
     };
     localBinInPath = true;
-
-    etc."containers".source = ./config/containers;
   };
 
   # region programs

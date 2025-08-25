@@ -219,7 +219,10 @@
               domain = null;
               as_proxy = false;
             };
-            others = [ ./others/cftunnel.nix ];
+            others = [
+              ./others/cftunnel.nix
+              ./others/containers/reader.nix
+            ];
           };
         };
         # region vps
