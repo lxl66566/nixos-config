@@ -160,7 +160,7 @@ in
         gcm = "git commit --signoff -am";
         py = "python";
         fd = "fd -H";
-        nb = "nh os switch . -H ${devicename} -- --impure"; # nixos (re)build, impure is for NUR
+        nb = "nh os switch . -H ${devicename} --bypass-root-check -- --impure"; # nixos (re)build, impure is for NUR
         nbo = "sudo nixos-rebuild switch --show-trace --impure --flake .#${devicename}"; # nixos rebuild, o means origin
         nbf = "sudo nix-fast-build --flake .#${devicename}";
         nd = "nix develop -c $SHELL";

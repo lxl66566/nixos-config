@@ -102,6 +102,11 @@
       };
       description = "for remote connection (openssh) and other setups like proxy, disko, etc.";
     };
+    others = lib.mkOption {
+      type = lib.types.listOf lib.types.path;
+      default = [ ];
+      description = "extra configurations' paths";
+    };
   };
 
   config.features = features;

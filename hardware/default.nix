@@ -11,7 +11,7 @@
   imports =
     let
       knownDevices = {
-        "localserver" = ./localserver.nix;
+        "ls" = ./localserver.nix;
         "main" = ./main.nix;
         "rfc" = ./rfc.nix;
       };

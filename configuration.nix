@@ -14,7 +14,8 @@
 {
   imports = [
     ./hardware
-  ];
+  ]
+  ++ features.others;
 
   # region boot&network
   boot = lib.mkIf (!features.wsl) {

@@ -80,6 +80,7 @@
         wsl = false;
         like_to_build = false;
         impermanence = false;
+        others = [ ];
       };
       # a function to generate a system with specific features
       mkSystem =
@@ -206,7 +207,7 @@
         };
         # region localserver
         "ls" = mkSystem {
-          devicename = "localserver";
+          devicename = "ls";
           username = "root";
           userFeatures = {
             mini = false;
@@ -218,6 +219,7 @@
               domain = null;
               as_proxy = false;
             };
+            others = [ ./others/cftunnel.nix ];
           };
         };
         # region vps
