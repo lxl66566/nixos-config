@@ -160,7 +160,9 @@ in
         gcm = "git commit --signoff -am";
         py = "python";
         fd = "fd -H";
-        nb = "nh os switch . -H ${devicename} --bypass-root-check -- --impure"; # nixos (re)build, impure is for NUR
+        nb = "nh os switch . -H ${devicename} ${
+          if username == "root" then "--bypass-root-check" else ""
+        } -- --impure"; # nixos (re)build, impure is for NUR
         nbo = "sudo nixos-rebuild switch --show-trace --impure --flake .#${devicename}"; # nixos rebuild, o means origin
         nbf = "sudo nix-fast-build --flake .#${devicename}";
         nd = "nix develop -c $SHELL";
@@ -217,7 +219,7 @@ in
     };
     eza = lib.mkIf (!(features.mini)) {
       enable = true;
-      # enableFishIntegration = true; # This will cause infinite loop
+      enableFishIntegration = false; # This will cause infinite loop
       extraOptions = [
         "--group-directories-first"
         "--header"

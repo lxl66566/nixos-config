@@ -383,6 +383,13 @@
       #   enable = true;
       #   setSocketVariable = true;
       # };
+
+      daemon.settings = {
+        "insecure-registries" = [
+          "http://harbor.smart.ddns.temu.team"
+          "harbor.smart.ddns.temu.team"
+        ];
+      };
     };
   };
 

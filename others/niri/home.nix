@@ -9,8 +9,9 @@
 }@inputs:
 {
   imports = [
-    ./DankMaterialShell.nix
+    # ./DankMaterialShell.nix
     # ./eww.nix
+    ./caelestia-shell.nix
   ];
 
   home.file = {

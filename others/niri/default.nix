@@ -1,3 +1,4 @@
+# please see https://github.com/Vortriz/awesome-niri
 {
   lib,
   ...
