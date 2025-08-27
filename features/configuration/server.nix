@@ -52,6 +52,7 @@
       dhcp = "dhcpcd";
     };
     useDHCP = false;
+    usePredictableInterfaceNames = false;
   }
   );
 

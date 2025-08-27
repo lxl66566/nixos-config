@@ -103,7 +103,7 @@
             config = import ./config/nix-config.nix;
           };
           useBtrfs =
-            !features.mini && !(features.server.enable && features.server.type == "local") && !features.wsl;
+            !features.mini && !(features.server.enable && features.server.type == "remote") && !features.wsl;
         in
         lib.nixosSystem {
           inherit pkgs;
@@ -269,6 +269,24 @@
                   "2606:4700:4700::1111"
                   "2001:4860:4860::8888"
                 ];
+              };
+            };
+          };
+        };
+
+        "dedi" = mkSystem {
+          devicename = "dedi";
+          username = "root";
+          userFeatures = {
+            mini = false;
+            server = {
+              enable = true;
+              type = "remote";
+              domain = "dedi.852456.xyz";
+              as_proxy = true;
+              disk_name = "/dev/vda";
+              networking = {
+                usePredictableInterfaceNames = false;
               };
             };
           };

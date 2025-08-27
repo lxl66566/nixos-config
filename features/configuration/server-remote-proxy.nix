@@ -151,7 +151,6 @@ let
     Restart = "on-failure";
     RestartSec = "20s";
     StartLimitBurst = 30000; # 服务允许尝试启动的总次数为 30000 次
-    StartLimitIntervalSec = 0; # 设置为 0 以禁用基于时间的速率限制
   };
 in
 {

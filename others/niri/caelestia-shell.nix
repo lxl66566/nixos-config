@@ -30,15 +30,15 @@
   ];
 
   xdg.configFile = {
-    "quickshell/niri-caelestia-shell" = {
-      source = pkgs.fetchFromGitHub {
-        owner = "jutraim";
-        repo = "niri-caelestia-shell";
-        rev = "86d2cc159023f13d14327427a6addae92c850c4b";
-        sha256 = "sha256-M5RZuNZKXRnNix6mDkD6+rsIGdozqqsBFi4N5dEbciA=";
-      };
-      executable = true;
-      recursive = true;
-    };
+    # "quickshell/niri-caelestia-shell" = {
+    #   source = pkgs.fetchFromGitHub {
+    #     owner = "jutraim";
+    #     repo = "niri-caelestia-shell";
+    #     rev = "86d2cc159023f13d14327427a6addae92c850c4b";
+    #     sha256 = "sha256-M5RZuNZKXRnNix6mDkD6+rsIGdozqqsBFi4N5dEbciA=";
+    #   };
+    #   executable = true;
+    #   recursive = true;
+    # };
   };
 }

@@ -39,6 +39,10 @@ Host rfc
   User root
   HostName 198.176.52.113
   IdentityFile ~/.ssh/id_ed25519
+Host dedi
+  User root
+  HostName 173.254.249.43
+  IdentityFile ~/.ssh/id_ed25519
 
 # whc
 # greencloud
