@@ -20,4 +20,8 @@ in
     HTTPS_PROXY = proxy;
     ALL_PROXY = proxy;
   };
+
+  systemd.services.nix-daemon.serviceConfig = {
+    Environment = "all_proxy=" + proxy;
+  };
 }
