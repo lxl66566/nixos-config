@@ -11,6 +11,12 @@ Host git.temu.team
   IdentityFile ~/.ssh/id_ed25519_gitlab
   IdentitiesOnly yes
   AddKeysToAgent yes
+Host gitlab.kuajing.team
+  User git
+  HostName gitlab.kuajing.team
+  IdentityFile ~/.ssh/id_ed25519_gitlab
+  IdentitiesOnly yes
+  AddKeysToAgent yes
 Host xline
   User xuanle
   HostName frp.whyiscas.top

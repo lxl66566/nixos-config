@@ -7,7 +7,8 @@
   ...
 }:
 let
-  proxy = "http://127.0.0.1:10450";
+  hostIP = "127.0.0.1";
+  proxyUrl = "http://${hostIP}:10450";
 in
 {
   wsl = {
@@ -16,12 +17,12 @@ in
   };
 
   environment.variables = {
-    HTTP_PROXY = proxy;
-    HTTPS_PROXY = proxy;
-    ALL_PROXY = proxy;
+    HTTP_PROXY = proxyUrl;
+    HTTPS_PROXY = proxyUrl;
+    ALL_PROXY = proxyUrl;
   };
 
-  systemd.services.nix-daemon.serviceConfig = {
-    Environment = "all_proxy=" + proxy;
-  };
+  # systemd.services.nix-daemon.serviceConfig = {
+  #   Environment = "all_proxy=" + proxyUrl;
+  # };
 }

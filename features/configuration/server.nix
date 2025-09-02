@@ -75,6 +75,7 @@
     systemPackages =
       with pkgs;
       [
+        dufs # simple file http server
       ]
       ++ (lib.optionals (features.server.type == "local") [
         pciutils
