@@ -219,6 +219,12 @@ in
     };
   };
 
+  # nftables：高位 quic 豁免
+  networking.nftables = {
+    enable = true;
+    rulesetFile = ../../config/nftables-proxy;
+  };
+
   security.acme = {
     acceptTerms = true;
     defaults = {

@@ -388,6 +388,8 @@
         "insecure-registries" = [
           "http://harbor.smart.ddns.temu.team"
           "harbor.smart.ddns.temu.team"
+          "http://harbor.smart.ddns.kuajing.team"
+          "harbor.smart.ddns.kuajing.team"
         ];
       };
     };

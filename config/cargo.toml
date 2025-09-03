@@ -27,3 +27,6 @@ debug = false
 [profile.release]
 panic = "abort"
 opt-level = "s"
+
+[net]
+git-fetch-with-cli = true

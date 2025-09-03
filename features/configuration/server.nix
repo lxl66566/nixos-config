@@ -23,7 +23,7 @@
     # assume you are using ipv4 server
     enableIPv6 = false;
     firewall = {
-      enable = true; # fail2ban can not be used without a firewall
+      enable = false; # nftables conflict with firewall; fail2ban can not be used without a firewall/nftables
       # allow all ports
       allowedTCPPortRanges = [
         {

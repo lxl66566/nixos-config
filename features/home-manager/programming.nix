@@ -7,7 +7,7 @@
 }:
 {
   home.file = {
-    ".config/cargo/config.toml".source = ../../config/cargo.toml;
+    ".cargo/config.toml".source = ../../config/cargo.toml;
     ".gitignore_g".source = ../../config/.gitignore_g;
     ".gitattributes_g".source = ../../config/.gitattributes_g;
   };
