@@ -34,12 +34,12 @@ let
           rewriteHost = true;
         };
       };
-      obfs = {
-        type = "salamander";
-        salamander = {
-          password = "make_hysteria_great_again";
-        };
-      };
+      # obfs = {
+      #   type = "salamander";
+      #   salamander = {
+      #     password = "make_hysteria_great_again";
+      #   };
+      # };
       ignoreClientBandwidth = true;
     }
   );
