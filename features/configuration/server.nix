@@ -65,7 +65,7 @@
     mutableUsers = true;
     users.root = {
       # my "vps" password
-      initialHashedPassword = "$6$m6Skk6dB0hu.eU4Y$oVCENpvE/wXpm9m4fw25oZrDG5E/Ovipr3hbaadibYHJ8.H4TzO6WRb1PBqGp2z.lATK3WorX42m/DAr4ruzh1";
+      initialHashedPassword = "$6$CAF317uZ0TflvUR/$bc7f1k3ThJJb2VaIr7F2hu1JQIIzna/SUee7C5V4JiceyRJfBHfOPVfbN2hJQHkGUcdnsooucSgk9gsdE2KEu0";
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKhsZBFg1jO+wWYvOxtS+q4cuYXCEzCs+qHH6c1pPunX lxl66566@gmail.com" # windows ssh key
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA8MA5ciuFugeCNfPwI5yKIuqP4QQvPdWrHZDm9vSgel absx@absx" # nixos ssh key
