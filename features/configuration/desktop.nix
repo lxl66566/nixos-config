@@ -9,7 +9,7 @@
 {
   imports = [
     inputs.stylix.nixosModules.stylix
-    ../../others/vm.nix
+    # ../../others/vm.nix
   ];
   hardware = {
     bluetooth = {

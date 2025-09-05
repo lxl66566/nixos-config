@@ -12,14 +12,14 @@
 let
   revertversion = pkgs.writeShellScriptBin "rv" ''
     set -euxo pipefail
-    if [[ -z "$1" ]]; then
-      echo "Error: No version tag provided."
+    if [ $# -ne 1 ]; then
+      echo "Usage: revertversion <version>"
+      return 1
     fi
-    VERSION_TAG="$1"
-    echo "Reverting version $VERSION_TAG ..."
-    git push origin :refs/tags/$VERSION_TAG
-    git tag -d $VERSION_TAG
-    git tag $VERSION_TAG
+    echo "Reverting version $@"
+    git push origin :refs/tags/$@
+    git tag -d $@
+    git tag $@
     git push --tags
   '';
   gfixup = pkgs.writeShellScriptBin "gfixup" ''
@@ -253,6 +253,7 @@ in
 
   services = {
     ssh-agent.enable = lib.mkForce false;
+    # gcr-ssh-agent.enable = lib.mkForce false;
   };
 
   xdg.configFile = {
