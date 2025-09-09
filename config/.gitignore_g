@@ -1,0 +1,9 @@
+node_modules
+__pycache__
+*.exe
+*.o
+.venv
+target
+*.svn
+*.cache
+bfg*.tar

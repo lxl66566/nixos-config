@@ -1,0 +1,8 @@
+table inet nat {
+  chain prerouting {
+    type nat hook prerouting priority -100; policy accept;
+    # 将外部流入的流量从 65533 端口重定向到 5497 端口
+    tcp dport 65533 redirect to :5497
+    udp dport 65533 redirect to :5497
+  }
+}

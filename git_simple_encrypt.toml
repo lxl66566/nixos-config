@@ -1,0 +1,11 @@
+path = "git_simple_encrypt.toml"
+use_zstd = true
+zstd_level = 15
+crypt_list = [
+  "config/absx.dae",
+  "config/atuin.key",
+  "config/proxy_password",
+  "config/cloudflare",
+  "config/ssh_config",
+  "config/docker-insecure-registries.nix",
+]

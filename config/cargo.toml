@@ -1,0 +1,32 @@
+# 一些好用的 alias
+[alias]
+b = "build --release"
+c = "check"
+t = "test -- --nocapture"
+r = "run"
+u = "update"
+f = "clippy --fix --all-targets --all-features --allow-staged --allow-dirty"
+i = "install --profile installation"
+bi = "binstall -y"
+
+# 使用 sccache 缓存编译结果（需要安装 sccache）
+[build]
+rustc-wrapper = "sccache"
+
+# 使用 cargo install 使用的命令
+[profile.installation]
+lto = true
+inherits = "release"
+codegen-units = 1
+rustflags = ["-C", "target-cpu=native"]
+
+# 默认不带调试符号，减小编译大小
+[profile.dev]
+debug = false
+
+[profile.release]
+panic = "abort"
+opt-level = "s"
+
+[net]
+git-fetch-with-cli = true
