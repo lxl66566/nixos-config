@@ -107,6 +107,7 @@
           excludesfile = pkgs.mylib.configToStore ../../config/.gitignore_g;
           autocrlf = "input";
           ignorecase = false;
+          hooksPath = "~/.git-hooks";
         };
         credential."https://e.coding.net" = {
           provider = "generic";
