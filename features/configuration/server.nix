@@ -2,13 +2,17 @@
   lib,
   inputs,
   pkgs,
+  devicename,
   features,
   config,
   ...
 }:
 
 {
-  imports = lib.optionals (features.server.type == "remote") [
+  imports = [
+    ../../others/network/easytier.nix
+  ]
+  ++ lib.optionals (features.server.type == "remote") [
     ./server-remote.nix
   ];
 

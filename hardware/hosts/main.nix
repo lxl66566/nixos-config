@@ -8,11 +8,11 @@
 }:
 {
   imports = [
-    ./types.nix
-    ./defaultmount.nix
+    ../types.nix
+    ../defaultmount.nix
   ]
   ++ (lib.optionals (features.desktop != [ ] && !features.wsl && features.like_to_build) [
-    ./specific/amdgpu.nix
+    ../specific/amdgpu.nix
   ]);
 
   config = {

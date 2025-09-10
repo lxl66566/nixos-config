@@ -220,7 +220,7 @@
               as_proxy = false;
             };
             others = [
-              ./others/cftunnel.nix
+              ./others/network/cftunnel.nix
               ./others/containers/reader.nix
             ];
           };
