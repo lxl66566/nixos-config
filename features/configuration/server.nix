@@ -2,6 +2,7 @@
   lib,
   inputs,
   pkgs,
+  devicename,
   features,
   config,
   ...
@@ -10,6 +11,7 @@
 {
   imports = lib.optionals (features.server.type == "remote") [
     ./server-remote.nix
+    ../../others/network/easytier.nix
   ];
 
   swapDevices = lib.mkDefault [

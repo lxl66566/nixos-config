@@ -8,8 +8,8 @@
 }:
 {
   imports = [
-    ./types.nix
-    ./defaultmount.nix
+    ../types.nix
+    ../defaultmount.nix
   ];
 
   config = {

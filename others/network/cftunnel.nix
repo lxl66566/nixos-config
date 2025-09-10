@@ -18,7 +18,7 @@
       # 隧道 UUID
       "a0290f42-d3ce-4ef5-a209-3ce3b9bf5d4a" = {
         default = "http_status:404";
-        credentialsFile = ../config/cloudflare/a0290f42-d3ce-4ef5-a209-3ce3b9bf5d4a.json;
+        credentialsFile = ../../config/cloudflare/a0290f42-d3ce-4ef5-a209-3ce3b9bf5d4a.json;
 
         # 定义流量入口规则
         ingress = {

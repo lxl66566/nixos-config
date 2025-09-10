@@ -273,6 +273,7 @@
         iotop
         bubblewrap
         skim # RIIR of fzf
+        # perf
         docker-compose
         lazydocker
       ])
@@ -281,7 +282,6 @@
       EDITOR = "nvim";
       SCCACHE_DIR = "~/.cache/sccache"; # needed for wsl to not to use the cache dir on windows (which is slow)
       SCCACHE_CACHE_SIZE = "50G";
-      SCCACHE_SERVER_PORT = lib.mkIf features.wsl "5650"; # use a different port for wsl to avoid conflict with windows sccache
       NIXPKGS_ALLOW_UNFREE = 1;
     };
 
