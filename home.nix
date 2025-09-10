@@ -175,8 +175,9 @@ in
     };
     ssh = {
       enable = !features.mini;
+      enableDefaultConfig = false;
       extraConfig = builtins.readFile ./config/ssh_config;
-      forwardAgent = lib.mkForce false;
+      matchBlocks."*".forwardAgent = lib.mkForce false;
     };
     atuin = {
       enable = !features.mini;
