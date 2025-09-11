@@ -137,6 +137,7 @@
           ++ (lib.optional features.laptop ./features/configuration/laptop.nix)
           ++ (lib.optional features.mining ./features/configuration/mining.nix)
           ++ (lib.optional features.wsl ./features/configuration/wsl.nix)
+          ++ (lib.optional features.programming ./features/configuration/programming.nix)
           # ++ (lib.optional (!features.mini) inputs.daeuniverse.nixosModules.dae) # use dae flake may need to compile dae from source, which is not acceptable for mini NixOS
           ++ [
             # home-manager module
@@ -163,8 +164,7 @@
                 ++ (lib.optional (features.desktop != [ ] && !features.wsl) ./features/home-manager/desktop.nix)
                 ++ (lib.optional (builtins.elem "niri" features.desktop) ./others/niri/home.nix)
                 ++ (lib.optional (builtins.elem "plasma" features.desktop) ./others/plasma/home.nix)
-                ++ (lib.optional features.laptop ./features/home-manager/laptop.nix)
-                ++ (lib.optional features.programming ./features/home-manager/programming.nix);
+                ++ (lib.optional features.laptop ./features/home-manager/laptop.nix);
               };
             }
           ];

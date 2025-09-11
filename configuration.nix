@@ -280,8 +280,6 @@
     );
     sessionVariables = rec {
       EDITOR = "nvim";
-      SCCACHE_DIR = "~/.cache/sccache"; # needed for wsl to not to use the cache dir on windows (which is slow)
-      SCCACHE_CACHE_SIZE = "50G";
       NIXPKGS_ALLOW_UNFREE = 1;
     };
 
