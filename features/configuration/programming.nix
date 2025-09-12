@@ -7,7 +7,7 @@
   ...
 }:
 {
-  imports = [
+  imports = lib.optionals (!features.wsl) [
     ../../others/sccache.nix
   ];
 
