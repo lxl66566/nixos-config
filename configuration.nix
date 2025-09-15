@@ -18,9 +18,9 @@
   ++ features.others;
 
   # region boot&network
-  boot = lib.mkIf (!features.wsl) {
+  boot = {
     initrd.systemd.enable = true;
-    loader = {
+    loader = lib.mkDefault {
       efi.canTouchEfiVariables = true;
       efi.efiSysMountPoint = "/boot";
       grub = {
@@ -29,7 +29,6 @@
         efiSupport = true;
         default = "saved";
         useOSProber = lib.mkDefault false;
-
       };
       timeout = 15;
       systemd-boot.enable = false;
@@ -69,7 +68,18 @@
       "net.ifnames=0"
     ]);
     supportedFilesystems = [ "ntfs" ];
+    tmp = {
+      # https://github.com/NixOS/nixpkgs/blob/nixos-24.05/nixos/modules/system/boot/tmp.nix
+      useTmpfs = true;
+      tmpfsSize = "80%";
+      # useZram = true;
+      # zramSettings = {
+      #   zram-size = lib.mkDefault "ram * 0.7";
+      #   compression-algorithm = "zstd";
+      # };
+    };
   };
+
   networking = lib.mkIf (!features.wsl && !features.server.enable) {
     useDHCP = lib.mkDefault true;
     hostName = lib.mkDefault username;

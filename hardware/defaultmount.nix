@@ -46,16 +46,6 @@ in
       "k10temp"
     ];
     extraModulePackages = [ ];
-    tmp = {
-      # https://github.com/NixOS/nixpkgs/blob/nixos-24.05/nixos/modules/system/boot/tmp.nix
-      useTmpfs = true;
-      tmpfsSize = "80%";
-      # useZram = true;
-      # zramSettings = {
-      #   zram-size = lib.mkDefault "ram * 0.7";
-      #   compression-algorithm = "zstd";
-      # };
-    };
   };
 
   fileSystems."/" =

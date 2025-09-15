@@ -204,6 +204,7 @@
             desktop = [ "niri" ];
             programming = true;
             wsl = true;
+            like_to_build = true;
           };
         };
         # region localserver
