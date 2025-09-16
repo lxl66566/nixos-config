@@ -49,7 +49,11 @@
       "net.ipv6.conf.default.disable_ipv6" = 1;
       "net.ipv6.conf.lo.disable_ipv6" = 1;
     };
-    kernelPackages = pkgs.linuxPackages_zen;
+    kernelPackages =
+      # if features.wsl then
+      #   (callPackage ./mynixpkgs/wsl-kernel.nix { })
+      # else
+      lib.mkDefault pkgs.linuxPackages_zen;
     kernelModules = lib.mkAfter [
       "tcp_bbr"
     ];
@@ -93,10 +97,6 @@
       185.199.110.133 raw.githubusercontent.com
       104.244.42.65 twitter.com
     '';
-    proxy = lib.mkIf features.wsl {
-      default = "http://127.0.0.1:10450";
-      noProxy = "localhost,127.0.0.1,internal.domain.com";
-    };
   };
   systemd.network.enable = lib.mkDefault false;
 
@@ -206,7 +206,7 @@
       );
     };
     dae = {
-      enable = !(features.wsl || features.server.as_proxy);
+      enable = !(features.server.as_proxy);
       configFile = pkgs.mylib.configToStoreWithMode {
         configFile = ./config/absx.dae;
         mode = "0600";
@@ -361,10 +361,6 @@
       #   enable = true;
       #   setSocketVariable = true;
       # };
-
-      daemon.settings = {
-        "insecure-registries" = (import ./config/docker-insecure-registries.nix);
-      };
     };
   };
 

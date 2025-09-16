@@ -16,7 +16,7 @@ let
 
   # 新增的内网服务器列表，这些服务器不会被添加到 peer
   internalServers = [
-    "ls" # 10.200.4.1
+    # "ls" # 10.200.4.1
   ];
   allServers = publicServers ++ internalServers;
 
