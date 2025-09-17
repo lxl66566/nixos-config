@@ -1,0 +1,6 @@
+{ pkgs, username, ... }:
+{
+  imports = [
+    ./terminal
+  ];
+}

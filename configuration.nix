@@ -14,6 +14,7 @@
 {
   imports = [
     ./hardware
+    ./others
   ]
   ++ features.others;
 

@@ -12,6 +12,10 @@ bi = "binstall -y"
 # 使用 sccache 缓存编译结果（需要安装 sccache）
 [build]
 # rustc-wrapper = "sccache" # use env instead of this
+# rustflags = "-Z checksum-freshness"
+
+[unstable]
+checksum-freshness = true
 
 # 使用 cargo install 使用的命令
 [profile.installation]

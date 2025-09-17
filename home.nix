@@ -35,7 +35,8 @@ let
     GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash "$rebase_target"
   '';
   record = pkgs.writeShellScriptBin "record" ''
-    script -q -c "$*" test.log
+    cmd=$(printf '%q ' "$@")
+    script -q -c "$cmd" test.log
   '';
   repeat = pkgs.writeShellScriptBin "repeat" ''
     if [ "$#" -eq 0 ]; then
@@ -130,6 +131,7 @@ in
       gfixup
       record
       l
+      repeat
     ])
     ++ (lib.optionals (features.like_to_build) [
       dwarfs
