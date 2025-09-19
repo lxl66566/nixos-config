@@ -113,6 +113,7 @@
 
     fail2ban = {
       enable = true;
+      # it will auto choose nftables or iptables
       ignoreIP = [
         "10.0.0.0/8"
         "172.16.0.0/12"

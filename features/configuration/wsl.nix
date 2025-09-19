@@ -43,4 +43,5 @@ in
     "insecure-registries" = (import ../../config/docker-insecure-registries.nix);
   };
   services.dae.enable = lib.mkForce false;
+  services.v2raya.enable = true;
 }

@@ -32,7 +32,6 @@
         nodejs_22
         corepack_22
         zig # programming language
-        go
         jdk
         pre-commit
         nil # Nix language server
@@ -61,6 +60,8 @@
         # work
         protobuf
         capnproto
+        etcd
+        go
       ]
       ++ (lib.optionals (features.desktop != [ ] && !features.wsl) [
         androidStudioPackages.dev
@@ -113,6 +114,7 @@
             autocrlf = "input";
             ignorecase = false;
             hooksPath = if features.wsl then "/mnt/c/Users/lxl/.git-hooks" else "~/.git-hooks";
+            symlinks = true;
           };
           credential."https://e.coding.net" = {
             provider = "generic";
