@@ -54,7 +54,7 @@
       # if features.wsl then
       #   (callPackage ./mynixpkgs/wsl-kernel.nix { })
       # else
-      lib.mkDefault pkgs.linuxPackages_zen;
+      lib.mkIf (!features.wsl) pkgs.linuxPackages_zen;
     kernelModules = lib.mkAfter [
       "tcp_bbr"
     ];
@@ -85,7 +85,7 @@
     };
   };
 
-  networking = lib.mkIf (!features.wsl && !features.server.enable) {
+  networking = lib.mkIf (!features.server.enable) {
     useDHCP = lib.mkDefault true;
     hostName = lib.mkDefault username;
     networkmanager.enable = lib.mkDefault true;
@@ -94,10 +94,12 @@
     # proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
     # use https://tool.chinaz.com/dns/ to info host.
-    extraHosts = lib.mkDefault ''
-      185.199.110.133 raw.githubusercontent.com
-      104.244.42.65 twitter.com
-    '';
+    extraHosts = lib.mkIf (!features.wsl) (
+      lib.mkDefault ''
+        185.199.110.133 raw.githubusercontent.com
+        104.244.42.65 twitter.com
+      ''
+    );
   };
   systemd.network.enable = lib.mkDefault false;
 

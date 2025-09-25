@@ -11,6 +11,11 @@
     ../../others/sccache.nix
   ];
 
+  config = {
+    environment.variables = {
+      RUSTC_BOOTSTRAP = 1;
+    };
+  };
   config.home-manager.users."${username}" = {
     home.file = {
       ".cargo/config.toml".source = ../../config/cargo.toml;
