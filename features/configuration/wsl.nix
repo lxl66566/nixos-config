@@ -26,6 +26,7 @@ in
       NOPROXY = noProxy;
       CARGO_BUILD_JOBS = 16;
     };
+    etc.hosts.enable = lib.mkForce false; # to edit host file manually
   };
 
   # systemd.services.nix-daemon.serviceConfig = {

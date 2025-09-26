@@ -67,6 +67,7 @@
         capnproto
         etcd
         go
+        wrk2
       ]
       ++ (lib.optionals (features.desktop != [ ] && !features.wsl) [
         androidStudioPackages.dev
