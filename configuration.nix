@@ -9,6 +9,7 @@
   username,
   features,
   useBtrfs,
+  noProxy,
   ...
 }@args:
 {
@@ -91,7 +92,7 @@
     networkmanager.enable = lib.mkDefault true;
     firewall.enable = lib.mkDefault false;
     # proxy.default = "http://127.0.0.1:20172/";
-    # proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+    proxy.noProxy = noProxy;
 
     # use https://tool.chinaz.com/dns/ to info host.
     extraHosts = lib.mkIf (!features.wsl) (

@@ -84,6 +84,7 @@
         others = [ ];
       };
       # a function to generate a system with specific features
+      noProxy = "localhost,127.0.0.1,::1,.local,192.168.0.0/16,10.0.0.0/8,172.16.0.0/12";
       mkSystem =
         {
           system ? "x86_64-linux",
@@ -116,6 +117,7 @@
               devicename
               username
               useBtrfs
+              noProxy
               ;
           };
           modules = [

@@ -59,15 +59,7 @@
         android-tools
         # ida-free
         libarchive
-
-        podman
-
-        # work
-        protobuf
-        capnproto
-        etcd
-        go
-        wrk2
+        stylua
       ]
       ++ (lib.optionals (features.desktop != [ ] && !features.wsl) [
         androidStudioPackages.dev
