@@ -8,4 +8,6 @@ crypt_list = [
   "config/cloudflare",
   "config/ssh_config",
   "config/docker-insecure-registries.nix",
+  "secrets",
+  "others/steamauto/config",
 ]

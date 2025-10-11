@@ -19,6 +19,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     # nix-std.url = "github:chessai/nix-std";
     impermanence.url = "github:nix-community/impermanence";
+    # flake-utils.url = "github:numtide/flake-utils";
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -226,6 +227,7 @@
             others = [
               ./others/network/cftunnel.nix
               ./others/containers/reader.nix
+              ./others/steamauto
             ];
           };
         };
