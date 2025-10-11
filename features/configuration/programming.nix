@@ -41,7 +41,7 @@
         pre-commit
         nil # Nix language server
         taplo
-        # difftastic # diff tool, better pager and structured diff
+        difftastic # diff tool, better pager and structured diff
         # mise # download and run any dev tools
         # leiningen # clojure package manager
         # clojure # functional language
@@ -100,82 +100,13 @@
           load_dotenv = true;
         };
       };
-
       git = {
-        enable = true;
-        # user and email are set in home.file
         delta.enable = true;
         extraConfig = {
-          safe.directory = "*";
-          core = {
-            quotepath = false;
-            excludesfile = pkgs.mylib.configToStore ../../config/.gitignore_g;
-            autocrlf = "input";
-            ignorecase = false;
-            hooksPath = if features.wsl then "/mnt/c/Users/lxl/.git-hooks" else "~/.git-hooks";
-            symlinks = true;
-          };
-          credential."https://e.coding.net" = {
-            provider = "generic";
-          };
-          filter.lfs = {
-            smudge = "git-lfs smudge -- %f";
-            process = "git-lfs filter-process";
-            required = true;
-            clean = "git-lfs clean -- %f";
-          };
-          push = {
-            default = "current";
-            autoSetupRemote = true;
-            useForceIfIncludes = true;
-            followTags = true;
-          };
-          pull = {
-            autoSetupRemote = true;
-            rebase = true;
-            ff = "only";
-          };
           diff = {
-            # external = "difft";
-            algorithm = "histogram";
-            colorMoved = "plain";
-            mnemonicPrefix = true;
-            renames = true;
+            external = "difft";
           };
-          init.defaultBranch = "main";
           delta.navigate = true;
-          rebase = {
-            autoSquash = true;
-            autoStash = true;
-            updateRefs = true;
-          };
-          alias = {
-            cs = "commit --signoff";
-          };
-          column = {
-            ui = "auto";
-          };
-          branch = {
-            sort = "-committerdate";
-          };
-          tag = {
-            sort = "version:refname";
-          };
-          fetch = {
-            prune = true;
-            pruneTags = true;
-            all = true;
-          };
-          help = {
-            autocorrect = "prompt";
-          };
-          commit = {
-            verbose = true;
-          };
-          rerere = {
-            enabled = true;
-            autoupdate = true;
-          };
           merge = {
             conflictStyle = "diff3";
             mergiraf = {
@@ -183,8 +114,6 @@
               driver = "mergiraf merge --git %O %A %B -s %S -x %X -y %Y -p %P -l %L";
             };
           };
-          pack.threads = 8;
-          checkout.workers = 8;
         };
       };
     };
