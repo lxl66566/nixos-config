@@ -60,6 +60,7 @@
         # ida-free
         libarchive
         stylua
+        autocorrect
       ]
       ++ (lib.optionals (features.desktop != [ ] && !features.wsl) [
         androidStudioPackages.dev

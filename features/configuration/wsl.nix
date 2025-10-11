@@ -32,6 +32,10 @@ in
   #   Environment = "all_proxy=" + proxyUrl;
   # };
 
+  # https://github.com/giltene/wrk2/issues/58
+  services.ntp.enable = lib.mkForce false;
+  services.timesyncd.enable = false;
+
   services.dae.enable = lib.mkForce false;
   services.v2raya.enable = true;
 }
