@@ -27,10 +27,10 @@
       efi.efiSysMountPoint = "/boot";
       grub = {
         enable = !config.boot.isContainer;
-        devices = lib.mkDefault [ "nodev" ];
+        devices = [ "nodev" ];
         efiSupport = true;
         default = "saved";
-        useOSProber = lib.mkDefault false;
+        useOSProber = false;
       };
       timeout = 15;
       systemd-boot.enable = false;
