@@ -330,10 +330,6 @@
       enable = true;
       defaultEditor = features.mini;
     };
-    neovim = {
-      enable = !features.mini;
-      defaultEditor = true;
-    };
     git = {
       enable = true;
     };

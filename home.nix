@@ -325,29 +325,10 @@ in
     btop = {
       enable = !features.mini;
     };
-    neovim = {
-      enable = !features.mini;
-      vimAlias = true;
-      withNodeJs = true;
-      withPython3 = true;
-    };
   };
 
   services = {
     ssh-agent.enable = lib.mkForce false;
     # gcr-ssh-agent.enable = lib.mkForce false;
-  };
-
-  xdg.configFile = {
-    "nvim" = {
-      source = pkgs.fetchFromGitHub {
-        owner = "AstroNvim";
-        repo = "template";
-        rev = "20450d8a65a74be39d2c92bc8689b1acccf2cffe";
-        sha256 = "sha256-P6AC1L5wWybju3+Pkuca3KB4YwKEdG7GVNvAR8w+X1I=";
-      };
-      executable = true;
-      recursive = true;
-    };
   };
 }
