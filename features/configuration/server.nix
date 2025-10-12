@@ -10,9 +10,9 @@
 
 {
   imports = [
-    ../../others/network/easytier.nix
   ]
   ++ lib.optionals (features.server.type == "remote") [
+    ../../others/network/easytier.nix
     ./server-remote.nix
   ];
 
