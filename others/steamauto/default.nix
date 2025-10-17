@@ -9,6 +9,7 @@ let
   };
   config-src = pkgs.mylib.configToStore ./config/config.json5;
   steam-config-src = pkgs.mylib.configToStore ./config/steam_account_info.json5;
+  rsakey-src = pkgs.mylib.configToStore ./config/rsakey.txt;
   dest = "/var/lib/steamauto";
 in
 {
@@ -43,6 +44,7 @@ in
         "${pkgs.coreutils}/bin/mkdir -p ${dest}/config"
         "${pkgs.coreutils}/bin/cp -f ${config-src} ${dest}/config/config.json5"
         "${pkgs.coreutils}/bin/cp -f ${steam-config-src} ${dest}/config/steam_account_info.json5"
+        "${pkgs.coreutils}/bin/cp -f ${rsakey-src} ${dest}/config/rsakey.txt"
       ];
 
       ExecStart = ''
