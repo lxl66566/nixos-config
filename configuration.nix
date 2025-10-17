@@ -74,7 +74,7 @@
       "net.ifnames=0"
     ]);
     supportedFilesystems = [ "ntfs" ];
-    tmp = {
+    tmp = lib.mkDefault {
       # https://github.com/NixOS/nixpkgs/blob/nixos-24.05/nixos/modules/system/boot/tmp.nix
       useTmpfs = true;
       tmpfsSize = "80%";
@@ -230,8 +230,13 @@
     logrotate.checkConfig = false;
   };
 
-  security.pam.services.sudo.rootOK = true;
-  security.rtkit.enable = true;
+  security = {
+    pam.services.sudo.rootOK = true;
+    rtkit.enable = true;
+    sudo.extraConfig = ''
+      Defaults env_keep += "HTTP_PROXY HTTPS_PROXY"
+    '';
+  };
 
   # region Users and Root
 
@@ -246,6 +251,10 @@
     password = lib.mkIf (features.impermanence || !features.server.enable) "1"; # must be set if you use impermanence
   };
   environment = {
+    shellAliases = {
+      jc = "journalctl";
+      sc = "systemctl";
+    };
     systemPackages = (
       with pkgs;
       [

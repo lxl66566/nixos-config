@@ -72,6 +72,7 @@
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKhsZBFg1jO+wWYvOxtS+q4cuYXCEzCs+qHH6c1pPunX lxl66566@gmail.com" # windows ssh key
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA8MA5ciuFugeCNfPwI5yKIuqP4QQvPdWrHZDm9vSgel absx@absx" # nixos ssh key
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDzpOO88tLGqLQ6BeyWydGY6H4e0DesiNaVUiP6nhsKW lxl66566@gmail.com" # work ssh key
       ];
     };
   };

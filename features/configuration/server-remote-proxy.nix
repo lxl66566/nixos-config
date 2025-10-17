@@ -1,4 +1,6 @@
-# defines some proxy services:
+# defines some proxy services.
+#
+# inbound ports:
 #
 # hysteria: 65533
 # trojan-go: 40000

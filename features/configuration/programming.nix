@@ -27,6 +27,7 @@
       [
         gcc
         gnumake
+        tcpdump
         cmake
         rustup
         pkg-config

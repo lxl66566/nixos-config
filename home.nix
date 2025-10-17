@@ -230,7 +230,7 @@ in
       '';
       shellAliases = rec {
         e = "$EDITOR";
-        dust = "pdu";
+        # dust = "pdu";
         gp = "git pull";
         gc = "git clone";
         gcm = "git commit --signoff -am";
@@ -242,8 +242,6 @@ in
         nbo = "sudo nixos-rebuild switch --show-trace --print-build-logs --verbose --impure --flake .#${devicename}"; # nixos rebuild, o means origin
         nd = "nix develop -c $SHELL";
         ndc = "git checkout nix -- flake.nix flake.lock && nd";
-        jc = "journalctl";
-        sc = "systemctl";
         tp = "trash-put";
         sync = "rsync -aviuzP --compress-choice=zstd --compress-level=3";
         bbwrap = "bwrap --bind / / --dev /dev --proc /proc --tmpfs /tmp";
