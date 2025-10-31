@@ -231,6 +231,7 @@ in
       shellAliases = rec {
         e = "$EDITOR";
         # dust = "pdu";
+        sc = "sudo systemctl";
         gp = "git pull";
         gc = "git clone";
         gcm = "git commit --signoff -am";

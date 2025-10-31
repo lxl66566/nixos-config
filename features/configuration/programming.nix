@@ -31,7 +31,8 @@
         cmake
         rustup
         pkg-config
-        llvmPackages_18.clang-tools
+        # llvmPackages_18.clang-tools
+        llvmPackages_18.clang-unwrapped
         bfg-repo-cleaner
         bun
         fnm

@@ -28,6 +28,9 @@ in
     };
   };
 
+  # networking.proxy.allProxy = proxyUrl; # https://t.me/nixos_zhcn/718039
+  #
+  # do not use:
   # systemd.services.nix-daemon.serviceConfig = {
   #   Environment = "all_proxy=" + proxyUrl;
   # };
@@ -38,4 +41,5 @@ in
 
   services.dae.enable = lib.mkForce false;
   services.v2raya.enable = true;
+  systemd.services.v2raya.wantedBy = lib.mkForce [ ]; # 禁止自启
 }
