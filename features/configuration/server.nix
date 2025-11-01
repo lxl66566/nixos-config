@@ -13,6 +13,7 @@
   ]
   ++ lib.optionals (features.server.type == "remote") [
     ../../others/network/easytier.nix
+    ../../others/network/fungi
     ./server-remote.nix
   ];
 

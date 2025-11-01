@@ -1,0 +1,41 @@
+[rpc]
+listen_address = "127.0.0.1:5405"
+
+[network]
+listen_tcp_port = 0
+listen_udp_port = 0
+incoming_allowed_peers = [
+  "16Uiu2HAmN7utr2gU28MizZqpL3tHtFK3nnPfxedzYVCLBxxCDWAP", # main
+  "16Uiu2HAmGG3gtjvuHQUnhoASkLF5JYVvvsm8SXmsQTE7EckeN4kh", # mobile main
+  "16Uiu2HAkvHi2hg7KKH8AWoDqee7Tn2LQbMrnpPE9vCqxQksPTCdo", # nixos main
+  "16Uiu2HAmNYRSYs25evsQ9WKPLuQMTKjYo42EYTj4rL82AyNbUDCG", # nixos main daemon
+]
+disable_relay = false
+custom_relay_addresses = []
+
+[tcp_tunneling.forwarding]
+enabled = true
+rules = []
+
+[tcp_tunneling.listening]
+enabled = true
+rules = [
+  { host = "127.0.0.1", port = 22 }, # Expose SSH to remote devices
+]
+
+[file_transfer]
+client = []
+
+[file_transfer.server]
+enabled = true
+shared_root_dir = "/var/lib/fungi"
+
+[file_transfer.proxy_ftp]
+enabled = true
+host = "127.0.0.1"
+port = 2121
+
+[file_transfer.proxy_webdav]
+enabled = true
+host = "127.0.0.1"
+port = 8181
