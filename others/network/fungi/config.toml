@@ -10,6 +10,8 @@ incoming_allowed_peers = [
   "16Uiu2HAkvHi2hg7KKH8AWoDqee7Tn2LQbMrnpPE9vCqxQksPTCdo", # nixos main
   "16Uiu2HAmNYRSYs25evsQ9WKPLuQMTKjYo42EYTj4rL82AyNbUDCG", # nixos main daemon
   "16Uiu2HAmKjVVPWSmdMC8i89UAwrhp8KP6VFQXvPX6V69n5ozXdht", # ls daemon
+  "16Uiu2HAmBG8mtibqrJbFzAqYWSVsNXHc6nwtyVkHcJhjgcZc3ZWL", # work
+  "",
 ]
 disable_relay = false
 custom_relay_addresses = []

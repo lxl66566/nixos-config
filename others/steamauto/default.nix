@@ -4,8 +4,8 @@ let
   steamauto-src = pkgs.fetchFromGitHub {
     owner = "lxl66566";
     repo = "Steamauto";
-    rev = "5fe762d9620576ca5f71345458f13ccd926391b5";
-    sha256 = "sha256-66Uamx17QpeqtUr+ZtGMc80d4SvRrF+pXd7QLARFj9s=";
+    rev = "0df08a1895a8ab1b9d51f4ad61a027b96fa1b60d";
+    sha256 = "sha256-wuNHB/FC+ymGBpSGCL7fwktofkL6G1L32h/iDcNS9d4=";
   };
   config-src = pkgs.mylib.configToStore ./config/config.json5;
   steam-config-src = pkgs.mylib.configToStore ./config/steam_account_info.json5;
