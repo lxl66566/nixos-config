@@ -63,6 +63,8 @@
         libarchive
         stylua
         autocorrect
+        nftables
+        net-tools
       ]
       ++ (lib.optionals (features.desktop != [ ] && !features.wsl) [
         androidStudioPackages.dev
