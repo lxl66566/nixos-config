@@ -35,5 +35,26 @@ self: super: {
           # 使用传入的 mode 参数设置文件权限。
           chmod ${mode} $out
         '';
+
+    # 将一个二进制文件写入 Nix store，并确保其可执行。
+    #
+    # @param binaryFile: (string) 源二进制文件的路径。
+    #
+    # @return 一个 derivation，其 store 路径指向新创建的可执行文件。
+    binaryToStore =
+      binaryFile:
+      super.runCommand (builtins.baseNameOf binaryFile)
+        {
+          # 在 builder 的 shell 环境中需要 `coreutils` 来提供 `cp` 和 `chmod` 命令。
+          nativeBuildInputs = [ super.coreutils ];
+        }
+        ''
+          # 直接将源二进制文件复制到输出路径 ($out)。
+          # 源文件路径在 Nix 求值期间是可访问的。
+          cp ${binaryFile} $out
+
+          # 为文件添加可执行权限。
+          chmod +x $out
+        '';
   };
 }

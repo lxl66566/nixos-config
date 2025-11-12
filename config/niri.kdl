@@ -284,8 +284,8 @@ spawn-at-startup "bash" "-c" "wl-paste --watch cliphist store &"
 spawn-at-startup "swayidle" "-w" "timeout" "1800" "swaylock -f -c 000000"
 spawn-at-startup "mako"
 // spawn-at-startup "qs" "-c" "DankMaterialShell"
-
-spawn-at-startup "qs" "-c" "niri-caelestia-shell"
+// spawn-at-startup "qs" "-c" "niri-caelestia-shell"
+spawn-at-startup "qs" "-c" "noctalia-shell"
 
 // spawn-at-startup "eww" "daemon"
 // spawn-at-startup "eww" "open-many" "bar"

@@ -50,6 +50,15 @@
       url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    quickshell = {
+      url = "github:outfoxxed/quickshell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.quickshell.follows = "quickshell";
+    };
   };
   outputs =
     {
@@ -166,8 +175,6 @@
                 ]
                 ++ (lib.optional features.gaming ./features/home-manager/gaming.nix)
                 ++ (lib.optional (features.desktop != [ ] && !features.wsl) ./features/home-manager/desktop.nix)
-                ++ (lib.optional (builtins.elem "niri" features.desktop) ./others/niri/home.nix)
-                ++ (lib.optional (builtins.elem "plasma" features.desktop) ./others/plasma/home.nix)
                 ++ (lib.optional features.laptop ./features/home-manager/laptop.nix);
               };
             }
