@@ -42,11 +42,15 @@
       "vm.watermark_boost_factor" = 0;
       "vm.watermark_scale_factor" = 125;
       "vm.page-cluster" = 0;
+      "net.core.somaxconn" = 65535;
       "net.core.default_qdisc" = "cake";
       "net.core.netdev_max_backlog" = 16384;
       "net.ipv4.tcp_fastopen" = 3;
       "net.ipv4.tcp_min_snd_mss" = 536;
       "net.ipv4.tcp_congestion_control" = "bbr";
+      "net.ipv4.tcp_max_syn_backlog" = 65535;
+      "net.ipv4.tcp_tw_reuse" = 1;
+      "net.ipv4.ip_local_port_range" = "10240 65535";
       "net.ipv6.conf.all.disable_ipv6" = 1;
       "net.ipv6.conf.default.disable_ipv6" = 1;
       "net.ipv6.conf.lo.disable_ipv6" = 1;
@@ -231,7 +235,24 @@
   };
 
   security = {
-    pam.services.sudo.rootOK = true;
+    pam = {
+      services.sudo.rootOK = true;
+      loginLimits = [
+        {
+          domain = "*";
+          type = "soft";
+          item = "nofile";
+          value = "65535";
+        }
+        {
+          domain = "*";
+          type = "hard";
+          item = "nofile";
+          value = "65535";
+        }
+      ];
+    };
+
     rtkit.enable = true;
     sudo.extraConfig = ''
       Defaults env_keep += "HTTP_PROXY HTTPS_PROXY"
