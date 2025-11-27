@@ -16,11 +16,11 @@
     "Maple Mono NF CN"
   ];
 
-  imports = [ ./noctalia-shell.nix ];
+  # imports = [ ./noctalia-shell.nix ];
 
   home-manager.users.${username} = {
     imports = [
-      # ./DankMaterialShell.nix
+      ./DankMaterialShell.nix
       # ./eww.nix
       # ./caelestia-shell.nix
     ];
