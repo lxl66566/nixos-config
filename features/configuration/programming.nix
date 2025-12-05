@@ -105,14 +105,12 @@
       };
       delta.enable = true;
       git.settings = {
-        extraConfig = {
-          diff = {
-            external = "difft";
-          };
-          delta.navigate = true;
-          merge = {
-            conflictStyle = "diff3";
-          };
+        diff = {
+          external = "difft";
+        };
+        delta.navigate = true;
+        merge = {
+          conflictStyle = "diff3";
         };
       };
     };
