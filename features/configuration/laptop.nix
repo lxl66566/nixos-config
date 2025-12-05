@@ -2,6 +2,7 @@
   lib,
   inputs,
   pkgs,
+  username,
   ...
 }:
 
@@ -54,4 +55,13 @@
     AllowSuspendThenHibernate=no
     HibernateDelaySec=1h
   '';
+
+  home-manager.users.${username} = {
+    home.file = {
+      "auto-cpufreq/auto-cpufreq.conf".source = ./config/auto-cpufreq.conf;
+    };
+    home.package = with pkgs; [
+      lm_sensors
+    ];
+  };
 }

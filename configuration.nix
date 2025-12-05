@@ -176,11 +176,19 @@
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
     };
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 30d";
-    };
+    gc =
+      if !(features.server.enable && features.server.type == "remote") then
+        {
+          automatic = true;
+          dates = "weekly";
+          options = "--delete-older-than 30d";
+        }
+      else
+        {
+          automatic = true;
+          dates = "daily";
+          options = "--delete-older-than 1d";
+        };
   };
 
   # region services
@@ -232,6 +240,9 @@
     thermald.enable = !features.mini;
     vnstat.enable = !features.mini;
     logrotate.checkConfig = false;
+
+    # minimize: https://nixcademy.com/posts/minimizing-nixos-images/
+    speechd.enable = false;
   };
 
   security = {
@@ -303,11 +314,11 @@
         nixfmt-rfc-style
         python3
         strace
-        fastfetch
+        fastfetchMinimal
         efibootmgr # edit efi boot manager
         ethtool # network card info
         zip
-        yazi # TUI file browser
+        yazi-unwrapped # TUI file browser
         ltrace # intercepts and records dynamic library calls which are called by an executed process and the signals received by that process
         sysstat # Collection of performance monitoring tools for Linux (such as sar, iostat and pidstat)
         dnsutils # `dig` + `nslookup`

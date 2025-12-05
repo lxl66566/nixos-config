@@ -202,7 +202,6 @@ in
       btop
       ripgrep
       fatresize
-      yazi
       impala
       efibootmgr
       rsync

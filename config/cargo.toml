@@ -8,6 +8,7 @@ u = "update"
 f = "clippy --fix --all-targets --all-features --allow-staged --allow-dirty"
 i = "install --profile installation"
 bi = "binstall -y"
+cov = "llvm-cov nextest --html --ignore-run-fail --verbose"
 
 # 使用 sccache 缓存编译结果（需要安装 sccache）
 [build]

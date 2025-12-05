@@ -14,8 +14,8 @@
 
   hardware = {
     graphics = {
-      enable = true;
-      enable32Bit = true;
+      enable = false;
+      enable32Bit = false;
     };
   };
 
@@ -130,7 +130,6 @@
       git
       wget
       curl
-      yazi
       fd
       ncdu
       ripgrep

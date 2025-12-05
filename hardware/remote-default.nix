@@ -14,6 +14,13 @@
     (modulesPath + "/profiles/qemu-guest.nix")
   ];
 
+  hardware = {
+    graphics = {
+      enable = false;
+      enable32Bit = false;
+    };
+  };
+
   boot.initrd.availableKernelModules = [
     "ata_piix"
     "uhci_hcd"

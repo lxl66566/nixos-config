@@ -93,8 +93,16 @@
         impermanence = false;
         others = [ ];
       };
-      # a function to generate a system with specific features
+      # networking default
+      TPDomain = "852456.xyz";
       noProxy = "localhost,127.0.0.1,::1,.local,192.168.0.0/16,10.0.0.0/8,172.16.0.0/12";
+      defaultNameServers = [
+        "1.1.1.1"
+        "8.8.8.8"
+        "2606:4700:4700::1111"
+        "2001:4860:4860::8888"
+      ];
+      # a function to generate a system with specific features
       mkSystem =
         {
           system ? "x86_64-linux",
@@ -174,8 +182,7 @@
                   ./home.nix
                 ]
                 ++ (lib.optional features.gaming ./features/home-manager/gaming.nix)
-                ++ (lib.optional (features.desktop != [ ] && !features.wsl) ./features/home-manager/desktop.nix)
-                ++ (lib.optional features.laptop ./features/home-manager/laptop.nix);
+                ++ (lib.optional (features.desktop != [ ] && !features.wsl) ./features/home-manager/desktop.nix);
               };
             }
           ];
@@ -253,15 +260,15 @@
         # nixos-rebuild boot --flake .#rfc --target-host rfc
         # or
         # nh os switch . -H rfc --target-host rfc -- --impure
-        "rfc" = mkSystem {
+        "rfc" = mkSystem rec {
           devicename = "rfc";
           username = "root";
           userFeatures = {
-            mini = false;
+            mini = true;
             server = {
               enable = true;
               type = "remote";
-              domain = "rfc.852456.xyz";
+              domain = "${devicename}.${TPDomain}";
               as_proxy = true;
               networking = {
                 interfaces.eth0.ipv4.addresses = [
@@ -274,18 +281,13 @@
                   address = "198.176.52.1";
                   interface = "eth0";
                 };
-                nameservers = [
-                  "1.1.1.1"
-                  "8.8.8.8"
-                  "2606:4700:4700::1111"
-                  "2001:4860:4860::8888"
-                ];
+                nameservers = defaultNameServers;
               };
             };
           };
         };
 
-        "dedi" = mkSystem {
+        "dedi" = mkSystem rec {
           devicename = "dedi";
           username = "root";
           userFeatures = {
@@ -293,12 +295,12 @@
             server = {
               enable = true;
               type = "remote";
-              domain = "dedi.852456.xyz";
+              domain = "${devicename}.${TPDomain}";
               as_proxy = true;
             };
           };
         };
-        "claw" = mkSystem {
+        "claw" = mkSystem rec {
           devicename = "claw";
           username = "root";
           userFeatures = {
@@ -306,8 +308,45 @@
             server = {
               enable = true;
               type = "remote";
-              domain = "claw.852456.xyz";
+              domain = "${devicename}.${TPDomain}";
               as_proxy = true;
+            };
+          };
+        };
+        "acck" = mkSystem rec {
+          devicename = "acck";
+          username = "root";
+          userFeatures = {
+            mini = false;
+            server = {
+              enable = true;
+              type = "remote";
+              domain = "${devicename}.${TPDomain}";
+              as_proxy = true;
+              networking = {
+                usePredictableInterfaceNames = false;
+                interfaces.eth0.ipv4.addresses = [
+                  {
+                    address = "156.231.140.190";
+                    prefixLength = 23;
+                  }
+                ];
+                defaultGateway = {
+                  address = "156.231.140.1";
+                  interface = "eth0";
+                };
+                interfaces.eth0.ipv6.addresses = [
+                  {
+                    address = "2602:fa4f:b01:3629:70ef:e8be:a9b2:7593";
+                    prefixLength = 64;
+                  }
+                ];
+                defaultGateway6 = {
+                  address = "2602:fa4f:b01::1";
+                  interface = "eth0";
+                };
+                nameservers = defaultNameServers;
+              };
             };
           };
         };

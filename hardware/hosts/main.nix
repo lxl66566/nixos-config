@@ -23,8 +23,8 @@
 
     nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
     hardware.graphics = {
-      enable = true;
-      enable32Bit = true;
+      enable = lib.mkDefault (!features.mini);
+      enable32Bit = lib.mkDefault (!features.mini);
     };
     boot.loader.grub.extraEntries = ''
       menuentry "Windows 11 (zh)" {
