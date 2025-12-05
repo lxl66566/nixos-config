@@ -334,7 +334,6 @@
       ])
     );
     sessionVariables = rec {
-      EDITOR = "nvim";
       NIXPKGS_ALLOW_UNFREE = 1;
     };
 
@@ -369,7 +368,7 @@
     fish.enable = true;
     vim = {
       enable = true;
-      defaultEditor = features.mini;
+      defaultEditor = true;
     };
     git = {
       enable = true;

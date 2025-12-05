@@ -7,6 +7,16 @@
   ...
 }:
 {
+  environment.sessionVariables.EDITOR = "nvim";
+  programs = {
+    nix-ld = {
+      enable = true;
+      libraries = with pkgs; [
+        stdenv.cc.cc
+      ];
+    };
+  };
+
   home-manager.users."${username}" = {
     home.packages = with pkgs; [ gcc ];
 
@@ -28,15 +38,6 @@
         executable = true;
         recursive = true;
       };
-    };
-  };
-
-  programs = {
-    nix-ld = {
-      enable = true;
-      libraries = with pkgs; [
-        stdenv.cc.cc
-      ];
     };
   };
 }
