@@ -6,9 +6,9 @@
   lib,
   pkgs,
   modulesPath,
+  features,
   ...
 }:
-
 {
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
@@ -19,6 +19,14 @@
       enable = false;
       enable32Bit = false;
     };
+  };
+
+  # MBR boot, not EFI boot
+  boot.loader.systemd-boot.enable = false;
+  boot.loader.efi.canTouchEfiVariables = false;
+  boot.loader.grub = {
+    enable = true;
+    efiSupport = false;
   };
 
   boot.initrd.availableKernelModules = [

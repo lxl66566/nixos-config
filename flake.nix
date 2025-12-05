@@ -322,6 +322,7 @@
               enable = true;
               type = "remote";
               domain = "${devicename}.${TPDomain}";
+              disk_name = "/dev/sda";
               as_proxy = true;
               networking = {
                 usePredictableInterfaceNames = false;

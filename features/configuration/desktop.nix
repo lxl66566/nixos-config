@@ -10,7 +10,8 @@
   imports = [
     inputs.stylix.nixosModules.stylix
     # ../../others/vm.nix
-  ];
+  ]
+  ++ (lib.optionals (!features.mini) [ ../../others/neovim.nix ]);
   hardware = {
     bluetooth = {
       enable = true; # enables support for Bluetooth

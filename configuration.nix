@@ -150,7 +150,7 @@
   # region nix
 
   nix = {
-    package = pkgs.lix; # try lix
+    package = if !features.server.enable then pkgs.lix else pkgs.nix;
     settings = {
       trusted-users = [ username ];
       experimental-features = [
