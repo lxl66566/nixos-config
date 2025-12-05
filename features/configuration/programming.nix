@@ -20,7 +20,6 @@
     home.file = {
       ".cargo/config.toml".source = ../../config/cargo.toml;
       ".gitignore_g".source = ../../config/.gitignore_g;
-      ".gitattributes_g".source = ../../config/.gitattributes_g;
     };
     home.packages =
       with pkgs;
@@ -104,8 +103,8 @@
           load_dotenv = true;
         };
       };
-      git = {
-        delta.enable = true;
+      delta.enable = true;
+      git.settings = {
         extraConfig = {
           diff = {
             external = "difft";
@@ -113,10 +112,6 @@
           delta.navigate = true;
           merge = {
             conflictStyle = "diff3";
-            mergiraf = {
-              name = "mergiraf";
-              driver = "mergiraf merge --git %O %A %B -s %S -x %X -y %Y -p %P -l %L";
-            };
           };
         };
       };

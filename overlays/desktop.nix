@@ -39,7 +39,7 @@ _final: prev: {
   # HACK:
   xdg-desktop-portal-gtk =
     (prev.xdg-desktop-portal-gtk.override {
-      gnome-settings-daemon = null;
+      # gnome-settings-daemon = null; # removed in 25.11
       gnome-desktop = null;
       gsettings-desktop-schemas = null;
     }).overrideAttrs

@@ -69,7 +69,7 @@ in
   home.username = username;
   # home.homeDirectory = lib.mkDefault "/home/${username}";
   home.enableNixpkgsReleaseCheck = false;
-  home.stateVersion = "25.05";
+  home.stateVersion = "25.11";
   home.file = {
     # config.lib.file.mkOutOfStoreSymlink: https://nixos-and-flakes.thiscute.world/zh/best-practices/accelerating-dotfiles-debugging
     # but it's a shit
@@ -145,80 +145,76 @@ in
 
     git = {
       enable = true;
-      userName = "lxl66566";
-      userEmail = "lxl66566@gmail.com";
-      extraConfig = {
-        safe.directory = "*";
-        core = {
-          quotepath = false;
-          excludesfile = pkgs.mylib.configToStore ./config/.gitignore_g;
-          autocrlf = "input";
-          ignorecase = false;
-          hooksPath = if features.wsl then "/mnt/c/Users/lxl/.git-hooks" else "~/.git-hooks";
-          symlinks = true;
+      settings = {
+        user = {
+          name = "lxl66566";
+          email = "lxl66566@gmail.com";
         };
-        credential."https://e.coding.net" = {
-          provider = "generic";
+        extraConfig = {
+          safe.directory = "*";
+          core = {
+            quotepath = false;
+            excludesfile = pkgs.mylib.configToStore ./config/.gitignore_g;
+            autocrlf = "input";
+            ignorecase = false;
+            hooksPath = if features.wsl then "/mnt/c/Users/lxl/.git-hooks" else "~/.git-hooks";
+            symlinks = true;
+          };
+          lfs.enable = true;
+          push = {
+            default = "current";
+            autoSetupRemote = true;
+            useForceIfIncludes = true;
+            followTags = true;
+          };
+          pull = {
+            autoSetupRemote = true;
+            rebase = true;
+            ff = "only";
+          };
+          diff = {
+            # difftastic set in programming.nix
+            algorithm = "histogram";
+            colorMoved = "plain";
+            mnemonicPrefix = true;
+            renames = true;
+          };
+          init.defaultBranch = "main";
+          rebase = {
+            autoSquash = true;
+            autoStash = true;
+            updateRefs = true;
+          };
+          alias = {
+            cs = "commit --signoff";
+          };
+          column = {
+            ui = "auto";
+          };
+          branch = {
+            sort = "-committerdate";
+          };
+          tag = {
+            sort = "version:refname";
+          };
+          fetch = {
+            prune = true;
+            pruneTags = true;
+            all = true;
+          };
+          help = {
+            autocorrect = "prompt";
+          };
+          commit = {
+            verbose = true;
+          };
+          rerere = {
+            enabled = true;
+            autoupdate = true;
+          };
+          pack.threads = 8;
+          checkout.workers = 8;
         };
-        filter.lfs = {
-          smudge = "git-lfs smudge -- %f";
-          process = "git-lfs filter-process";
-          required = true;
-          clean = "git-lfs clean -- %f";
-        };
-        push = {
-          default = "current";
-          autoSetupRemote = true;
-          useForceIfIncludes = true;
-          followTags = true;
-        };
-        pull = {
-          autoSetupRemote = true;
-          rebase = true;
-          ff = "only";
-        };
-        diff = {
-          # difftastic set in programming.nix
-          algorithm = "histogram";
-          colorMoved = "plain";
-          mnemonicPrefix = true;
-          renames = true;
-        };
-        init.defaultBranch = "main";
-        rebase = {
-          autoSquash = true;
-          autoStash = true;
-          updateRefs = true;
-        };
-        alias = {
-          cs = "commit --signoff";
-        };
-        column = {
-          ui = "auto";
-        };
-        branch = {
-          sort = "-committerdate";
-        };
-        tag = {
-          sort = "version:refname";
-        };
-        fetch = {
-          prune = true;
-          pruneTags = true;
-          all = true;
-        };
-        help = {
-          autocorrect = "prompt";
-        };
-        commit = {
-          verbose = true;
-        };
-        rerere = {
-          enabled = true;
-          autoupdate = true;
-        };
-        pack.threads = 8;
-        checkout.workers = 8;
       };
     };
     fish = {
