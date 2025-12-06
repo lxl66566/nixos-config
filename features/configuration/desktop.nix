@@ -32,7 +32,7 @@
       # 'noto-fonts-cjk' has been renamed to/replaced by 'noto-fonts-cjk-sans'
       noto-fonts-cjk-serif
       noto-fonts-cjk-sans
-      noto-fonts-emoji
+      noto-fonts-color-emoji
       liberation_ttf
       fira-code
       fira-code-symbols
@@ -41,7 +41,7 @@
       source-han-serif
       sarasa-gothic
       ipafont
-      vistafonts-chs
+      vista-fonts-chs
     ];
     fontconfig = {
       defaultFonts = {

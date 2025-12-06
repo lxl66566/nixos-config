@@ -242,7 +242,8 @@
     logrotate.checkConfig = false;
 
     # minimize: https://nixcademy.com/posts/minimizing-nixos-images/
-    speechd.enable = false;
+    speechd.enable = lib.mkForce false;
+    orca.enable = lib.mkForce false;
   };
 
   security = {

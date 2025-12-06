@@ -42,4 +42,10 @@ in
   services.dae.enable = lib.mkForce false;
   services.v2raya.enable = true;
   systemd.services.v2raya.wantedBy = lib.mkForce [ ]; # 禁止自启
+
+  nixpkgs.overlays = [
+    (final: prev: {
+      pkgs.androidStudioPackages.dev = prev.runCommand "android-studio-dev-disable" { } "mkdir -p $out";
+    })
+  ];
 }
