@@ -13,7 +13,12 @@ let
   noProxy = "localhost,127.0.0.1,::1,.local,192.168.0.0/16,10.0.0.0/8,172.16.0.0/12";
 in
 {
-  imports = [ ./work.nix ];
+  imports = [
+    inputs.nixos-wsl.nixosModules.default
+    ./work.nix
+  ];
+  disabledModules = [ ../../others/sccache.nix ];
+
   wsl = {
     enable = true;
     defaultUser = username;
@@ -43,9 +48,13 @@ in
   services.v2raya.enable = true;
   systemd.services.v2raya.wantedBy = lib.mkForce [ ]; # 禁止自启
 
-  nixpkgs.overlays = [
-    (final: prev: {
-      pkgs.androidStudioPackages.dev = prev.runCommand "android-studio-dev-disable" { } "mkdir -p $out";
-    })
-  ];
+  # nixpkgs.overlays = [
+  #   (final: prev: {
+  #     pkgs.androidStudioPackages.dev = prev.runCommand "android-studio-dev-disable" { } "mkdir -p $out";
+  #   })
+  # ];
+
+  home-manager.users."${username}" = {
+    programs.git.settings.core.hooksPath = lib.mkForce "/mnt/c/Users/lxl/.git-hooks";
+  };
 }

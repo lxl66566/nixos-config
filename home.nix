@@ -135,9 +135,6 @@ in
     ])
     ++ (lib.optionals (features.like_to_build) [
       dwarfs
-    ])
-    ++ (lib.optionals (features.wsl) [
-      proxychains-ng
     ]);
 
   programs = {
@@ -156,7 +153,7 @@ in
           excludesfile = pkgs.mylib.configToStore ./config/.gitignore_g;
           autocrlf = "input";
           ignorecase = false;
-          hooksPath = if features.wsl then "/mnt/c/Users/lxl/.git-hooks" else "~/.git-hooks";
+          hooksPath = "~/.git-hooks";
           symlinks = true;
         };
         lfs.enable = true;
@@ -233,8 +230,8 @@ in
         fd = "fd -H";
         nb = "nh os switch . -H ${devicename} ${
           if username == "root" then "--bypass-root-check" else ""
-        } -- --impure"; # nixos (re)build, impure is for NUR
-        nbo = "sudo nixos-rebuild switch --show-trace --print-build-logs --verbose --impure --flake .#${devicename}"; # nixos rebuild, o means origin
+        } --show-trace"; # nixos (re)build
+        nbo = "sudo nixos-rebuild switch --show-trace --print-build-logs --verbose --flake .#${devicename}"; # nixos rebuild, o means origin
         nd = "nix develop -c $SHELL";
         ndc = "git checkout nix -- flake.nix flake.lock && nd";
         tp = "trash-put";

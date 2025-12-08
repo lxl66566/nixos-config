@@ -7,10 +7,6 @@
   ...
 }:
 {
-  imports = lib.optionals (!features.wsl) [
-    ../../others/sccache.nix
-  ];
-
   config = {
     environment.variables = {
       RUSTC_BOOTSTRAP = 1;

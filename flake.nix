@@ -37,6 +37,10 @@
       url = "github:fufexan/nix-gaming";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # use nixpkgs' instead
     # niri = {
     #   url = "github:sodiboo/niri-flake";
@@ -213,7 +217,7 @@
         # https://github.com/nix-community/nixos-wsl
         # sudo cp -r . /etc/nixos
         # cd /etc/nixos
-        # sudo nixos-rebuild switch --show-trace --flake .#wsl --impure --option substituters https://mirrors.ustc.edu.cn/nix-channels/store
+        # sudo nixos-rebuild switch --show-trace --flake .#wsl --option substituters https://mirrors.ustc.edu.cn/nix-channels/store
         "wsl" = mkSystem {
           devicename = "wsl";
           username = "nixos";
