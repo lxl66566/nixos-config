@@ -1,4 +1,5 @@
 {
+  self,
   lib,
   inputs,
   pkgs,
@@ -17,7 +18,9 @@ in
     inputs.nixos-wsl.nixosModules.default
     ./work.nix
   ];
-  disabledModules = [ ../../others/sccache.nix ];
+  disabledModules = [
+    "${self}/others/sccache.nix"
+  ];
 
   wsl = {
     enable = true;

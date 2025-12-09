@@ -1,5 +1,6 @@
 # please see https://github.com/Vortriz/awesome-niri
 {
+  self,
   lib,
   config,
   pkgs,
@@ -26,7 +27,7 @@
     ];
 
     home.file = {
-      ".config/niri/config.kdl".source = ../../config/niri.kdl;
+      ".config/niri/config.kdl".source = "${self}/config/niri.kdl";
     };
 
     home.packages = with pkgs; [

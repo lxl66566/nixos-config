@@ -10,10 +10,10 @@
 
 {
   imports = [
-    # ../../others/network/fungi
+    # ${self}/others/network/fungi
   ]
   ++ lib.optionals (features.server.type == "remote") [
-    # ../../others/network/easytier.nix
+    # ${self}/others/network/easytier.nix
     ./server-remote.nix
   ];
 

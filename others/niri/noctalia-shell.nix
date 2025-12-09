@@ -1,5 +1,6 @@
 # currently not usable
 {
+  self,
   config,
   pkgs,
   inputs,
@@ -73,7 +74,7 @@
         };
         colorSchemes.predefinedScheme = "Monochrome";
         general = {
-          avatarImage = pkgs.mylib.binaryToStore ../../assets/logo.jpg;
+          avatarImage = pkgs.mylib.binaryToStore "${self}/assets/logo.jpg";
           radiusRatio = 0.2;
         };
         location = {

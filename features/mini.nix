@@ -1,4 +1,5 @@
 {
+  self,
   pkgs,
   lib,
   features,
@@ -7,7 +8,7 @@
   ...
 }:
 {
-  disabledModules = [ ../others/neovim.nix ];
+  disabledModules = [ "${self}/others/neovim.nix" ];
 
   hardware = {
     graphics.enable = lib.mkForce false;

@@ -31,6 +31,7 @@ Sensitive data is encrypted using [git-simple-encrypt](https://github.com/lxl665
 |      `config/`      |               Stores personal configuration files for different applications.               |
 |     `overlays/`     |                                  my self-defined functions                                  |
 |      `disko/`       |           Disko scripts (definition) used for installation. (currently not used)            |
+|      `assets/`      |                                        binary assets                                        |
 
 ### Hardware
 

@@ -1,4 +1,5 @@
 {
+  self,
   lib,
   pkgs,
   devicename,
@@ -36,7 +37,7 @@ in
       settings = {
         hostname = devicename;
         network_name = "lxl66566";
-        network_secret = builtins.readFile ../../config/proxy_password;
+        network_secret = builtins.readFile "${self}/config/proxy_password";
         inherit peers ipv4;
       };
       extraSettings = {

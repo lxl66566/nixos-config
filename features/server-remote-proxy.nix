@@ -7,6 +7,7 @@
 # openppp2: 29777
 
 {
+  self,
   lib,
   inputs,
   pkgs,
@@ -51,7 +52,7 @@ let
 
   geoip = "${pkgs.v2ray-geoip}/share/v2ray/geoip.dat";
   geosite = "${pkgs.v2ray-domain-list-community}/share/v2ray/geosite.dat";
-  password = pkgs.lib.fileContents ../../config/proxy_password;
+  password = pkgs.lib.fileContents "${self}/config/proxy_password";
   hysteria-config = pkgs.writeText "config.json" (
     builtins.toJSON {
       listen = ":5497";
@@ -287,7 +288,7 @@ in
   # nftables：高位 quic 豁免
   networking.nftables = {
     enable = true;
-    rulesetFile = ../../config/nftables-proxy;
+    rulesetFile = "${self}/config/nftables-proxy";
   };
 
   # security.acme = {

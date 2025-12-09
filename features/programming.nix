@@ -1,4 +1,5 @@
 {
+  self,
   lib,
   pkgs,
   username,
@@ -14,8 +15,8 @@
   };
   config.home-manager.users."${username}" = {
     home.file = {
-      ".cargo/config.toml".source = ../../config/cargo.toml;
-      ".gitignore_g".source = ../../config/.gitignore_g;
+      ".cargo/config.toml".source = "${self}/config/cargo.toml";
+      ".gitignore_g".source = "${self}/config/.gitignore_g";
     };
     home.packages =
       with pkgs;

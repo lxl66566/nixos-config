@@ -133,6 +133,7 @@
           # specialArgs will be passed to all modules
           specialArgs = {
             inherit
+              self
               inputs
               features
               devicename
@@ -153,32 +154,23 @@
             # types of features
             ./features/types.nix
           ]
-          ++ (lib.optional features.gaming ./features/configuration/gaming.nix)
-          ++ (lib.optional (features.desktop != [ ] && !features.wsl) ./features/configuration/desktop.nix)
+          ++ (lib.optional features.gaming ./features/gaming.nix)
+          ++ (lib.optional (features.desktop != [ ] && !features.wsl) ./features/desktop.nix)
           ++ (lib.optional (builtins.elem "niri" features.desktop) ./others/niri)
           ++ (lib.optional (builtins.elem "plasma" features.desktop) ./others/plasma)
-          ++ (lib.optional features.server.enable ./features/configuration/server.nix)
-          ++ (lib.optional features.laptop ./features/configuration/laptop.nix)
+          ++ (lib.optional features.server.enable ./features/server.nix)
+          ++ (lib.optional features.laptop ./features/laptop.nix)
           ++ (lib.optional features.mini ./features/mini.nix)
-          ++ (lib.optional features.mining ./features/configuration/mining.nix)
-          ++ (lib.optional features.wsl ./features/configuration/wsl.nix)
-          ++ (lib.optional features.programming ./features/configuration/programming.nix)
+          ++ (lib.optional features.mining ./features/mining.nix)
+          ++ (lib.optional features.wsl ./features/wsl.nix)
+          ++ (lib.optional features.programming ./features/programming.nix)
           ++ [
             # home-manager module
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = {
-                inherit
-                  inputs
-                  features
-                  devicename
-                  username
-                  nur
-                  useBtrfs
-                  ;
-              };
+              home-manager.extraSpecialArgs = { };
               home-manager.backupFileExtension = "backup";
             }
           ];
@@ -258,9 +250,9 @@
         # nixos-rebuild boot --flake .#rfc --target-host rfc --build-host rfc   # eval on local but build on remote
         # or
         # nh os switch . -H rfc --target-host rfc -- --impure
-        # only get the drv:
-        # nix build .#nixosConfigurations.<hostname>.config.system.build.toplevel --dry-run
         #
+        # only eval:
+        # nix build .#nixosConfigurations.<hostname>.config.system.build.toplevel --dry-run
         "rfc" = mkSystem rec {
           devicename = "rfc";
           username = "root";

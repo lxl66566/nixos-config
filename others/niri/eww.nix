@@ -1,4 +1,5 @@
 {
+  self,
   config,
   pkgs,
   lib,
@@ -16,6 +17,6 @@
   };
 
   xdg.configFile = {
-    "eww".source = ../../config/eww;
+    "eww".source = "${self}/config/eww";
   };
 }

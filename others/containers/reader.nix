@@ -1,6 +1,11 @@
-{ config, pkgs, ... }:
+{
+  self,
+  config,
+  pkgs,
+  ...
+}:
 let
-  password = pkgs.lib.fileContents ../../config/proxy_password;
+  password = pkgs.lib.fileContents "${self}/config/proxy_password";
 in
 {
   virtualisation.podman.enable = true;

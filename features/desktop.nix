@@ -1,4 +1,5 @@
 {
+  self,
   pkgs,
   lib,
   features,
@@ -10,8 +11,8 @@
 {
   imports = [
     inputs.stylix.nixosModules.stylix
-    # ../../others/vm.nix
-    ../../others/neovim.nix
+    # ${self}/others/vm.nix
+    "${self}/others/neovim.nix"
   ];
   hardware = {
     bluetooth = {
@@ -261,7 +262,7 @@
     ];
 
     home.file = {
-      ".config/mpv".source = ../../config/mpv;
+      ".config/mpv".source = "${self}/config/mpv";
     };
 
     home.packages =
