@@ -24,6 +24,8 @@ in
     defaultUser = username;
   };
 
+  boot.kernelPackages = lib.mkForce pkgs.linuxPackages; # default
+
   environment = {
     variables = {
       # HTTP_PROXY = proxyUrl;

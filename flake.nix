@@ -3,7 +3,6 @@
   nixConfig = {
     # substituers will be appended to the default substituters when fetching packages
     extra-substituters = [
-      # "https://hyprland.cachix.org"
       # "https://nixpkgs-wayland.cachix.org"
       "https://nix-gaming.cachix.org"
       "https://nix-community.cachix.org"
@@ -160,10 +159,10 @@
           ++ (lib.optional (builtins.elem "plasma" features.desktop) ./others/plasma)
           ++ (lib.optional features.server.enable ./features/configuration/server.nix)
           ++ (lib.optional features.laptop ./features/configuration/laptop.nix)
+          ++ (lib.optional features.mini ./features/mini.nix)
           ++ (lib.optional features.mining ./features/configuration/mining.nix)
           ++ (lib.optional features.wsl ./features/configuration/wsl.nix)
           ++ (lib.optional features.programming ./features/configuration/programming.nix)
-          # ++ (lib.optional (!features.mini) inputs.daeuniverse.nixosModules.dae) # use dae flake may need to compile dae from source, which is not acceptable for mini NixOS
           ++ [
             # home-manager module
             home-manager.nixosModules.home-manager
@@ -181,13 +180,6 @@
                   ;
               };
               home-manager.backupFileExtension = "backup";
-              home-manager.users.${username} = {
-                imports = [
-                  ./home.nix
-                ]
-                ++ (lib.optional features.gaming ./features/home-manager/gaming.nix)
-                ++ (lib.optional (features.desktop != [ ] && !features.wsl) ./features/home-manager/desktop.nix);
-              };
             }
           ];
         };
@@ -261,9 +253,14 @@
         #
         # (get the hardware config from remote /etc/nixos/hardware-configuration.nix to this repo: hardware/rfc.nix)
         # (get the network config from remote /etc/nixos/configuration.nix to this repo: see below)
-        # nixos-rebuild boot --flake .#rfc --target-host rfc
+        # then:
+        # nixos-rebuild boot --flake .#rfc --target-host rfc                    # build on local, and copy all paths to target host
+        # nixos-rebuild boot --flake .#rfc --target-host rfc --build-host rfc   # eval on local but build on remote
         # or
         # nh os switch . -H rfc --target-host rfc -- --impure
+        # only get the drv:
+        # nix build .#nixosConfigurations.<hostname>.config.system.build.toplevel --dry-run
+        #
         "rfc" = mkSystem rec {
           devicename = "rfc";
           username = "root";

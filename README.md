@@ -25,14 +25,12 @@ Sensitive data is encrypted using [git-simple-encrypt](https://github.com/lxl665
 |     `features/`     |       Contains modular configurations, as described in the "Features" section above.        |
 |     `hardware/`     |                 Contains hardware configurations for my different machines                  |
 | `configuration.nix` | A basic system configuration that serves as a foundation before applying specific features. |
-|     `home.nix`      |            Manages user-specific configurations and packages using Home Manager.            |
 |      `iso.nix`      |                   Defines a minimal, self-defined NixOS installation ISO.                   |
 |    `mynixpkgs/`     |                      Contains custom Nix packages developed by myself.                      |
 |      `others/`      |                                 per-software configurations                                 |
 |      `config/`      |               Stores personal configuration files for different applications.               |
 |     `overlays/`     |                                  my self-defined functions                                  |
-|      `disko/`       |                      Disko scripts (definition) used for installation.                      |
-|    `minimal.nix`    |                           (not used, use `mini` feature instead)                            |
+|      `disko/`       |           Disko scripts (definition) used for installation. (currently not used)            |
 
 ### Hardware
 

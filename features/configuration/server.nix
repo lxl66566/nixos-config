@@ -97,7 +97,7 @@
         PermitRootLogin = lib.mkForce "yes";
         UseDns = true;
         PasswordAuthentication = true;
-        X11Forwarding = !features.mini;
+        X11Forwarding = true;
         LogLevel = lib.mkDefault "VERBOSE";
       };
       hostKeys = [

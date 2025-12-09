@@ -13,6 +13,21 @@
       tailor-gui.enable = true;
     };
   };
+
+  # specialisation = {
+  #   on-the-go.configuration = {
+  #     system.nixos.tags = [ "on-the-go" ];
+  #     hardware.nvidia = {
+  #       prime.offload.enable = lib.mkForce true;
+  #       prime.offload.enableOffloadCmd = lib.mkForce true;
+  #       prime.sync.enable = lib.mkForce false;
+  #       powerManagement.finegrained = lib.mkForce true;
+  #     };
+  #     powerManagement.cpuFreqGovernor = lib.mkForce "powersave";
+  #     powerManagement.powertop.enable = lib.mkForce true;
+  #   };
+  # };
+
   boot.kernelModules = lib.mkAfter [
     "coretemp"
     # "ryzen_smu" # for ryzenadj
