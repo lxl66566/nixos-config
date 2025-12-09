@@ -56,5 +56,17 @@ self: super: {
           # 为文件添加可执行权限。
           chmod +x $out
         '';
+
+    # 1. 如果路径存在 -> 正常 import
+    # 2. 如果路径不存在 且 default 为 null -> 强行 import（触发 Nix 原生报错）
+    # 3. 如果路径不存在 且 default 有值 -> 返回 default
+    importOr =
+      path: default:
+      if builtins.pathExists path then
+        import path
+      else if default == null then
+        import path # 这会触发 "No such file or directory" 错误
+      else
+        default;
   };
 }

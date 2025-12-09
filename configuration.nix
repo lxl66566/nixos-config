@@ -3,6 +3,7 @@
 
 {
   config,
+  inputs,
   lib,
   pkgs,
   devicename,
@@ -475,7 +476,47 @@
 
       programs = {
         home-manager.enable = true;
-
+        ssh = {
+          enable = true;
+          enableDefaultConfig = false;
+          matchBlocks =
+            let
+              rootServers = {
+                xrq = "server.perrykum.top";
+                n1 = "192.168.1.2";
+                ls = "192.168.10.171";
+                claw = "47.79.33.39";
+                rfc = "198.176.52.113";
+                dedi = "173.254.249.43";
+                acck = "156.231.140.190";
+              };
+            in
+            (lib.mapAttrs (host: hostname: {
+              hostname = hostname;
+              user = "root";
+            }) rootServers)
+            // (pkgs.mylib.importOr "/etc/me/ssh_config.nix" { })
+            // {
+              "github.com" = {
+                user = "git";
+                hostname = "ssh.github.com";
+                port = 443;
+              };
+              "*" = {
+                forwardAgent = lib.mkForce false;
+                addKeysToAgent = "no";
+                identityAgent = null;
+                identityFile = "~/.ssh/id_ed25519";
+                compression = true;
+                hashKnownHosts = false;
+                userKnownHostsFile = "/dev/null";
+                extraOptions = {
+                  StrictHostKeyChecking = "no";
+                  LogLevel = "ERROR";
+                };
+              };
+            };
+        };
         git = {
           enable = true;
           settings = {
@@ -566,20 +607,16 @@
             fd = "fd -H";
             nb = "nh os switch . -H ${devicename} ${
               if username == "root" then "--bypass-root-check" else ""
-            } --show-trace"; # nixos (re)build
-            nbo = "sudo nixos-rebuild switch --show-trace --print-build-logs --verbose --flake .#${devicename}"; # nixos rebuild, o means origin
+            } --show-trace ${if features.wsl then "-- --impure" else ""}"; # nixos (re)build
+            nbo = "sudo nixos-rebuild switch --show-trace --print-build-logs --verbose --flake .#${devicename} ${
+              if features.wsl then "--impure" else ""
+            }"; # nixos rebuild, o means origin
             nd = "nix develop -c $SHELL";
             ndc = "git checkout nix -- flake.nix flake.lock && nd";
             tp = "trash-put";
             sync = "rsync -aviuzP --compress-choice=zstd --compress-level=3";
             bbwrap = "bwrap --bind / / --dev /dev --proc /proc --tmpfs /tmp";
           };
-        };
-        ssh = {
-          enable = true;
-          enableDefaultConfig = false;
-          extraConfig = builtins.readFile ./config/ssh_config;
-          matchBlocks."*".forwardAgent = lib.mkForce false;
         };
         atuin = {
           enable = true;

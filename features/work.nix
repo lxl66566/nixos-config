@@ -30,7 +30,7 @@ in
       ];
     };
     virtualisation.docker.daemon.settings = {
-      "insecure-registries" = (import "${self}/config/docker-insecure-registries.nix");
+      "insecure-registries" = (pkgs.mylib.importOr "/etc/me/docker-insecure-registries.nix" [ ]);
     };
   };
   config.home-manager.users."${username}" = {
