@@ -572,7 +572,7 @@
             };
             fetch = {
               prune = true;
-              pruneTags = true;
+              pruneTags = false; # This is dangerous！If set to true, it will delete local tags on every fetch.
               all = true;
             };
             help = {
