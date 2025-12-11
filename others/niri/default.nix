@@ -11,29 +11,36 @@
 }:
 {
   imports = [
-    # inputs.niri.nixosModules.niri
+    inputs.niri.nixosModules.niri # system level module for displayManager (sddm), https://github.com/sodiboo/niri-flake/issues/287
     ./DankMaterialShell.nix # currently used
+    # ./noctalia-shell.nix
   ];
   services.gnome.gnome-keyring.enable = lib.mkForce false;
+  # https://github.com/sodiboo/niri-flake/issues/114
+  services.pulseaudio.enable = false;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    jack.enable = true;
+  };
+  security.rtkit.enable = true;
   # so that the portal definitions and DE provided configurations get linked
   environment.pathsToLink = [
     "/share/applications"
     "/share/xdg-desktop-portal"
   ];
+
+  programs.niri.enable = true;
+  environment.systemPackages = with pkgs; [
+    xwayland-satellite
+    xdg-desktop-portal-gtk
+    catppuccin-cursors.mochaDark
+  ];
   home-manager.users.${username} =
     { config, lib, ... }:
     {
-      imports = [
-        inputs.niri.homeModules.niri
-      ];
-
-      home.packages = with pkgs; [
-        xwayland-satellite
-        xdg-desktop-portal-gtk
-        catppuccin-cursors.mochaDark
-      ];
-
-      programs.niri.enable = true;
       # https://github.com/sodiboo/niri-flake/blob/main/docs.md
       programs.niri.settings = {
         screenshot-path = "~/Pictures from %Y.%m.%d-%H%M%S.png";

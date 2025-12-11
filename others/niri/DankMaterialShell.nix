@@ -28,7 +28,7 @@
       };
       enableSystemMonitoring = true; # System monitoring widgets (dgop)
       enableClipboard = true; # Clipboard history manager
-      enableVPN = true; # VPN management widget
+      enableVPN = false; # VPN management widget
       enableBrightnessControl = true; # Backlight/brightness controls
       enableColorPicker = true; # Color picker tool
       enableDynamicTheming = true; # Wallpaper-based theming (matugen)

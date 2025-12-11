@@ -30,6 +30,7 @@
     # DO NOT USE samba4Full
     samba # Standard Windows interoperability suite of programs for Linux and Unix
     # bottles # not usable in 20250723
+    soundtouch
     (lutris.override {
       extraLibraries = pkgs: [
 

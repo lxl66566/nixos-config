@@ -1,4 +1,4 @@
-# currently not usable
+# https://docs.noctalia.dev/getting-started/nixos/#config-ref
 {
   self,
   config,
