@@ -50,7 +50,7 @@
     generateCaches = false;
     man-db.enable = false;
   };
-  console = {
+  console = lib.mkDefault {
     earlySetup = true;
     font = "${pkgs.terminus_font}/share/consolefonts/ter-120n.psf.gz";
     packages = with pkgs; [ terminus_font ];
@@ -213,24 +213,23 @@
         fd
         htop
         ripgrep
-        ncdu
         curl
         which
+        lsof
+        file
         # linuxKernel.packages.linux_6_6.cpupower
         nur.repos.lxl66566.git-simple-encrypt
       ]
       ++ (lib.optionals (!features.mini) [
         # busybox
-        file
+        ncdu
         tree
-        lsof
         gnused # GNU sed
         gawk # GNU awk
         gnutar
         unzip
         nixfmt-rfc-style
         python3
-        strace
         fastfetchMinimal
         efibootmgr # edit efi boot manager
         ethtool # network card info
@@ -241,7 +240,6 @@
         dnsutils # `dig` + `nslookup`
         mkpasswd
         sd
-        bat
         iotop
         bubblewrap
         skim # RIIR of fzf
@@ -434,6 +432,7 @@
         [
           # lunarvim
           ouch # compress and decompress painlessly
+          parallel-disk-usage # fastest disk usage
           # iperf3
           # ldns # replacement of `dig`, it provide the command `drill`
           # socat # replacement of openbsd-netcat
@@ -458,7 +457,6 @@
           nix-tree
           nix-index
           # dust # disk usage
-          parallel-disk-usage # fastest disk usage
           tldr
           zellij
           dysk
@@ -527,7 +525,7 @@
             safe.directory = "*";
             core = {
               quotepath = false;
-              excludesfile = pkgs.mylib.configToStore ./config/.gitignore_g;
+              excludesfile = "${./config/.gitignore_g}";
               autocrlf = "input";
               ignorecase = false;
               hooksPath = "~/.git-hooks";
@@ -628,7 +626,7 @@
           settings = {
             auto_sync = true;
             dialect = "uk";
-            key_path = pkgs.mylib.configToStore ./config/atuin.key;
+            key_path = "${./config/atuin.key}";
             show_preview = true;
             style = "compact";
             sync_frequency = "1h";
@@ -650,7 +648,7 @@
           enableNushellIntegration = true;
         };
         bat = {
-          enable = true;
+          enable = !features.mini;
           extraPackages = with pkgs.bat-extras; [
             batgrep
             # batman

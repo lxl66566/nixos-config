@@ -51,14 +51,7 @@
     ];
     usePredictableInterfaceNames = false;
     useDHCP = true;
-  }
-  // (features.server.networking or {
-    # networkmanager = {
-    #   enable = true;
-    #   dhcp = "dhcpcd";
-    # };
-  }
-  );
+  };
 
   systemd.network =
     features.server.network or {

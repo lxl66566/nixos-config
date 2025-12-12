@@ -123,6 +123,7 @@
           userFeatures ? defaultFeatures,
           devicename ? "main",
           username ? "absx",
+          networking ? { },
         }:
         let
           # merge default features with user features
@@ -163,6 +164,13 @@
 
             # types of features
             ./features/types.nix
+
+            (
+              { ... }:
+              {
+                networking = networking;
+              }
+            )
           ]
           ++ (lib.optional features.gaming ./features/gaming.nix)
           ++ (lib.optional (features.desktop != [ ] && !features.wsl) ./features/desktop.nix)
@@ -249,15 +257,15 @@
         # now I use https://github.com/bin456789/reinstall :
         #
         # curl -O https://raw.githubusercontent.com/bin456789/reinstall/main/reinstall.sh || wget -O reinstall.sh $_
-        # bash reinstall.sh nixos --ssh-key ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKhsZBFg1jO+wWYvOxtS+q4cuYXCEzCs+qHH6c1pPunX lxl66566@gmail.com
+        # bash reinstall.sh nixos --ssh-key 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKhsZBFg1jO+wWYvOxtS+q4cuYXCEzCs+qHH6c1pPunX lxl66566@gmail.com' --ssh-key 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDzpOO88tLGqLQ6BeyWydGY6H4e0DesiNaVUiP6nhsKW lxl66566@gmail.com' --ssh-key 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA8MA5ciuFugeCNfPwI5yKIuqP4QQvPdWrHZDm9vSgel absx@absx'
         #
         # after installation, you can:
         #
         # (get the hardware config from remote /etc/nixos/hardware-configuration.nix to this repo: hardware/rfc.nix)
         # (get the network config from remote /etc/nixos/configuration.nix to this repo: see below)
         # then:
-        # nixos-rebuild boot --flake .#rfc --target-host rfc                    # build on local, and copy all paths to target host
-        # nixos-rebuild boot --flake .#rfc --target-host rfc --build-host rfc   # eval on local but build on remote
+        # nixos-rebuild switch --flake .#rfc --target-host rfc                    # build on local, and copy all paths to target host
+        # nixos-rebuild switch --flake .#rfc --target-host rfc --build-host rfc   # eval on local but build on remote
         # or
         # nh os switch . -H rfc --target-host rfc -- --impure
         #
@@ -273,20 +281,21 @@
               type = "remote";
               domain = "${devicename}.${TPDomain}";
               as_proxy = true;
-              networking = {
-                interfaces.eth0.ipv4.addresses = [
-                  {
-                    address = "198.176.52.113";
-                    prefixLength = 24;
-                  }
-                ];
-                defaultGateway = {
-                  address = "198.176.52.1";
-                  interface = "eth0";
-                };
-                nameservers = defaultNameServers;
-              };
+
             };
+          };
+          networking = {
+            interfaces.eth0.ipv4.addresses = [
+              {
+                address = "198.176.52.113";
+                prefixLength = 24;
+              }
+            ];
+            defaultGateway = {
+              address = "198.176.52.1";
+              interface = "eth0";
+            };
+            nameservers = defaultNameServers;
           };
         };
 
@@ -327,31 +336,33 @@
               domain = "${devicename}.${TPDomain}";
               disk_name = "/dev/sda";
               as_proxy = true;
-              networking = {
-                usePredictableInterfaceNames = false;
-                interfaces.eth0.ipv4.addresses = [
-                  {
-                    address = "156.231.140.190";
-                    prefixLength = 23;
-                  }
-                ];
-                defaultGateway = {
-                  address = "156.231.140.1";
-                  interface = "eth0";
-                };
-                interfaces.eth0.ipv6.addresses = [
-                  {
-                    address = "2602:fa4f:b01:3629:70ef:e8be:a9b2:7593";
-                    prefixLength = 64;
-                  }
-                ];
-                defaultGateway6 = {
-                  address = "2602:fa4f:b01::1";
-                  interface = "eth0";
-                };
-                nameservers = defaultNameServers;
-              };
             };
+          };
+          networking = {
+            usePredictableInterfaceNames = false;
+            interfaces.eth0.ipv4.addresses = [
+              {
+                address = "156.231.140.190";
+                prefixLength = 23;
+              }
+            ];
+            defaultGateway = {
+              address = "156.231.140.1";
+              interface = "eth0";
+            };
+            # ipv6 disabled
+            #
+            # interfaces.eth0.ipv6.addresses = [
+            #   {
+            #     address = "2602:fa4f:b01:3629:70ef:e8be:a9b2:7593";
+            #     prefixLength = 64;
+            #   }
+            # ];
+            # defaultGateway6 = {
+            #   address = "2602:fa4f:b01::1";
+            #   interface = "eth0";
+            # };
+            nameservers = defaultNameServers;
           };
         };
       };

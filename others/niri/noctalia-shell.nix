@@ -74,7 +74,7 @@
         };
         colorSchemes.predefinedScheme = "Monochrome";
         general = {
-          avatarImage = pkgs.mylib.binaryToStore "${self}/assets/logo.jpg";
+          avatarImage = "${./. + "${self}/assets/logo.jpg"}";
           radiusRatio = 0.2;
         };
         location = {

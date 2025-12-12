@@ -93,11 +93,6 @@
             default = null;
             description = "whether to use disko to generate image and dd to vps.";
           };
-          networking = lib.mkOption {
-            type = lib.types.nullOr config.networking.type;
-            default = null;
-            description = "The nixos network options of the remote server, will be merged with the default networking config.";
-          };
         };
       };
       description = "for remote connection (openssh) and other setups like proxy, disko, etc.";

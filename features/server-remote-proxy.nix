@@ -48,7 +48,10 @@ let
     -${pkgs.systemd}/bin/systemctl try-restart trojan-go.service hysteria.service
   '';
 
-  static_root = builtins.fetchTarball "https://github.com/lxl66566/thing-in-rings-with-ai/releases/download/v0.1.0/dist.tar.gz"; # a small static website to serve
+  static_root = builtins.fetchTarball {
+    url = "https://github.com/lxl66566/thing-in-rings-with-ai/releases/download/v0.1.0/dist.tar.gz";
+    sha256 = "sha256:1wsbsn294q1qbmklkjx6wj26sr38g4bfdjam5377h94xccmn8whq";
+  }; # a small static website to serve
 
   geoip = "${pkgs.v2ray-geoip}/share/v2ray/geoip.dat";
   geosite = "${pkgs.v2ray-domain-list-community}/share/v2ray/geosite.dat";

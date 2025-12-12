@@ -7,7 +7,7 @@
 
 let
   dest = "/root/.fungi";
-  config-src = pkgs.mylib.configToStore ./config.toml;
+  config-src = "${./config.toml}";
 in
 {
   systemd.services.fungi = {

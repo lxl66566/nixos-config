@@ -7,9 +7,9 @@ let
     rev = "0df08a1895a8ab1b9d51f4ad61a027b96fa1b60d";
     sha256 = "sha256-wuNHB/FC+ymGBpSGCL7fwktofkL6G1L32h/iDcNS9d4=";
   };
-  config-src = pkgs.mylib.configToStore ./config/config.json5;
-  steam-config-src = pkgs.mylib.configToStore ./config/steam_account_info.json5;
-  rsakey-src = pkgs.mylib.configToStore ./config/rsakey.txt;
+  config-src = "${./config/config.json5}";
+  steam-config-src = "${./config/steam_account_info.json5}";
+  rsakey-src = "${./config/rsakey.txt}";
   dest = "/var/lib/steamauto";
 in
 {

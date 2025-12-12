@@ -25,6 +25,7 @@
         gnumake
         tcpdump
         cmake
+        strace
         rustup
         pkg-config
         # llvmPackages_18.clang-tools
@@ -39,7 +40,7 @@
         pre-commit
         nil # Nix language server
         taplo
-        difftastic # diff tool, better pager and structured diff
+        # difftastic # diff tool, better pager and structured diff
         # mise # download and run any dev tools
         # leiningen # clojure package manager
         # clojure # functional language
@@ -102,13 +103,13 @@
       };
       delta.enable = true;
       git.settings = {
-        diff = {
-          external = "difft";
-        };
+        # diff = {
+        #   external = "difft";
+        # };
         delta.navigate = true;
-        merge = {
-          conflictStyle = "diff3";
-        };
+        # merge = {
+        #   conflictStyle = "diff3";
+        # };
       };
     };
   };
