@@ -184,6 +184,8 @@
     rtkit.enable = true;
     sudo.extraConfig = ''
       Defaults env_keep += "HTTP_PROXY HTTPS_PROXY"
+      Defaults passwd_timeout=999
+      Defaults timestamp_timeout=30
     '';
   };
 

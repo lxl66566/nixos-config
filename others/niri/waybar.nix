@@ -1,4 +1,4 @@
-# https://paste.aleksana.moe/cVCjVCVAMXa.nix
+# original from https://paste.aleksana.moe/cVCjVCVAMXa.nix, and changed by me
 {
   lib,
   pkgs,
@@ -12,6 +12,9 @@ in
 {
   home-manager.users.${username} = {
     home.packages = [ pkgs.nerd-fonts.jetbrains-mono ];
+    programs.niri.settings.spawn-at-startup = lib.mkAfter [
+      { argv = [ "waybar" ]; }
+    ];
     programs.waybar = {
       enable = true;
       package = pkgs.waybar;
@@ -51,17 +54,17 @@ in
           "niri/workspaces" = { };
 
           "cpu" = {
-            interval = 5;
+            interval = 1;
             format = " {usage}% {avg_frequency}G";
           };
 
           "memory" = {
-            interval = 10;
+            interval = 2;
             format = "󰄦 {used:0.1f}/{total:0.1f}G";
           };
 
           "temperature" = {
-            interval = 5;
+            interval = 1;
             hwmon-path = "/sys/class/hwmon/hwmon2/temp1_input";
             format = " {temperatureC}°C";
           };
@@ -76,7 +79,7 @@ in
 
           "custom/playing" = {
             exec = pkgs.writeShellScript "getplaying" ''
-            ${pkgs.playerctl}/bin/playerctl metadata --follow --format '{{ status }} {{ trunc(title,8) }}|{{ trunc(artist,8) }}' | ${pkgs.gnused}/bin/sed -u 's/Playing//;s/Paused//;s/Stopped |$//'
+              ${pkgs.playerctl}/bin/playerctl metadata --follow --format '{{ status }} {{ trunc(title,8) }}|{{ trunc(artist,8) }}' | ${pkgs.gnused}/bin/sed -u 's/Playing//;s/Paused//;s/Stopped |$//'
             '';
             on-click = pkgs.writeShellScript "switch" ''
               ${pkgs.playerctl}/bin/playerctl play-pause;
@@ -104,11 +107,11 @@ in
           # };
 
           "clock" = {
-            interval = 60;
+            interval = 1;
             align = 0;
             rotate = 0;
             tooltip-format = "<tt><big>{calendar}</big></tt>";
-            format = " {:%a %m.%d  %H:%M}";
+            format = "  {:%a %Y-%m-%d %H:%M:%S}";
           };
 
           "custom/notification" = {
@@ -202,7 +205,7 @@ in
           };
 
           "network" = {
-            interval = 5;
+            interval = 1;
             format-disconnected = "󰤯 Disconnected";
             format-disabled = "󰤮 Disabled";
             format = " {bandwidthUpBytes}  {bandwidthDownBytes}";
@@ -211,7 +214,7 @@ in
           };
 
           "battery" = {
-            interval = 15;
+            interval = 50;
             full-at = 100;
             design-capacity = false;
             states = {
@@ -252,7 +255,6 @@ in
         };
       };
       style = ''
-        @import "mocha.css";
         *{font-weight:700;font-size:12px;font-family:JetBrainsMono Nerd Font Propo,Noto Sans CJK SC,sans-serif}
         window#waybar{background:transparent}
         window#waybar>box{border-radius:8px;margin:4px 8px 4px 8px;padding-right:4px;background-color:@base;opacity:0.95;box-shadow:0 0 2px 1px @surface0}

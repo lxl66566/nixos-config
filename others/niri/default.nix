@@ -44,6 +44,7 @@
   home-manager.users.${username} =
     { config, lib, ... }:
     {
+      programs.fuzzel.enable = true;
       # https://github.com/sodiboo/niri-flake/blob/main/docs.md
       programs.niri.settings = {
         screenshot-path = "~/Pictures from %Y.%m.%d-%H%M%S.png";
@@ -79,7 +80,7 @@
         };
         outputs.DP-1 = {
           enable = true;
-          scale = 1.5;
+          scale = 1.0; # default is good
           variable-refresh-rate = "on-demand";
           focus-at-startup = true;
         };
@@ -88,6 +89,7 @@
           center-focused-column = "on-overflow";
           always-center-single-column = true;
           preset-column-widths = [
+            { proportion = 4. / 5.; }
             { proportion = 1. / 3.; }
             { proportion = 1. / 2.; }
             { proportion = 2. / 3.; }
@@ -130,7 +132,7 @@
         binds = with config.lib.niri.actions; {
           "Mod+Shift+Slash".action = show-hotkey-overlay;
           "Mod+R".action.spawn = "foot";
-          # "Mod+Space".action.spawn = "fuzzel";
+          "Mod+Space".action.spawn = "fuzzel";
           "Mod+O" = {
             repeat = false;
             action = toggle-overview;
