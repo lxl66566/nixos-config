@@ -10,8 +10,8 @@
 }:
 {
   imports = [
-    inputs.stylix.nixosModules.stylix
     # ${self}/others/vm.nix
+    # "${self}/others/theme/stylix.nix"
     "${self}/others/neovim.nix"
   ];
   hardware = {
@@ -249,18 +249,8 @@
     };
   };
 
-  stylix = {
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
-    polarity = "dark";
-    targets.gnome-text-editor.enable = false;
-  };
-
   # region home-manager
   home-manager.users.${username} = {
-    imports = [
-      inputs.stylix.homeModules.stylix
-    ];
-
     home.file = {
       ".config/mpv".source = "${self}/config/mpv";
     };

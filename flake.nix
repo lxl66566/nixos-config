@@ -7,6 +7,7 @@
       "https://nix-gaming.cachix.org"
       "https://nix-community.cachix.org"
       "https://niri.cachix.org"
+      "https://catppuccin.cachix.org"
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
@@ -14,6 +15,7 @@
       "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
       "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
       "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
+      "catppuccin.cachix.org-1:noG/4HkbhJb+lUAdKrph6LaozJvAeEEZj4N732IysmU="
     ];
     # accept-flake-config = false; # manually added the substituter config to avoid niri bootstrap
   };
@@ -73,6 +75,10 @@
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
       # inputs.quickshell.follows = "quickshell";
+    };
+    catppuccin = {
+      url = "github:catppuccin/nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
   outputs =
@@ -171,6 +177,8 @@
                 networking = networking;
               }
             )
+
+            "${self}/others/theme/catppuccin.nix"
           ]
           ++ (lib.optional features.gaming ./features/gaming.nix)
           ++ (lib.optional (features.desktop != [ ] && !features.wsl) ./features/desktop.nix)

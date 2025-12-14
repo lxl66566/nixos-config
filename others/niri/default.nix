@@ -7,14 +7,17 @@
   config,
   devicename,
   username,
+  features,
   ...
 }:
 {
   imports = [
     inputs.niri.nixosModules.niri # system level module for displayManager (sddm), https://github.com/sodiboo/niri-flake/issues/287
-    ./DankMaterialShell.nix # currently used
+    # ./DankMaterialShell.nix # currently used
     # ./noctalia-shell.nix
-  ];
+  ]
+  ++ (if features.wsl then [ ./DankMaterialShell.nix ] else [ ./waybar.nix ]); # waybar cannot use in WSL
+
   services.gnome.gnome-keyring.enable = lib.mkForce false;
   # https://github.com/sodiboo/niri-flake/issues/114
   services.pulseaudio.enable = false;

@@ -8,7 +8,13 @@
   ...
 }:
 {
-  disabledModules = [ "${self}/others/neovim.nix" ];
+  disabledModules = [
+    inputs.catppuccin.nixosModules.catppuccin
+    inputs.catppuccin.homeManagerModules.catppuccin
+    "${self}/others/theme/catppuccin.nix"
+    "${self}/others/theme/stylix.nix"
+    "${self}/others/neovim.nix"
+  ];
 
   hardware = {
     graphics.enable = lib.mkForce false;
