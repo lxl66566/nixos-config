@@ -5,15 +5,16 @@
   devicename,
   features,
   config,
+  self,
   ...
 }:
 
 {
   imports = [
-    # ${self}/others/network/fungi
+    # "${self}/others/network/fungi"
+    "${self}/others/network/easytier.nix"
   ]
   ++ lib.optionals (features.server.type == "remote") [
-    # ${self}/others/network/easytier.nix
     ./server-remote.nix
   ];
 

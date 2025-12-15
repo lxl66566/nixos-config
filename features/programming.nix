@@ -40,6 +40,7 @@
         pre-commit
         nil # Nix language server
         taplo
+        tokei
         # difftastic # diff tool, better pager and structured diff
         # mise # download and run any dev tools
         # leiningen # clojure package manager

@@ -12,6 +12,8 @@ in
 {
   home-manager.users.${username} = {
     home.packages = [ pkgs.nerd-fonts.jetbrains-mono ];
+    services.swaync.enable = true;
+    programs.wlogout.enable = true;
     programs.niri.settings.spawn-at-startup = lib.mkAfter [
       { argv = [ "waybar" ]; }
     ];
@@ -48,7 +50,7 @@ in
           "custom/menu" = {
             format = "  ";
             tooltip = false;
-            on-click = "${lib.getExe pkgs.better-control}";
+            on-click = "${pkgs.wlogout}/bin/wlogout";
           };
 
           "niri/workspaces" = { };
