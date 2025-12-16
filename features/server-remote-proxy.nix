@@ -332,18 +332,18 @@ in
   services = {
     caddy = {
       enable = true;
-      configFile = pkgs.writeText "Caddyfile" ''
-        ${domain}
-
-        handle_path /thing-in-rings-with-ai/* {
-          root * ${static_root}
-          file_server
-        }
-        handle {
-          root * ${static_root}
-          file_server
-        }
-      '';
+      virtualHosts."${domain}" = {
+        extraConfig = ''
+          handle_path /thing-in-rings-with-ai/* {
+            root * ${static_root}
+            file_server
+          }
+          handle {
+            root * ${static_root}
+            file_server
+          }
+        '';
+      };
     };
   };
 

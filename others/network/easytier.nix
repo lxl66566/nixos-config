@@ -8,7 +8,7 @@
 let
   base = "852456.xyz";
   listenerPortTcp = 11010;
-  listenerPortQuic = 11012;
+  listenerPortQuic = 1357; # small enough port number
   networkName = "lxl66566";
 
   # 内网服务器列表，这些服务器不会被添加到 peer

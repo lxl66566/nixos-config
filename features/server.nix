@@ -13,6 +13,7 @@
   imports = [
     # "${self}/others/network/fungi"
     "${self}/others/network/easytier.nix"
+    "${self}/others/webdav.nix"
   ]
   ++ lib.optionals (features.server.type == "remote") [
     ./server-remote.nix
