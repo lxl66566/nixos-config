@@ -289,7 +289,6 @@
               type = "remote";
               domain = "${devicename}.${TPDomain}";
               as_proxy = true;
-
             };
           };
           networking = {

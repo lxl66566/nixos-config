@@ -37,6 +37,8 @@ Sensitive data is encrypted using [git-simple-encrypt](https://github.com/lxl665
 
 All of my physical machines has the same partition layout, so I use the `hardware/defaultmount.nix` module for them all.
 
+This nixos config needs at least 3.5GB of free space and 420MB of RAM to run. (mini = true; server.enable = true; server.type = "remote")
+
 ### ISO
 
 The official installation ISO [sucks](https://absx.pages.dev/articles/linux/nix.html#nixos-%E5%AE%89%E8%A3%85)! So I created my own minimal installation ISO, which is defined in `iso.nix`. It contains some fast scripts to reduce the installation time.

@@ -79,4 +79,15 @@ in
   };
 
   networking.nameservers = lib.mkBefore [ "100.100.100.101" ];
+
+  # 重要服务保活！！
+  systemd.timers."easytier-${devicename}" = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      # 开机 30s 后先检查/启动一次
+      OnBootSec = "30s";
+      # 当服务进入 "Inactive" (停止) 状态后，计时 30s，然后再次启动它。
+      OnUnitInactiveSec = "30s";
+    };
+  };
 }
