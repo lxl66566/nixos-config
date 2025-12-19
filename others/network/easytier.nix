@@ -63,6 +63,7 @@ in
           enable_kcp_proxy = false;
           disable_kcp_input = true;
           enable_quic_proxy = true;
+          disable_quic_input = false;
 
           default_protocol = "quic"; # use quic by default
 
