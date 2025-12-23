@@ -163,6 +163,7 @@
           modules = [
             inputs.impermanence.nixosModules.impermanence
             inputs.disko.nixosModules.disko
+            pkgs.nur.repos.lxl66566.nixosModules.system76-scheduler-niri
             { nix.settings.trusted-users = [ username ]; }
 
             # base configuration and all feature modules
@@ -182,8 +183,6 @@
           ]
           ++ (lib.optional features.gaming ./features/gaming.nix)
           ++ (lib.optional (features.desktop != [ ] && !features.wsl) ./features/desktop.nix)
-          ++ (lib.optional (builtins.elem "niri" features.desktop) ./others/desktop/niri)
-          ++ (lib.optional (builtins.elem "plasma" features.desktop) ./others/desktop/plasma)
           ++ (lib.optional features.server.enable ./features/server.nix)
           ++ (lib.optional features.laptop ./features/laptop.nix)
           ++ (lib.optional features.mini ./features/mini.nix)
@@ -236,6 +235,7 @@
             programming = true;
             wsl = true;
             like_to_build = true;
+            others = [ ./others/desktop ];
           };
         };
         # region localserver

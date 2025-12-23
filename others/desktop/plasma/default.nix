@@ -6,6 +6,9 @@
   ...
 }:
 {
+  imports = [
+    ./plasma-manager.nix
+  ];
   services = {
     desktopManager = {
       plasma6 = {
@@ -38,12 +41,6 @@
   };
 
   home-manager.users.${username} = {
-    imports = [
-      inputs.plasma-manager.homeModules.plasma-manager
-      ./plasma-manager.nix
-      ../eye-protection.nix
-    ];
-
     home.packages = with pkgs; [
       kdePackages.yakuake
       kdePackages.spectacle

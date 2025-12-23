@@ -16,6 +16,7 @@
     # ./noctalia-shell.nix # not usable
     # ./DankMaterialShell.nix
     ./waybar.nix # currently used
+    ../system76.nix
   ];
 
   services.gnome.gnome-keyring.enable = lib.mkForce false;

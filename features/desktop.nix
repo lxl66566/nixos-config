@@ -12,6 +12,7 @@
   imports = [
     # ${self}/others/vm.nix
     # "${self}/others/theme/stylix.nix"
+    "${self}/others/desktop"
     "${self}/others/neovim.nix"
   ];
   hardware = {

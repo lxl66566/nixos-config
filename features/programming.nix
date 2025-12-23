@@ -63,6 +63,7 @@
         autocorrect
         nftables
         net-tools
+        ast-grep
       ]
       ++ (lib.optionals (features.desktop != [ ] && !features.wsl) [
         androidStudioPackages.dev
