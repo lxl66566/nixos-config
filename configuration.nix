@@ -115,7 +115,7 @@
     };
     beesd.filesystems = lib.mkIf useBtrfs {
       "-" = {
-        spec = "LABEL=root";
+        spec = "LABEL=nixos";
         hashTableSizeMB = 128;
         extraOptions = [
           "--loadavg-target"

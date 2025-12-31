@@ -9,6 +9,8 @@
   imports = [
 
   ]
-  ++ (lib.optionals (features.programming) [ ./sccache.nix ]);
+  ++ (lib.optionals (features.programming) [
+    # ./sccache.nix
+  ]);
 
 }

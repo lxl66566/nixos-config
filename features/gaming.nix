@@ -7,7 +7,6 @@
 {
   imports = with inputs.nix-gaming.nixosModules; [
     pipewireLowLatency
-    platformOptimizations
   ];
   programs = {
     steam = {
@@ -15,7 +14,7 @@
       remotePlay.openFirewall = true;
       dedicatedServer.openFirewall = true;
       gamescopeSession.enable = true;
-      platformOptimizations.enable = true;
+      # platformOptimizations.enable = true;
       extraCompatPackages = with pkgs; [ proton-ge-bin ];
       protontricks = {
         enable = true;
