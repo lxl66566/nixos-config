@@ -113,6 +113,16 @@
       enable = useBtrfs;
       interval = "15 days";
     };
+    beesd.filesystems = lib.mkIf useBtrfs {
+      "-" = {
+        spec = "LABEL=root";
+        hashTableSizeMB = 128;
+        extraOptions = [
+          "--loadavg-target"
+          "5.0"
+        ];
+      };
+    };
     # 为所有可移动的块设备强制 udisks2 使用 sync 挂载选项
     udev.extraRules = ''
       ENV{ID_DRIVE_REMOVABLE}=="1", ENV{UDISKS_MOUNT_OPTIONS_DEFAULTS}+="sync"

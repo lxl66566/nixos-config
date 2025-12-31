@@ -235,7 +235,10 @@
             programming = true;
             wsl = true;
             like_to_build = true;
-            others = [ ./others/desktop ];
+            others = [
+              ./others/desktop
+              ./others/webdav.nix
+            ];
           };
         };
         # region localserver
