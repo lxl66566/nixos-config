@@ -352,7 +352,7 @@
             usePredictableInterfaceNames = false;
             interfaces.eth0.ipv4.addresses = [
               {
-                address = "156.231.140.190";
+                address = "156.231.141.178";
                 prefixLength = 23;
               }
             ];
@@ -364,7 +364,7 @@
             #
             # interfaces.eth0.ipv6.addresses = [
             #   {
-            #     address = "2602:fa4f:b01:3629:70ef:e8be:a9b2:7593";
+            #     address = "2602:fa4f:b01:94f2:fb50:376a:4e7:5485";
             #     prefixLength = 64;
             #   }
             # ];

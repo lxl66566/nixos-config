@@ -13,7 +13,7 @@
   ];
   boot.kernelModules = [ "kvm-intel" ];
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/8d4348f6-6443-481d-bf2e-48af79d00715";
+    device = "/dev/disk/by-uuid/cd27991d-2202-4b08-85cc-a8c446ea5234";
     fsType = "ext4";
   };
 
