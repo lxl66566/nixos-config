@@ -380,7 +380,7 @@
         else
           rebase_target="''${commit_hash}~1"
         fi
-        GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash "$rebase_target"
+        GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash --committer-date-is-author-date "$rebase_target"
       '';
       record = pkgs.writeShellScriptBin "record" ''
         cmd=$(printf '%q ' "$@")

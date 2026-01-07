@@ -249,7 +249,7 @@ in
         l = "ls -alF";
         gp = "git pull";
         gc = "git clone --filter=tree:0";
-        gfixup = "git commit -a --fixup HEAD && GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash HEAD~2";
+        gfixup = "git commit -a --fixup HEAD && GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash --committer-date-is-author-date HEAD~2";
         ni = "sudo nixos-install";
         jc = "journalctl";
         sc = "systemctl";
