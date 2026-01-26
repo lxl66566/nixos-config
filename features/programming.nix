@@ -67,9 +67,6 @@
       ]
       ++ (lib.optionals (features.desktop != [ ] && !features.wsl) [
         androidStudioPackages.dev
-      ])
-      ++ (lib.optionals (features.like_to_build) [
-        mergiraf # structured merge tool
       ]);
 
     programs = {
@@ -105,14 +102,9 @@
       };
       delta.enable = true;
       git.settings = {
-        # diff = {
-        #   external = "difft";
-        # };
         delta.navigate = true;
-        # merge = {
-        #   conflictStyle = "diff3";
-        # };
       };
+      mergiraf.enable = true;
     };
   };
 

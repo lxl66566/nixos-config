@@ -529,6 +529,7 @@
         };
         git = {
           enable = true;
+          attributes = lib.mkBefore [ "* text=auto lf" ];
           settings = {
             user = {
               name = "lxl66566";
@@ -552,7 +553,7 @@
             };
             pull = {
               autoSetupRemote = true;
-              rebase = true;
+              rebase = false; # https://t.me/withabsolutex/2610, https://t.me/withabsolutex/2611
               ff = "only";
             };
             diff = {
@@ -562,6 +563,7 @@
               mnemonicPrefix = true;
               renames = true;
             };
+            merge.conflictstyle = lib.mkForce "zdiff3";
             init.defaultBranch = "main";
             rebase = {
               autoSquash = true;
