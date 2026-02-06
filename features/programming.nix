@@ -41,7 +41,6 @@
         nil # Nix language server
         taplo
         tokei
-        # difftastic # diff tool, better pager and structured diff
         # mise # download and run any dev tools
         # leiningen # clojure package manager
         # clojure # functional language
@@ -101,8 +100,18 @@
         };
       };
       delta.enable = true;
+      difftastic = {
+        enable = true;
+        git.enable = false;
+        options = {
+          display = "side-by-side-show-both";
+        };
+      };
       git.settings = {
         delta.navigate = true;
+        alias = {
+          dft = "-c diff.external=difft diff";
+        };
       };
       mergiraf.enable = true;
     };
