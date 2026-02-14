@@ -50,6 +50,8 @@
         # pipx # python binary package manager
         # octave # scientific computing
         cargo-msrv
+        cargo-fuzz
+        cargo-flamegraph
         # jmeter
         # postman
         gradle

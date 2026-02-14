@@ -18,16 +18,11 @@
 
   boot = {
     initrd.systemd.enable = true;
-    loader = lib.mkDefault {
+    loader = lib.mkIf (!config.boot.isContainer) {
       efi.canTouchEfiVariables = true;
       efi.efiSysMountPoint = "/boot";
       grub = {
-        enable =
-          (builtins.elem devicename [
-            "main"
-            "ls"
-          ])
-          || !config.boot.isContainer;
+        enable = true;
         devices = [ "nodev" ];
         efiSupport = true;
         default = "saved";
@@ -89,7 +84,14 @@
       "audit=0"
       "net.ifnames=0"
     ]);
-    supportedFilesystems = [ "ntfs" ];
+    supportedFilesystems = [
+      "btrfs"
+      "reiserfs"
+      "vfat"
+      "f2fs"
+      "xfs"
+      "ntfs"
+    ];
     tmp = lib.mkDefault {
       # https://github.com/NixOS/nixpkgs/blob/nixos-24.05/nixos/modules/system/boot/tmp.nix
       useTmpfs = true;

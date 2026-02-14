@@ -26,6 +26,7 @@
       enable = lib.mkDefault true;
       enable32Bit = lib.mkDefault true;
     };
+    boot.loader.grub.default = lib.mkForce 1;
     boot.loader.grub.extraEntries = ''
       menuentry "Windows 11 (zh)" {
         search --fs-uuid D247-DFCF --set=root

@@ -117,6 +117,9 @@
       sddm = {
         enable = true;
         autoNumlock = true;
+        setupScript = ''
+          ${pkgs.numlockx}/bin/numlockx on
+        '';
       };
       defaultSession = "plasmax11";
       autoLogin = {
