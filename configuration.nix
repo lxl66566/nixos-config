@@ -115,7 +115,7 @@
     };
     beesd.filesystems = lib.mkIf useBtrfs {
       "-" = {
-        spec = "LABEL=nixos";
+        spec = "LABEL=nixos"; # needs to mark your btrfs fs as `nixos`, btrfs filesystem label / nixos
         hashTableSizeMB = 128;
         extraOptions = [
           "--loadavg-target"
@@ -258,6 +258,8 @@
         # perf
         docker-compose
         lazydocker
+        wol # wake on lan, send packets to wake up computer. to wake up my main device: wol E8:9C:25:9B:44:9D
+        try # overlayfs, dry-run before writing to fs
       ])
     );
     sessionVariables = rec {

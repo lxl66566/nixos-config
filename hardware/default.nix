@@ -22,7 +22,12 @@
       efi.canTouchEfiVariables = true;
       efi.efiSysMountPoint = "/boot";
       grub = {
-        enable = !config.boot.isContainer;
+        enable =
+          (builtins.elem devicename [
+            "main"
+            "ls"
+          ])
+          || !config.boot.isContainer;
         devices = [ "nodev" ];
         efiSupport = true;
         default = "saved";
