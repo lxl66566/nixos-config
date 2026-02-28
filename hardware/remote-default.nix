@@ -23,10 +23,10 @@
 
   # MBR boot, not EFI boot
   boot.loader.systemd-boot.enable = false;
-  boot.loader.efi.canTouchEfiVariables = false;
+  boot.loader.efi.canTouchEfiVariables = lib.mkForce false;
   boot.loader.grub = {
     enable = true;
-    efiSupport = false;
+    efiSupport = lib.mkForce false;
   };
 
   boot.initrd.availableKernelModules = [

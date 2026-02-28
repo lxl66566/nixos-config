@@ -26,8 +26,10 @@
     }
   ];
 
+  nix.package = pkgs.nix;
+
   networking = {
-    enableIPv6 = lib.mkDefault false; # true; # trojan-go needs ipv6, ref https://github.com/p4gefau1t/trojan-go/issues/524
+    enableIPv6 = true; # trojan-go needs ipv6, ref https://github.com/p4gefau1t/trojan-go/issues/524
     firewall = {
       enable = false; # nftables conflict with firewall; fail2ban can not be used without a firewall/nftables
       # allow all ports

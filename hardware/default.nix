@@ -22,7 +22,7 @@
       efi.canTouchEfiVariables = true;
       efi.efiSysMountPoint = "/boot";
       grub = {
-        enable = true;
+        enable = lib.mkDefault true; # WSL will set this to false
         devices = [ "nodev" ];
         efiSupport = true;
         default = "saved";
@@ -57,9 +57,9 @@
       "net.ipv4.udp_mem" = "262144 524288 1048576";
       "net.ipv4.udp_rmem_min" = 8192;
       "net.ipv4.udp_wmem_min" = 8192;
-      "net.ipv6.conf.all.disable_ipv6" = 1;
-      "net.ipv6.conf.default.disable_ipv6" = 1;
-      "net.ipv6.conf.lo.disable_ipv6" = 1;
+      # "net.ipv6.conf.all.disable_ipv6" = 1;
+      # "net.ipv6.conf.default.disable_ipv6" = 1;
+      # "net.ipv6.conf.lo.disable_ipv6" = 1;
       "vm.page-cluster" = 0;
       "vm.swappiness" = 130;
       "vm.watermark_boost_factor" = 0;

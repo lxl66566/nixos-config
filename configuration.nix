@@ -66,12 +66,15 @@
   # region nix
 
   nix = {
-    package = if !features.server.enable then pkgs.lix else pkgs.nix;
+    package = lib.mkDefault pkgs.lix;
     settings = {
       trusted-users = [ username ];
       experimental-features = [
-        "nix-command"
+        # "ca-derivations" # binary cache?
+        # "dynamic-derivations"
         "flakes"
+        "nix-command"
+        # "recursive-nix"
       ];
       warn-dirty = false;
       # builders-use-substitutes = true;
@@ -545,6 +548,8 @@
               ignorecase = false;
               hooksPath = "~/.git-hooks";
               symlinks = true;
+              partialClone = true;
+              fsmonitor = true;
             };
             lfs.enable = true;
             push = {
@@ -601,6 +606,9 @@
             };
             pack.threads = 8;
             checkout.workers = 8;
+            features = {
+              manyFiles = true;
+            };
           };
         };
         fish = {
@@ -617,6 +625,7 @@
             gp = "git pull";
             gc = "git clone";
             gcm = "git commit --signoff -am";
+            gf = "git fetch --filter=blob:none";
             py = "python";
             fd = "fd -H";
             nb = "nh os switch . -H ${devicename} ${
