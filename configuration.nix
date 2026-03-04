@@ -500,10 +500,9 @@
                 xrq = "server.perrykum.top";
                 n1 = "192.168.1.2";
                 ls = "192.168.10.171";
-                claw = "47.79.33.39";
                 rfc = "198.176.52.113";
                 dedi = "173.254.249.43";
-                acck = "156.231.141.178";
+                vhs = "23.95.36.146";
               };
             in
             (lib.mapAttrs (host: hostname: {
@@ -570,7 +569,7 @@
               mnemonicPrefix = true;
               renames = true;
             };
-            merge.conflictstyle = lib.mkForce "zdiff3";
+            merge.conflictStyle = lib.mkForce "zdiff3";
             init.defaultBranch = "main";
             rebase = {
               autoSquash = true;

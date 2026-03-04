@@ -283,12 +283,22 @@
         # (get the hardware config from remote /etc/nixos/hardware-configuration.nix to this repo: hardware/rfc.nix)
         # (get the network config from remote /etc/nixos/configuration.nix to this repo: see below)
         # then:
+        #
         # nixos-rebuild switch --flake .#rfc --target-host rfc                    # build on local, and copy all paths to target host
         # nixos-rebuild switch --flake .#rfc --target-host rfc --build-host rfc   # eval on local but build on remote
+        #
         # or
+        #
         # nh os switch . -H rfc --target-host rfc -- --impure
         #
-        # only eval:
+        # or sync this repo to remote server and eval on remote:
+        #
+        # sync . rfc:/etc/nixos
+        # ssh rfc, cd /etc/nixos
+        # chown root . -R
+        # nixos-rebuild switch --flake .#rfc
+        #
+        # only eval in local:
         # nix build .#nixosConfigurations.<hostname>.config.system.build.toplevel --dry-run
         "rfc" = mkSystem rec {
           devicename = "rfc";
@@ -330,8 +340,8 @@
             };
           };
         };
-        "claw" = mkSystem rec {
-          devicename = "claw";
+        "vhs" = mkSystem rec {
+          devicename = "vhs";
           username = "root";
           userFeatures = {
             mini = false;
@@ -339,20 +349,7 @@
               enable = true;
               type = "remote";
               domain = "${devicename}.${TPDomain}";
-              as_proxy = true;
-            };
-          };
-        };
-        "acck" = mkSystem rec {
-          devicename = "acck";
-          username = "root";
-          userFeatures = {
-            mini = false;
-            server = {
-              enable = true;
-              type = "remote";
-              domain = "${devicename}.${TPDomain}";
-              disk_name = "/dev/sda";
+              disk_name = "/dev/vda";
               as_proxy = true;
             };
           };
@@ -360,26 +357,24 @@
             usePredictableInterfaceNames = false;
             interfaces.eth0.ipv4.addresses = [
               {
-                address = "156.231.141.178";
+                address = "23.95.36.146";
                 prefixLength = 23;
               }
             ];
             defaultGateway = {
-              address = "156.231.140.1";
+              address = "23.95.36.129";
               interface = "eth0";
             };
-            # ipv6 disabled
-            #
-            # interfaces.eth0.ipv6.addresses = [
-            #   {
-            #     address = "2602:fa4f:b01:94f2:fb50:376a:4e7:5485";
-            #     prefixLength = 64;
-            #   }
-            # ];
-            # defaultGateway6 = {
-            #   address = "2602:fa4f:b01::1";
-            #   interface = "eth0";
-            # };
+            interfaces.eth0.ipv6.addresses = [
+              {
+                address = "2607:9d00:2000:ad::f907:1384";
+                prefixLength = 64;
+              }
+            ];
+            defaultGateway6 = {
+              address = "2607:9d00:2000:ad::1";
+              interface = "eth0";
+            };
             nameservers = defaultNameServers;
           };
         };
