@@ -23,8 +23,9 @@
   };
   environment.systemPackages = with pkgs; [
     # proton-ge-bin
-    wine
-    wine64
+    # wine        # 32 bit only
+    # wine64      # 64 bit only
+    wineWow64Packages.staging # 32bit + 64bit in one prefix. most widely used
     winetricks
     # DO NOT USE samba4Full
     samba # Standard Windows interoperability suite of programs for Linux and Unix

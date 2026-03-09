@@ -15,7 +15,8 @@
     inputs.niri.nixosModules.niri # system level module for displayManager (sddm), https://github.com/sodiboo/niri-flake/issues/287
     # ./noctalia-shell.nix # not usable
     # ./DankMaterialShell.nix
-    ./waybar.nix # currently used
+    # ./waybar.nix
+    ./mybar.nix
     ../system76.nix
   ];
 

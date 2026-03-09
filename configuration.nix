@@ -547,9 +547,9 @@
               ignorecase = false;
               hooksPath = "~/.git-hooks";
               symlinks = true;
-              partialClone = true;
               fsmonitor = true;
             };
+            # extensions.partialClone = true; # partial clone cannot be set in global config
             lfs.enable = true;
             push = {
               default = "current";
@@ -624,7 +624,6 @@
             gp = "git pull";
             gc = "git clone";
             gcm = "git commit --signoff -am";
-            gf = "git fetch --filter=blob:none";
             py = "python";
             fd = "fd -H";
             nb = "nh os switch . -H ${devicename} ${
